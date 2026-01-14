@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZXT99R0JE3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZXT99R0JE3');
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta name="description" content="MD2PPT-EVOLUTION - Convert Markdown to Professional PowerPoint Slides instantly in your browser." />
+    <meta name="keywords" content="Markdown, PPT, PPTX, PowerPoint, Converter, Slides, Presentation, EricHuang" />
+    <meta name="author" content="EricHuang" />
+    <meta property="og:title" content="MD2PPT-EVOLUTION | Markdown to Slides" />
+    <meta property="og:description" content="Professional Markdown to PowerPoint converter. Write in text, present in style." />
+    <meta property="twitter:title" content="MD2PPT-EVOLUTION | Markdown to Slides" />
+    <meta property="twitter:description" content="Professional Markdown to PowerPoint converter. Write in text, present in style." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MD2PPT-EVOLUTION | Markdown to Slides</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        /* 核心排版策略：英數強制 Consolas，中文微軟正黑體 */
+        :root {
+            --font-main: "Consolas", "Microsoft JhengHei", "微軟正黑體", sans-serif;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: #f1f5f9;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .manuscript-font {
+            font-family: var(--font-main);
+        }
+
+        /* 程式碼塊強制等寬 */
+        code, pre, .font-mono {
+            font-family: "Consolas", monospace !important;
+        }
+
+        /* 自定義捲軸 */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f8fafc; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/buffer/6.0.3/buffer.min.js"></script>
+    <script>
+        // 關鍵：將 Buffer 掛載到全局，部分 Node.js 依賴庫 (如 pptxgenjs, qrcode) 可能需要
+        // 修正：檢查 window.buffer 是否存在，避免直接引用導致 ReferenceError
+        if (window.buffer) {
+            window.Buffer = window.Buffer || window.buffer.Buffer;
+        }
+        // 確保 process.env 存在，避免 Gemini SDK 報錯
+        window.process = window.process || { env: { API_KEY: "" } };
+    </script>
+</head>
+<body class="manuscript-font">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
