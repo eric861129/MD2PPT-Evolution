@@ -1,0 +1,8 @@
+{
+  "track_id": "core_ppt_engine_20260114",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-14T10:35:00Z",
+  "updated_at": "2026-01-14T10:35:00Z",
+  "description": "實作從 Markdown AST 到 PPTX 的核心轉換引擎，包含自動分割、基礎排版、程式碼高亮與品牌樣式。"
+}
