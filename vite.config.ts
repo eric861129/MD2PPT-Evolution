@@ -28,11 +28,15 @@ export default defineConfig(({ mode }) => {
         __APP_VERSION__: JSON.stringify(packageJson.version),
       },
       build: {
-        chunkSizeWarningLimit: 1000, // 提高警告門檻至 1MB
+        chunkSizeWarningLimit: 2000, // 提高警告門檻至 2MB，適配大型庫
         rollupOptions: {
           output: {
             manualChunks: {
-              vendor: ['react', 'react-dom', 'lucide-react', 'file-saver'],
+              // 分拆大型第三方庫以優化載入與緩存
+              'vendor-react': ['react', 'react-dom'],
+              'vendor-utils': ['lucide-react', 'file-saver', 'i18next', 'react-i18next', 'js-yaml', 'marked'],
+              'vendor-mermaid': ['mermaid'],
+              'vendor-pptx': ['pptxgenjs'],
             },
           },
         },

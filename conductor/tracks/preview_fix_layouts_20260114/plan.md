@@ -1,9 +1,9 @@
 # 開發計畫: 預覽修復與專業排版豐富化
 
 ## 階段 1: 預覽同步與分頁 UI 修復
-- [ ] Task: 編寫同步分頁邏輯與 UI 邊界標示的測試案例
-- [ ] Task: 重構 `PreviewPane.tsx` 以顯示明確的「投影片卡片 (Slide Cards)」
-- [ ] Task: 確保 `pptGenerator` 與網頁預覽共用同一套分頁邏輯
+- [x] Task: 編寫同步分頁邏輯與 UI 邊界標示的測試案例
+- [x] Task: 重構 `PreviewPane.tsx` 以顯示明確的「投影片卡片 (Slide Cards)」
+- [x] Task: 確保 `pptGenerator` 與網頁預覽共用同一套分頁邏輯
 - [ ] Task: Conductor - User Manual Verification '階段 1: 預覽同步與分頁 UI 修復' (Protocol in workflow.md)
 
 ## 階段 2: 自定義背景顏色實作

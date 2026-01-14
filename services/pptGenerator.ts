@@ -8,48 +8,13 @@
 import PptxGenJS from "pptxgenjs";
 import { ParsedBlock, BlockType } from "./types";
 import { PPT_THEME } from "../constants/theme";
-
-export interface SlideData {
-  blocks: ParsedBlock[];
-}
+import { splitBlocksToSlides, SlideData } from "./parser/slides";
 
 export interface PptConfig {
   layoutName?: string;
   title?: string;
   author?: string;
 }
-
-/**
- * Splits the flat list of parsed blocks into groups, each representing a single slide.
- */
-export const splitBlocksToSlides = (blocks: ParsedBlock[]): SlideData[] => {
-  const slides: SlideData[] = [];
-  let currentSlideBlocks: ParsedBlock[] = [];
-
-  const flushCurrentSlide = () => {
-    slides.push({ blocks: currentSlideBlocks });
-    currentSlideBlocks = [];
-  };
-
-  for (const block of blocks) {
-    const isHeading1or2 = block.type === BlockType.HEADING_1 || block.type === BlockType.HEADING_2;
-    const isHorizontalRule = block.type === BlockType.HORIZONTAL_RULE;
-
-    if (isHorizontalRule) {
-      flushCurrentSlide();
-      continue;
-    }
-
-    if (isHeading1or2 && currentSlideBlocks.length > 0) {
-      flushCurrentSlide();
-    }
-
-    currentSlideBlocks.push(block);
-  }
-
-  flushCurrentSlide();
-  return slides;
-};
 
 export const generatePpt = async (blocks: ParsedBlock[], config: PptConfig = {}): Promise<void> => {
   const pptx = new PptxGenJS();
