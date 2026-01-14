@@ -1,39 +1,38 @@
-# Changelog
+# 更新日誌 (Changelog)
 
-All notable changes to this project will be documented in this file.
+本專案的所有重大變更都將記錄在此檔案中。
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
+並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
 ## [0.2.0] - 2026-01-14
 
-### Added
-- **Professional Layouts**: Introduced `two-column`, `impact`, and `full-bg` layouts for slides.
-- **Layered Configuration**: Implemented a hybrid syntax using `===` for slide separation and `---` for per-slide YAML configuration.
-- **Dynamic Backgrounds**: Added support for both `bg` (solid color) and `bgImage` (full-screen background) via slide metadata.
-- **WYSIWYG Scaling Preview**: A new preview system that scales the slide content proportionally (1200px virtual canvas), ensuring 100% visual consistency regardless of screen size.
-- **Automatic Image Pre-processing**: Images are now automatically converted to Base64 before PPTX export to ensure compatibility and bypass CORS issues.
-- **Enhanced Chat Mode**: Robust regex parsing and beautiful "Floating Bubbles" visual style for character dialogues.
+### 新增 (Added)
+- **專業投影片佈局**: 引入了 `two-column` (雙欄)、`impact` (強調頁) 與 `full-bg` (全螢幕背景) 等多種佈局模式。
+- **分層配置系統**: 實作了混合語法，使用 `===` 進行分頁，並支援在每頁頂部透過 `---` YAML 區塊進行獨立視覺設定。
+- **動態背景支援**: 支援透過投影片 metadata 設定 `bg` (純色背景) 與 `bgImage` (全螢幕背景圖片)。
+- **所見即所得 (WYSIWYG) 縮放預覽**: 全新的預覽系統，會根據 1200px 虛擬畫布自動計算縮放比例，確保內容在任何視窗大小下皆能保持一致的視覺比例，不再發生內容被擠出的問題。
+- **自動圖片預處理**: 匯出 PPTX 前自動將所有圖片 URL 轉換為 Base64 字串，有效解決瀏覽器 CORS 跨域限制並確保匯出檔案的圖片相容性。
+- **加強型角色對話**: 優化了 Regex 解析邏輯，並為角色對話設計了精美的「漂浮氣泡」視覺樣式。
 
-### Changed
-- **Slide Separator**: Migrated from `---` to `===` to prevent confusion with YAML frontmatter.
-- **Business Aesthetics**: Redesigned default styles with white backgrounds, professional margins, and larger fonts.
-- **Performance**: Optimized Vite build chunks to handle large libraries like `mermaid` and `pptxgenjs`.
+### 變更 (Changed)
+- **分頁符號語法**: 將分頁符號從 `---` 遷移至 `===`，以避免與 YAML 設定區塊產生視覺混淆。
+- **商務美學優化**: 全面重新設計預設樣式，採用純白簡潔背景、專業級邊距與更易讀的大字體。
+- **效能與建置優化**: 優化 Vite 建置配置，將 `mermaid` 與 `pptxgenjs` 等大型套件拆分為獨立 Chunk 以提升載入效率。
 
-### Fixed
-- **Empty Slide Issue**: Fixed a logic bug where leading headings or separators would generate an unwanted empty first slide.
-- **Build Errors**: Resolved esbuild syntax errors related to backtick escaping in template literals.
+### 修復 (Fixed)
+- **空白首頁問題**: 修復了當文件開頭包含標題或分頁線時，會產生多餘空白投影片的邏輯 Bug。
+- **建置錯誤**: 解決了 `esbuild` 在處理範例文件中的反引號跳脫時產生的語法解析錯誤。
 
 ## [0.1.0] - 2026-01-14
 
-### Evolution
-- **Project Rebirth**: Transitioned from `BookPublisher MD2Docx` to `MD2PPT-Evolution`.
-- **Core Engine**: Switched from `docx` (Word) to `pptxgenjs` (PowerPoint).
-- **Default Content**: Updated examples to showcase slide decks, code blocks, and charts suitable for presentations.
-- **Layouts**: Changed page sizes to standard slide aspect ratios (16:9, 4:3, etc.).
-- **Infrastructure**: Cleaned up legacy DOCX code while preserving the robust split-view editor and AST parser.
+### 演進與重生 (Evolution)
+- **專案轉型**: 從 `BookPublisher MD2Docx` 正式更名並轉型為 `MD2PPT-Evolution`。
+- **核心引擎切換**: 將匯出引擎從 `docx` (Word) 更換為 `pptxgenjs` (PowerPoint)。
+- **範例內容更新**: 更新預設範例以展示最適合簡報演示的內容，包括投影片分割、程式碼高亮與圖表。
+- **基礎設施清理**: 清理了所有殘留的 DOCX 相關程式碼，同時保留了強大的分割視窗編輯器與 AST 解析架構。
 
-## [Legacy Versions]
+## [舊版本 (Legacy Versions)]
 
 ### [1.2.8] - 2026-01-09 (MD2Docx)
-- Last version of the Word Document generator.
+- Markdown 轉 Word 產生器的最後一個穩定版本。
