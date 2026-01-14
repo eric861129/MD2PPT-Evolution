@@ -47,7 +47,8 @@ export const useMarkdownEditor = () => {
     exportToPpt(parsedBlocks, {
       layoutName: layout.name,
       title: documentMeta.title,
-      author: documentMeta.author
+      author: documentMeta.author,
+      bg: documentMeta.bg
     });
   };
 

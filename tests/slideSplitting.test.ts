@@ -3,11 +3,11 @@ import { BlockType, ParsedBlock } from '../services/types';
 import { splitBlocksToSlides } from '../services/parser/slides';
 
 describe('Slide Splitting Logic', () => {
-  it('should split blocks by horizontal rule (---)', () => {
+  it('should split blocks by boundary marker (===)', () => {
     const blocks: ParsedBlock[] = [
       { type: BlockType.HEADING_1, content: 'Slide 1' },
       { type: BlockType.PARAGRAPH, content: 'Content 1' },
-      { type: BlockType.HORIZONTAL_RULE, content: '---' },
+      { type: BlockType.HORIZONTAL_RULE, content: '===' },
       { type: BlockType.HEADING_1, content: 'Slide 2' },
       { type: BlockType.PARAGRAPH, content: 'Content 2' },
     ];
@@ -18,35 +18,10 @@ describe('Slide Splitting Logic', () => {
     expect(slides[1].blocks).toHaveLength(2);
   });
 
-  it('should split blocks by H1 and H2 headers', () => {
-    const blocks: ParsedBlock[] = [
-      { type: BlockType.HEADING_1, content: 'Title 1' },
-      { type: BlockType.PARAGRAPH, content: 'Some text' },
-      { type: BlockType.HEADING_2, content: 'Title 2' },
-      { type: BlockType.PARAGRAPH, content: 'More text' },
-    ];
-
-    const slides = splitBlocksToSlides(blocks);
-    expect(slides).toHaveLength(2);
-  });
-
-  it('should handle multiple H1s and horizontal rules correctly', () => {
-    const blocks: ParsedBlock[] = [
-      { type: BlockType.HEADING_1, content: 'Start' },
-      { type: BlockType.HORIZONTAL_RULE, content: '---' },
-      { type: BlockType.HORIZONTAL_RULE, content: '---' },
-      { type: BlockType.HEADING_1, content: 'End' },
-    ];
-
-    const slides = splitBlocksToSlides(blocks);
-    // [Start] --- [] --- [End] -> 3 slides
-    expect(slides).toHaveLength(3); 
-  });
-
-  it('should extract background color from horizontal rule parameters', () => {
+  it('should extract background color from boundary parameters', () => {
     const blocks: ParsedBlock[] = [
       { type: BlockType.HEADING_1, content: 'Slide 1' },
-      { type: BlockType.HORIZONTAL_RULE, content: '--- { "bg": "#FF5500" }', metadata: { bg: '#FF5500' } },
+      { type: BlockType.HORIZONTAL_RULE, content: '===', metadata: { bg: '#FF5500' } },
       { type: BlockType.PARAGRAPH, content: 'Slide 2' },
     ];
 
@@ -55,25 +30,12 @@ describe('Slide Splitting Logic', () => {
     expect(slides[1].metadata?.bg).toBe('#FF5500');
   });
 
-  it('should extract layout attribute from horizontal rule parameters', () => {
-    const blocks: ParsedBlock[] = [
-      { type: BlockType.HEADING_1, content: 'Title Only' },
-      { type: BlockType.HORIZONTAL_RULE, content: '--- { "layout": "two-column" }', metadata: { layout: 'two-column' } },
-      { type: BlockType.PARAGRAPH, content: 'Left content' },
-      { type: BlockType.PARAGRAPH, content: 'Right content' },
-    ];
-
-    const slides = splitBlocksToSlides(blocks);
-    expect(slides).toHaveLength(2);
-    expect(slides[1].metadata?.layout).toBe('two-column');
-  });
-
   it('should handle a complex sequence of slides with mixed metadata', () => {
     const blocks: ParsedBlock[] = [
       { type: BlockType.HEADING_1, content: 'Title Page' },
-      { type: BlockType.HORIZONTAL_RULE, content: '--- { "bg": "#000", "layout": "impact" }', metadata: { bg: '#000', layout: 'impact' } },
+      { type: BlockType.HORIZONTAL_RULE, content: '===', metadata: { bg: '#000', layout: 'impact' } },
       { type: BlockType.HEADING_2, content: 'Impact Message' },
-      { type: BlockType.HORIZONTAL_RULE, content: '--- { "layout": "two-column" }', metadata: { layout: 'two-column' } },
+      { type: BlockType.HORIZONTAL_RULE, content: '===', metadata: { layout: 'two-column' } },
       { type: BlockType.PARAGRAPH, content: 'Col 1' },
       { type: BlockType.PARAGRAPH, content: 'Col 2' },
     ];

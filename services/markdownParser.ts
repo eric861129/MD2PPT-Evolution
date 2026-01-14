@@ -1,6 +1,6 @@
 /**
- * BookPublisher MD2Docx
- * Copyright (c) 2025 EricHuang
+ * MD2PPT-Evolution
+ * Copyright (c) 2026 EricHuang
  * Licensed under the MIT License. 
  */
 
@@ -9,35 +9,65 @@ import { ParsedBlock, ParseResult, DocumentMeta } from './types';
 import { parseMarkdownWithAST } from './parser/ast';
 
 export const parseMarkdown = (text: string): ParseResult => {
-  let meta: DocumentMeta = {};
-  let contentToParse = text;
-  let lineOffset = 0;
-  let charOffset = 0;
-
-  // 1. Extract Frontmatter
-  // Pattern: ^---\n([\s\S]*?)\n---
-  const frontmatterRegex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n/;
-  const match = text.match(frontmatterRegex);
+  // 1. Extract Global Frontmatter (Top-level only)
+  let globalMeta: DocumentMeta = {};
+  let contentToSplit = text;
   
-  if (match) {
+  const globalMatch = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
+  if (globalMatch) {
     try {
-      const yamlContent = match[1];
-      const parsedYaml = yaml.load(yamlContent) as object;
-      if (parsedYaml && typeof parsedYaml === 'object') {
-        meta = parsedYaml;
-      }
-      // Remove frontmatter from content
-      contentToParse = text.slice(match[0].length);
-      // Calculate offsets
-      lineOffset = (match[0].match(/\n/g) || []).length;
-      charOffset = match[0].length;
+      globalMeta = yaml.load(globalMatch[1]) as object || {};
+      contentToSplit = text.slice(globalMatch[0].length);
     } catch (e) {
-      console.warn("Failed to parse YAML frontmatter", e);
+      console.warn("Global YAML parse fail", e);
     }
   }
 
-  // 2. Parse Content using AST
-  const blocks = parseMarkdownWithAST(contentToParse, lineOffset, charOffset);
+  // 2. Split slides by "==="
+  const slideSections = contentToSplit.split(/^===+$/m);
+  const allBlocks: ParsedBlock[] = [];
 
-  return { blocks, meta };
+  slideSections.forEach((section, idx) => {
+    let slideMarkdown = section.trim();
+    let slideMetadata: any = {};
+
+    // 3. Check for slide-level YAML
+    const slideFmMatch = slideMarkdown.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
+    if (slideFmMatch) {
+      try {
+        slideMetadata = yaml.load(slideFmMatch[1]) as object || {};
+        slideMarkdown = slideMarkdown.slice(slideFmMatch[0].length).trim();
+      } catch (e) {
+        console.warn("Slide YAML parse fail", e);
+      }
+    }
+
+    // 4. Inject Page Break Marker
+    // The very first section is slide 1. It carries the global metadata + its own.
+    if (idx === 0) {
+      // First slide boundary: we must provide the metadata but NOT a split rule
+      // Actually, we'll use a special invisible marker OR just set metadata on the first actual block.
+      // But splitBlocksToSlides depends on HR. 
+      // Solution: Always start with an HR if we want consistent metadata assignment.
+      allBlocks.push({
+        type: 'HORIZONTAL_RULE' as any,
+        content: '===',
+        metadata: { ...globalMeta, ...slideMetadata }
+      });
+    } else {
+      allBlocks.push({
+        type: 'HORIZONTAL_RULE' as any,
+        content: '===',
+        metadata: slideMetadata
+      });
+    }
+
+    // 5. Parse Slide Content
+    if (slideMarkdown) {
+      const blocks = parseMarkdownWithAST(slideMarkdown);
+      allBlocks.push(...blocks);
+    }
+  });
+
+  return { blocks: allBlocks, meta: globalMeta };
 };

@@ -3,11 +3,11 @@ import { BlockType, ParsedBlock } from '../services/types';
 import { splitBlocksToSlides } from '../services/parser/slides';
 
 describe('pptGenerator - Slide Splitting Logic', () => {
-  it('should split blocks by horizontal rule (---)', () => {
+  it('should split blocks by boundary marker (===)', () => {
     const blocks: ParsedBlock[] = [
       { type: BlockType.HEADING_1, content: 'Slide 1' },
       { type: BlockType.PARAGRAPH, content: 'Content 1' },
-      { type: BlockType.HORIZONTAL_RULE, content: '---' },
+      { type: BlockType.HORIZONTAL_RULE, content: '===' },
       { type: BlockType.HEADING_1, content: 'Slide 2' },
       { type: BlockType.PARAGRAPH, content: 'Content 2' },
     ];
@@ -18,7 +18,7 @@ describe('pptGenerator - Slide Splitting Logic', () => {
     expect(slides[1].blocks).toHaveLength(2); // Heading + Paragraph
   });
 
-  it('should split blocks by H1 and H2 headers', () => {
+  it('should NOT split blocks by H1 and H2 headers automatically', () => {
     const blocks: ParsedBlock[] = [
       { type: BlockType.HEADING_1, content: 'Title 1' },
       { type: BlockType.PARAGRAPH, content: 'Some text' },
@@ -27,19 +27,19 @@ describe('pptGenerator - Slide Splitting Logic', () => {
     ];
 
     const slides = splitBlocksToSlides(blocks);
-    expect(slides).toHaveLength(2);
+    // Should be 1 slide because no === was used
+    expect(slides).toHaveLength(1);
   });
 
-  it('should handle multiple H1s and horizontal rules correctly', () => {
+  it('should handle boundary markers correctly', () => {
     const blocks: ParsedBlock[] = [
       { type: BlockType.HEADING_1, content: 'Start' },
-      { type: BlockType.HORIZONTAL_RULE, content: '---' },
-      { type: BlockType.HORIZONTAL_RULE, content: '---' }, // Results in an empty slide in the middle
+      { type: BlockType.HORIZONTAL_RULE, content: '===' },
+      { type: BlockType.HORIZONTAL_RULE, content: '===' }, // Empty slide
       { type: BlockType.HEADING_1, content: 'End' },
     ];
 
     const slides = splitBlocksToSlides(blocks);
-    // [Start] --- [] --- [End] -> 3 slides
     expect(slides).toHaveLength(3); 
   });
 

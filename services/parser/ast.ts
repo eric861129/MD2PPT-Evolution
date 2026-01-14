@@ -1,6 +1,6 @@
 /**
- * BookPublisher MD2Docx
- * Copyright (c) 2025 EricHuang
+ * MD2PPT-Evolution
+ * Copyright (c) 2026 EricHuang
  * Licensed under the MIT License.
  */
 
@@ -21,7 +21,6 @@ export const parseMarkdownWithAST = (markdown: string, lineOffset: number = 0, c
   let currentIndex = charOffset;
 
   const processToken = (token: any, blockStartLine: number, blockStartIndex: number) => {
-    // Helper to add block with source info
     const addBlock = (block: ParsedBlock) => {
         blocks.push({
             ...block,
@@ -53,33 +52,26 @@ export const parseMarkdownWithAST = (markdown: string, lineOffset: number = 0, c
         }
 
         // 2. Chat Dialogues
-        // Center: Role :": Content
-        const centerMatch = text.match(/^(.+?)\s*:\":\s*(.*)$/);
+        const centerMatch = text.match(/^(.+?)\s*:\":\s*([\s\S]*)$/);
         if (centerMatch) {
             addBlock({ type: BlockType.CHAT_CUSTOM, role: centerMatch[1].trim(), content: centerMatch[2].trim(), alignment: 'center' });
             break;
         }
-        // Right: Role ::" Content
-        const rightMatch = text.match(/^(.+?)\s*::\"\s*(.*)$/);
+        const rightMatch = text.match(/^(.+?)\s*::"\s*([\s\S]*)$/);
         if (rightMatch) {
             addBlock({ type: BlockType.CHAT_CUSTOM, role: rightMatch[1].trim(), content: rightMatch[2].trim(), alignment: 'right' });
             break;
         }
-        // Left: Role ":: Content
-        const leftMatch = text.match(/^(.+?)\s*\"(?:::|::)\s*(.*)$/);
+        const leftMatch = text.match(/^(.+?)\s*"(?:::|::)\s*([\s\S]*)$/);
         if (leftMatch) {
             addBlock({ type: BlockType.CHAT_CUSTOM, role: leftMatch[1].trim(), content: leftMatch[2].trim(), alignment: 'left' });
             break;
         }
 
-        // 3. Simple Image Detection (Standalone Image in Paragraph)
-        const imageMatch = text.match(/^!\[(.*?)\]\((.*?)\)$/);
+        // 3. Simple Image Detection (Robust regex)
+        const imageMatch = text.trim().match(/^!\[(.*?)\]\((.*?)\)$/);
         if (imageMatch) {
-            addBlock({ 
-                type: BlockType.IMAGE, 
-                content: imageMatch[2], // URL or Base64
-                metadata: { alt: imageMatch[1] } 
-            });
+            addBlock({ type: BlockType.IMAGE, content: imageMatch[2], metadata: { alt: imageMatch[1] } });
             break;
         }
 
@@ -91,33 +83,18 @@ export const parseMarkdownWithAST = (markdown: string, lineOffset: number = 0, c
 
       case 'code':
         if (token.lang === 'mermaid') {
-          addBlock({
-            type: BlockType.MERMAID,
-            content: token.text
-          });
+          addBlock({ type: BlockType.MERMAID, content: token.text });
         } else {
           let language = token.lang || '';
           let showLineNumbers: boolean | undefined = undefined;
-
           if (language.includes(':')) {
             const parts = language.split(':');
             language = parts[0].trim();
             const modifier = parts[1].trim().toLowerCase();
-            if (['ln', 'line', 'yes'].includes(modifier)) {
-              showLineNumbers = true;
-            } else if (['no-ln', 'plain', 'no'].includes(modifier)) {
-              showLineNumbers = false;
-            }
+            if (['ln', 'line', 'yes'].includes(modifier)) showLineNumbers = true;
+            else if (['no-ln', 'plain', 'no'].includes(modifier)) showLineNumbers = false;
           }
-
-          addBlock({
-            type: BlockType.CODE_BLOCK,
-            content: token.text,
-            metadata: {
-              language,
-              showLineNumbers
-            }
-          });
+          addBlock({ type: BlockType.CODE_BLOCK, content: token.text, metadata: { language, showLineNumbers } });
         }
         break;
 
@@ -125,97 +102,49 @@ export const parseMarkdownWithAST = (markdown: string, lineOffset: number = 0, c
         const rawBlockquote = token.tokens.map((t: any) => t.raw).join('').trim();
         let calloutType = BlockType.QUOTE_BLOCK;
         let content = rawBlockquote;
-
         const firstToken = token.tokens[0];
         if (firstToken && firstToken.type === 'paragraph') {
            const firstLine = firstToken.text.trim();
            if (firstLine.startsWith('[!TIP]')) {
              calloutType = BlockType.CALLOUT_TIP;
-             content = rawBlockquote.replace(/^\\[!TIP\\]\s*/m, '').trim(); 
-             // Simplified stripping for now, matching previous logic roughly
-             // Re-implementing specific stripping if needed
-             const lines = rawBlockquote.split('\n');
-             if (lines[0].includes('[!TIP]')) lines[0] = lines[0].replace('[!TIP]', '').trim();
-             content = lines.join('\n');
-
+             content = rawBlockquote.replace(/[\[!]TIP[\s\S]*/, '').trim();
            } else if (firstLine.startsWith('[!WARNING]')) {
              calloutType = BlockType.CALLOUT_WARNING;
-             const lines = rawBlockquote.split('\n');
-             if (lines[0].includes('[!WARNING]')) lines[0] = lines[0].replace('[!WARNING]', '').trim();
-             content = lines.join('\n');
-
+             content = rawBlockquote.replace(/[\[!]WARNING[\s\S]*/, '').trim();
            } else if (firstLine.startsWith('[!NOTE]')) {
              calloutType = BlockType.CALLOUT_NOTE;
-             const lines = rawBlockquote.split('\n');
-             if (lines[0].includes('[!NOTE]')) lines[0] = lines[0].replace('[!NOTE]', '').trim();
-             content = lines.join('\n');
+             content = rawBlockquote.replace(/[\[!]NOTE[\s\S]*/, '').trim();
            }
         }
-        
-        addBlock({
-             type: calloutType,
-             content: content
-        });
+        addBlock({ type: calloutType, content: content });
         break;
 
       case 'list':
         token.items.forEach((item: any) => {
-          const cleanText = item.text.replace(/^\\[[ x]\\]\s*/, ''); 
-          addBlock({
-            type: token.ordered ? BlockType.NUMBERED_LIST : BlockType.BULLET_LIST,
-            content: cleanText 
-          });
+          addBlock({ type: token.ordered ? BlockType.NUMBERED_LIST : BlockType.BULLET_LIST, content: item.text });
         });
         break;
 
       case 'table':
-        const headers = token.header.map((h: any) => h.text);
-        const rows = token.rows.map((row: any) => row.map((cell: any) => cell.text));
-        const allRows = [headers, ...rows];
-        
-        addBlock({
-            type: BlockType.TABLE,
-            content: '',
-            tableRows: allRows
-        });
+        const allRows = [token.header.map((h: any) => h.text), ...token.rows.map((row: any) => row.map((cell: any) => cell.text))];
+        addBlock({ type: BlockType.TABLE, content: '', tableRows: allRows });
         break;
 
       case 'hr':
-        const hrRaw = token.raw.trim();
-        let hrMetadata: any = {};
-        const hrParamMatch = hrRaw.match(/^---+\s*({.*})$/);
-        if (hrParamMatch) {
-          try {
-            hrMetadata = JSON.parse(hrParamMatch[1]);
-          } catch (e) {
-            console.warn("Failed to parse HR metadata", e);
-          }
-        }
-        addBlock({ type: BlockType.HORIZONTAL_RULE, content: hrRaw, metadata: hrMetadata });
+        addBlock({ type: BlockType.HORIZONTAL_RULE, content: token.raw.trim() });
         break;
         
-      case 'space':
-        break;
-
-      default:
-        console.warn(`Unknown token type: ${token.type}`, token);
-        break;
+      case 'space': break;
+      default: console.warn(`Unknown token type: ${token.type}`, token); break;
     }
   };
 
   tokens.forEach(token => {
-     const raw = token.raw;
-     const newlines = (raw.match(/\n/g) || []).length;
-     const len = raw.length;
-     
      const blockStartLine = currentLine;
      const blockStartIndex = currentIndex;
-     
-     currentLine += newlines;
-     currentIndex += len;
-     
+     currentLine += (token.raw.match(/\n/g) || []).length;
+     currentIndex += token.raw.length;
      if (token.type === 'space') return;
-     
      processToken(token, blockStartLine, blockStartIndex);
   });
 

@@ -4,52 +4,47 @@
  * Licensed under the MIT License.
  */
 
-// --- PowerPoint Theme Configuration ---
-
 export const PPT_THEME = {
   FONTS: {
-    MAIN: "Arial",
+    MAIN: "Microsoft JhengHei", // 預設正黑體
     CODE: "Consolas",
-    HEADING: "Arial",
+    HEADING: "Microsoft JhengHei",
   },
   
   COLORS: {
-    // Brand Colors (Evolution Theme)
-    PRIMARY: "D24726",    // PowerPoint Orange-Red
-    SECONDARY: "FF8C00",  // Dark Orange
-    ACCENT: "00FF99",     // Neon Green (Keep for some contrast)
+    // 品牌色：PowerPoint 橘紅
+    PRIMARY: "D24726", 
+    SECONDARY: "444444", 
+    ACCENT: "D24726",
     
-    // Backgrounds
-    BG_SLIDE: "1A1A1A",   // Dark Gray
-    BG_CODE: "2D2D2D",
+    // 背景預設改為白色
+    BG_SLIDE: "FFFFFF",   
+    BG_CODE: "F8F8F8",
     
-    // Text
-    TEXT_MAIN: "FFFFFF",
-    TEXT_MUTED: "A0A0A0",
+    // 文字預設深色
+    TEXT_MAIN: "333333",
+    TEXT_MUTED: "666666",
     
-    // Borders
-    BORDER_CODE: "404040",
+    BORDER_CODE: "E0E0E0",
   },
 
   LAYOUT: {
     WIDTH: 10,
     HEIGHT: 5.625,
-    MARGIN: 0.5,
+    MARGIN: 0.6,
   },
   
   FONT_SIZES: {
-    TITLE: 32,
-    SUBTITLE: 24,
-    BODY: 18,
+    TITLE: 36,
+    SUBTITLE: 28,
+    BODY: 20,
     CODE: 14,
     FOOTER: 12
   }
 };
 
-// --- UI Theme Configuration (For React Components) ---
-
 export const UI_THEME = {
   FONTS: {
-    PREVIEW: `"${PPT_THEME.FONTS.MAIN}", sans-serif`
+    PREVIEW: `"Microsoft JhengHei", "Segoe UI", sans-serif`
   }
 };

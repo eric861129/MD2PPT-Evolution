@@ -38,6 +38,9 @@ export interface ParsedBlock {
   metadata?: {
     showLineNumbers?: boolean;
     language?: string;
+    bg?: string;
+    bgImage?: string;
+    layout?: string;
     [key: string]: any;
   };
 }

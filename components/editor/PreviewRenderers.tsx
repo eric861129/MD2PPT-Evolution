@@ -1,179 +1,115 @@
 /**
- * BookPublisher MD2Docx
- * Copyright (c) 2025 EricHuang
+ * MD2PPT-Evolution
+ * Copyright (c) 2026 EricHuang
  * Licensed under the MIT License. 
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ParsedBlock, BlockType } from '../../services/types';
 import { parseInlineElements, InlineStyleType } from '../../utils/styleParser';
-import { QrCode } from 'lucide-react';
+import { Image as ImageIcon, AlertCircle } from 'lucide-react';
 import MermaidRenderer from './MermaidRenderer';
 
 export const RenderRichText: React.FC<{ text: string }> = ({ text }) => {
   const segments = parseInlineElements(text);
-  
   return (
     <>
       {segments.map((segment, i) => {
         switch (segment.type) {
-          case InlineStyleType.BOLD:
-            return <strong key={i} className="font-bold text-slate-900">{segment.content}</strong>;
-          case InlineStyleType.ITALIC:
-            return <span key={i} className="italic text-blue-800">{segment.content}</span>;
-          case InlineStyleType.UNDERLINE:
-            return <span key={i} className="underline decoration-blue-500 text-blue-600 decoration-1 underline-offset-2">{segment.content}</span>;
-          case InlineStyleType.LINK:
-            return (
-              <span key={i} className="inline-flex items-baseline gap-1 mx-0.5 align-middle">
-                <a 
-                  href={segment.url} 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="text-blue-600 underline underline-offset-4 decoration-blue-300 hover:text-blue-800 hover:decoration-blue-600 transition-colors"
-                >
-                  {segment.content}
-                </a>
-                <span className="inline-flex items-center justify-center bg-slate-100 border border-slate-200 rounded p-[1px] -translate-y-[1px]">
-                   <QrCode className="w-3 h-3 text-slate-500" />
-                </span>
-              </span>
-            );
-          case InlineStyleType.CODE:
-            return <code key={i} className="bg-slate-100 px-1.5 py-0.5 rounded text-[0.9em] font-mono text-slate-700 border border-slate-200">{segment.content}</code>;
-          case InlineStyleType.UI_BUTTON:
-            return (
-              <span key={i} className="inline-block px-1.5 py-0.5 mx-0.5 text-[0.8rem] font-bold bg-slate-200 border border-slate-400 rounded text-slate-800 shadow-[1px_1px_0_0_#94a3b8]">
-                {segment.content}
-              </span>
-            );
-          case InlineStyleType.SHORTCUT:
-            return (
-              <span key={i} className="inline-block px-1 mx-0.5 text-[0.8rem] bg-white border border-slate-300 rounded shadow-sm text-slate-600">
-                {segment.content}
-              </span>
-            );
-          case InlineStyleType.BOOK:
-            return <span key={i} className="font-bold text-slate-900">{segment.content}</span>;
+          case InlineStyleType.BOLD: return <strong key={i} className="font-bold">{segment.content}</strong>;
+          case InlineStyleType.ITALIC: return <span key={i} className="italic opacity-90">{segment.content}</span>;
+          case InlineStyleType.CODE: return <code key={i} className="bg-slate-200/50 dark:bg-black/20 px-1.5 py-0.5 rounded font-mono text-[0.9em]">{segment.content}</code>;
+          case InlineStyleType.LINK: return <span key={i} className="text-orange-600 underline underline-offset-4">{segment.content}</span>;
           case InlineStyleType.TEXT:
-          default:
-            return <span key={i}>{segment.content}</span>;
+          default: return <span key={i}>{segment.content}</span>;
         }
       })}
     </>
   );
 };
 
-export const PreviewBlock: React.FC<{ block: ParsedBlock; showLineNumbers?: boolean }> = ({ block, showLineNumbers: globalShowLineNumbers = true }) => {
-  // 決定是否顯示行號：Metadata 優先，否則使用 Global 設定
-  let showLineNumbers = globalShowLineNumbers;
-  if (block.metadata?.showLineNumbers !== undefined) {
-    showLineNumbers = block.metadata.showLineNumbers;
-  }
+export const PreviewBlock: React.FC<{ block: ParsedBlock }> = ({ block }) => {
+  const [imgError, setImgError] = useState(false);
 
   switch (block.type) {
-    case BlockType.TOC:
-      const tocLines = block.content.split('\n');
-      return (
-        <div className="my-12">
-          <h2 className="text-3xl font-black mb-8 text-center tracking-widest text-slate-900 uppercase">目 錄</h2>
-          <div className="space-y-3">
-            {tocLines.map((line, idx) => {
-              const cleanText = line.replace(/^[-*\d\.]+\s*/, '').trim();
-              if (!cleanText) return null;
-              return (
-                <div key={idx} className="flex items-end gap-2 group">
-                  <span className="text-slate-800 font-medium whitespace-nowrap"><RenderRichText text={cleanText} /></span>
-                  <div className="flex-1 border-b-2 border-dotted border-slate-300 mb-1 opacity-50 group-hover:border-slate-400 transition-colors"></div>
-                  <span className="text-slate-400 font-mono text-sm mb-0.5">...</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
     case BlockType.HEADING_1:
-      return <h1 className="text-4xl font-black mb-12 mt-16 pb-4 border-b-4 border-slate-900 tracking-tight leading-tight"><RenderRichText text={block.content} /></h1>;
+      return <h1 className="text-6xl font-black mb-10 border-l-[12px] border-orange-600 pl-8 leading-tight uppercase tracking-tighter"><RenderRichText text={block.content} /></h1>;
     case BlockType.HEADING_2:
-      return <h2 className="text-2xl font-black mb-8 mt-12 tracking-tight flex items-center gap-3 before:w-2 before:h-8 before:bg-indigo-600"><RenderRichText text={block.content} /></h2>;
+      return <h2 className="text-4xl font-bold mb-8 text-slate-600 dark:text-slate-300 tracking-tight"><RenderRichText text={block.content} /></h2>;
     case BlockType.HEADING_3:
-      return <h3 className="text-xl font-bold mb-6 mt-10 text-slate-800 underline decoration-indigo-200 underline-offset-8 decoration-4"><RenderRichText text={block.content} /></h3>;
+      return <h3 className="text-3xl font-semibold mb-6 opacity-80 underline decoration-orange-500/30 underline-offset-8"><RenderRichText text={block.content} /></h3>;
     case BlockType.CODE_BLOCK:
-      const codeLines = block.content.split('\n');
       return (
-        <div className="my-10 border border-slate-300 bg-slate-50 rounded shadow-sm overflow-hidden relative group text-sm">
-          {block.metadata?.language && (
-            <div className="absolute top-0 right-0 px-3 py-1 bg-slate-200 text-[10px] font-bold text-slate-500 uppercase rounded-bl border-b border-l border-slate-300 z-10">
-              {block.metadata.language}
-            </div>
-          )}
-          <div className="flex font-mono">
-            {showLineNumbers && (
-              <div className="bg-slate-100/50 border-r border-slate-200 px-2 py-4 text-right select-none text-slate-400 leading-relaxed min-w-[2.5rem]">
-                {codeLines.map((_, i) => (
-                  <div key={i}>{i + 1}</div>
-                ))}
-              </div>
-            )}
-            <pre className="flex-1 p-4 whitespace-pre text-slate-900 leading-relaxed overflow-x-auto m-0 pt-8">
-              {block.content}
-            </pre>
-          </div>
+        <div className="my-10 bg-slate-100 dark:bg-black/30 border border-slate-300 dark:border-slate-700 p-8 rounded-lg font-mono text-xl shadow-inner overflow-hidden">
+          <pre className="whitespace-pre-wrap break-all">{block.content}</pre>
         </div>
       );
     case BlockType.MERMAID:
-      return <MermaidRenderer chart={block.content} />;
+      return <div className="my-10 scale-125 flex justify-center"><MermaidRenderer chart={block.content} /></div>;
     case BlockType.CHAT_CUSTOM:
-      const isRight = block.alignment === 'right';
-      const isCenter = block.alignment === 'center';
+      const align = block.alignment || 'left';
       return (
-        <div className={`flex ${isRight ? 'justify-end pl-20' : isCenter ? 'justify-center px-10' : 'justify-start pr-20'} my-12`}>
+        <div className={`flex ${align === 'right' ? 'justify-end pl-24' : align === 'center' ? 'justify-center px-12' : 'justify-start pr-24'} my-10`}>
           <div className={`
-            ${isCenter ? 'max-w-[90%]' : 'max-w-[85%]'} 
-            border-2 p-6 relative 
-            ${isRight ? 'border-dashed border-slate-900 bg-white text-right' : 
-              isCenter ? 'border-double border-indigo-400 bg-indigo-50/30 text-center' : 
-              'border-dotted border-slate-900 bg-slate-100 text-left'}
+            p-8 relative rounded-3xl shadow-lg border-2
+            ${align === 'right' ? 'bg-orange-50 border-orange-200 text-right rounded-tr-none' : 
+              align === 'center' ? 'bg-indigo-50 border-indigo-100 text-center' : 
+              'bg-emerald-50 border-emerald-100 text-left rounded-tl-none'}
           `}>
-            <div className={`absolute -top-3 ${isRight ? 'left-4' : isCenter ? 'left-1/2 -translate-x-1/2' : 'right-4'} bg-inherit px-2 text-[10px] font-black tracking-widest text-indigo-600 border border-slate-200 uppercase`}>
+            <div className={`absolute -top-4 ${align === 'right' ? 'right-0' : align === 'center' ? 'left-1/2 -translate-x-1/2' : 'left-0'} px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest shadow-md
+              ${align === 'right' ? 'bg-orange-500 text-white' : 
+                align === 'center' ? 'bg-indigo-500 text-white' : 
+                'bg-emerald-500 text-white'}
+            `}>
               {block.role}
             </div>
-            <div className="whitespace-pre-wrap leading-[1.8] text-slate-900"><RenderRichText text={block.content} /></div>
+            <div className="text-2xl leading-relaxed text-slate-800"><RenderRichText text={block.content} /></div>
           </div>
         </div>
       );
-    case BlockType.CALLOUT_TIP:
+    case BlockType.IMAGE:
       return (
-        <div className="my-14 p-6 bg-slate-50 border border-slate-400 shadow-sm relative">
-           <div className="absolute -top-3 left-4 bg-slate-50 px-2 text-xs font-bold text-slate-600 border border-slate-400">TIP</div>
-           <div className="whitespace-pre-wrap leading-[1.8] text-slate-800"><RenderRichText text={block.content} /></div>
-        </div>
-      );
-    case BlockType.CALLOUT_WARNING:
-      return (
-        <div className="my-14 p-6 bg-slate-50 border-2 border-black shadow-md relative">
-           <div className="absolute -top-3 left-4 bg-white px-2 text-xs font-black text-black border-2 border-black">WARNING</div>
-           <div className="whitespace-pre-wrap leading-[1.8] text-slate-900 font-bold"><RenderRichText text={block.content} /></div>
-        </div>
-      );
-    case BlockType.CALLOUT_NOTE:
-      return (
-        <div className="my-14 p-6 bg-white border border-dashed border-slate-400 shadow-sm relative">
-           <div className="absolute -top-3 left-4 bg-white px-2 text-xs font-bold text-slate-500 border border-dashed border-slate-400">NOTE</div>
-           <div className="whitespace-pre-wrap leading-[1.8] text-slate-800 italic"><RenderRichText text={block.content} /></div>
+        <div className="flex flex-col items-center justify-center my-12 w-full">
+          {imgError ? (
+            <div className="w-full h-64 bg-slate-100 rounded-xl border-4 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 gap-4">
+              <AlertCircle size={48} />
+              <p className="text-xl font-bold">圖片載入失敗 (可能存在 CORS 限制)</p>
+              <p className="text-sm opacity-60">{block.content}</p>
+            </div>
+          ) : (
+            <div className="relative group w-full flex justify-center">
+              <img 
+                src={block.content} 
+                alt={block.metadata?.alt || "Slide Content"} 
+                className="max-w-[95%] max-h-[600px] object-contain shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-xl border-8 border-white"
+                onError={() => setImgError(true)}
+              />
+              <div className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                <ImageIcon size={20} />
+              </div>
+            </div>
+          )}
+          {block.metadata?.alt && (
+            <p className="mt-4 text-lg text-slate-400 italic font-medium">{block.metadata.alt}</p>
+          )}
         </div>
       );
     case BlockType.TABLE:
       return (
-        <div className="my-10 overflow-x-auto">
-          <table className="w-full border-collapse border border-slate-400 text-left shadow-sm">
+        <div className="my-10 overflow-hidden rounded-xl border border-slate-300 dark:border-slate-700 shadow-2xl">
+          <table className="w-full border-collapse text-2xl">
+            <thead>
+              <tr className="bg-slate-800 text-white dark:bg-slate-700">
+                {block.tableRows?.[0].map((cell, idx) => (
+                  <th key={idx} className="p-6 text-left font-black tracking-widest uppercase">{cell}</th>
+                ))}
+              </tr>
+            </thead>
             <tbody>
-              {block.tableRows?.map((row, rIdx) => (
-                <tr key={rIdx} className={`border-b border-slate-300 ${rIdx === 0 ? 'bg-slate-100 font-bold' : 'bg-white'}`}>
+              {block.tableRows?.slice(1).map((row, rIdx) => (
+                <tr key={rIdx} className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 last:border-0 hover:bg-slate-50 transition-colors">
                   {row.map((cell, cIdx) => (
-                    <td key={cIdx} className="p-4 border-r border-slate-300 text-sm text-slate-800 last:border-r-0">
-                      <RenderRichText text={cell} />
-                    </td>
+                    <td key={cIdx} className="p-6 text-slate-700 dark:text-slate-300"><RenderRichText text={cell} /></td>
                   ))}
                 </tr>
               ))}
@@ -181,9 +117,17 @@ export const PreviewBlock: React.FC<{ block: ParsedBlock; showLineNumbers?: bool
           </table>
         </div>
       );
-    case BlockType.HORIZONTAL_RULE:
-      return <hr className="my-8 border-t-2 border-slate-900" />;
+    case BlockType.CALLOUT_TIP:
+    case BlockType.CALLOUT_NOTE:
+    case BlockType.CALLOUT_WARNING:
+      const isWarn = block.type === BlockType.CALLOUT_WARNING;
+      return (
+        <div className={`my-12 p-10 border-l-[16px] rounded-r-2xl shadow-xl ${isWarn ? 'bg-red-50 border-red-500' : 'bg-blue-50 border-blue-500'}`}>
+          <div className={`text-xl font-black uppercase mb-4 tracking-tighter ${isWarn ? 'text-red-600' : 'text-blue-600'}`}>{block.type.split('_')[1]}</div>
+          <div className="text-3xl italic leading-relaxed text-slate-800"><RenderRichText text={block.content} /></div>
+        </div>
+      );
     default:
-      return <p className="mb-8 leading-[2.1] text-justify text-slate-800 tracking-tight"><RenderRichText text={block.content} /></p>;
+      return <p className="text-3xl leading-relaxed mb-10 text-justify tracking-tight opacity-90"><RenderRichText text={block.content} /></p>;
   }
 };
