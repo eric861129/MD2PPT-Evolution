@@ -9,135 +9,115 @@
 const BT = "`";
 
 export const INITIAL_CONTENT_ZH = `---
-title: "MD2PPT 簡報範例"
+title: "MD2PPT 專業排版演示"
 author: "EricHuang"
-theme: "neon"
-aspectRatio: "16:9"
+bg: "#1A1A1A"
 ---
 
 # MD2PPT-Evolution
+## 讓 Markdown 成為你的專業簡報利器
 
-## 讓 Markdown 成為你的簡報利器
+--- { "layout": "impact", "bg": "#D24726" }
 
-- **快速**: 專注內容，自動排版
-- **靈活**: 支援程式碼、圖表與多種佈局
-- **美觀**: 內建現代化深色主題
+# 歡迎使用
+## 全新 Evolution 引擎
+
+--- { "layout": "two-column" }
+
+# 1. 雙欄排版功能
+
+### 內容優勢
+- 自動平分區塊內容
+- 適合左右對比
+- 保持商務美感
+
+### 技術細節
+- 偵測 ${BT}two-column${BT} 標籤
+- 自動計算內容高度
+- 支援圖片與清單混排
+
+--- { "layout": "full-bg" }
+
+![背景圖片](https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop)
+
+# 2. 全螢幕背景
+## 讓視覺更具衝擊力
 
 ---
 
-# 1. 投影片分割
-
-您可以使用標準的 Markdown 標題 (H1, H2) 來做為投影片的標題。
-或者使用 ${BT}---${BT} 分隔線來強制分頁。
-
-## 這是第二張投影片 (H2)
-
-- 這是列表項目 1
-- 這是列表項目 2
-    - 支援巢狀列表
-
----
-
-# 2. 程式碼高亮
-
-MD2PPT 專為技術分享者設計，支援豐富的程式碼高亮：
+# 3. 程式碼高亮與角色對話
 
 ${BT}${BT}${BT}typescript
-// 歡迎使用 MD2PPT
-interface Slide {
-  title: string;
-  content: string[];
-}
-
-const createSlide = (title: string): Slide => {
-  return { title, content: [] };
-}
+// 簡潔的 PPT 生成代碼
+const ppt = new PptxGenJS();
+ppt.layout = "LAYOUT_16x9";
 ${BT}${BT}${BT}
 
----
+Gemini ":: 這是靠左的角色對話
+讀者 ::" 這是靠右的角色對話
+系統 :": 這是置中的系統訊息
 
-# 3. 支援圖表 (Mermaid)
-
-直接在簡報中繪製流程圖：
-
-${BT}${BT}${BT}mermaid
-graph LR
-    Markdown --> Parser
-    Parser --> AST
-    AST --> PPTX
-${BT}${BT}${BT}
-
----
+--- { "bg": "#000000" }
 
 # 4. 結語
 
 感謝您的使用！
-按一下右上角的 **【匯出 PPT】** 按鈕即可取得檔案。
+點擊右上角的 **【匯出 PPT】** 即可取得這份簡報。
 `;
 
 export const INITIAL_CONTENT_EN = `---
-title: "MD2PPT Demo"
+title: "MD2PPT Professional Demo"
 author: "EricHuang"
-theme: "neon"
-aspectRatio: "16:9"
+bg: "#1A1A1A"
 ---
 
 # MD2PPT-Evolution
+## Turn Markdown into Professional Slides
 
-## Turn Markdown into Slides Instantly
+--- { "layout": "impact", "bg": "#D24726" }
 
-- **Fast**: Focus on content, auto-layout
-- **Flexible**: Code blocks, charts, and layouts
-- **Beautiful**: Modern dark themes built-in
+# Welcome to
+## Evolution Engine
+
+--- { "layout": "two-column" }
+
+# 1. Two-Column Layout
+
+### Content Advantages
+- Auto-splitting content
+- Perfect for comparisons
+- Business-ready aesthetics
+
+### Tech Specs
+- Detects ${BT}two-column${BT} tag
+- Auto-calculates heights
+- Supports mixed blocks
+
+--- { "layout": "full-bg" }
+
+![BG](https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop)
+
+# 2. Full Background
+## Higher Visual Impact
 
 ---
 
-# 1. Slide Splitting
-
-Use standard Markdown headers (H1, H2) as slide titles.
-Or use ${BT}---${BT} horizontal rules to force a new slide.
-
-## This is Slide 2 (H2)
-
-- List item 1
-- List item 2
-    - Nested list support
-
----
-
-# 2. Syntax Highlighting
-
-Designed for tech presenters:
+# 3. Code & Dialogues
 
 ${BT}${BT}${BT}typescript
-// Welcome to MD2PPT
-interface Slide {
-  title: string;
-  content: string[];
-}
-
-const createSlide = (title: string): Slide => {
-  return { title, content: [] };
-}
+// Clean PPT Generation
+const ppt = new PptxGenJS();
+ppt.layout = "LAYOUT_16x9";
 ${BT}${BT}${BT}
 
----
+Gemini ":: Left-aligned dialogue
+Reader ::" Right-aligned dialogue
+System :": Centered system message
 
-# 3. Charts (Mermaid)
-
-Draw flowcharts directly:
-
-${BT}${BT}${BT}mermaid
-graph LR
-    Markdown --> Parser
-    Parser --> AST
-    AST --> PPTX
-${BT}${BT}${BT}
-
----
+--- { "bg": "#000000" }
 
 # 4. Conclusion
 
 Thank you!
-Click the **[Export PPT]** button in the top right corner.
+Click **[Export PPT]** to download this deck.
 `;
