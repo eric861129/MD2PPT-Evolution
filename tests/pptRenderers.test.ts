@@ -6,11 +6,13 @@ import { bulletListRenderer } from '../services/ppt/builders/ListRenderer';
 import { imageRenderer } from '../services/ppt/builders/ImageRenderer';
 import { codeBlockRenderer } from '../services/ppt/builders/CodeBlockRenderer';
 
+import { chatCustomRenderer } from '../services/ppt/builders/ChatCustomRenderer';
+
 describe('Core Renderers', () => {
   const mockSlide = { addText: vi.fn(), addImage: vi.fn(), addShape: vi.fn() };
   const mockCtx = {
     slide: mockSlide,
-    pptx: { ShapeType: { rect: 'rect' } },
+    pptx: { ShapeType: { rect: 'rect', roundRect: 'roundRect' } },
     x: 1, y: 1, w: 8,
     options: { big: false, isDark: false }
   };
@@ -53,6 +55,19 @@ describe('Core Renderers', () => {
     };
     const newY = codeBlockRenderer.render(block, mockCtx as any);
     expect(mockSlide.addText).toHaveBeenCalled();
+    expect(newY).toBeGreaterThan(1);
+  });
+
+  it('ChatCustomRenderer should render and return new Y', () => {
+    const block = { 
+      type: BlockType.CHAT_CUSTOM, 
+      content: 'Hello', 
+      role: 'Bot', 
+      alignment: 'center' as const
+    };
+    const newY = chatCustomRenderer.render(block, mockCtx as any);
+    expect(mockSlide.addText).toHaveBeenCalled();
+    expect(mockSlide.addShape).toHaveBeenCalled();
     expect(newY).toBeGreaterThan(1);
   });
 });
