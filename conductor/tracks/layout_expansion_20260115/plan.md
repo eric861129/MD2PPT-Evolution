@@ -14,22 +14,22 @@
     - [x] 調整 `hooks/useEditorState.ts` 以存取新的 SOM 結構 (實際上更新了 PreviewPane 及其整合測試)
 - [x] 任務：Conductor - User Manual Verification '階段 1' (Protocol in workflow.md) (e3970fe)
 
-## 階段 2：佈局渲染器實作 (Web 預覽)
+## 階段 2：佈局渲染器實作 (Web 預覽) [checkpoint: 486fffa]
 **目標：** 在網頁預覽端實作四種新佈局與背景渲染。
 
-- [ ] 任務：實作 Center 與 Quote 佈局樣式
-    - [ ] 撰寫測試驗證佈局組件是否接收到正確的配置
-    - [ ] 在 `components/editor/PreviewRenderers.tsx` 中新增 Center 與 Quote 的 Tailwind 樣式
-- [ ] 任務：實作 Grid (網格) 佈局系統
-    - [ ] 撰寫測試驗證多欄位內容的分配邏輯
-    - [ ] 實作基於 CSS Grid 的預覽組件，支援選填的 columns 設定
-- [ ] 任務：實作 Alert 佈局樣式
-    - [ ] 撰寫預覽測試：驗證不同類型的 Alert (Info, Warning) 視覺呈現
-    - [ ] 新增 Alert 渲染組件
-- [ ] 任務：背景與過場動畫預覽整合
-    - [ ] 撰寫測試驗證背景顏色/圖片是否正確應用於預覽容器
-    - [ ] 在 `PreviewPane.tsx` 中實作動態背景與 CSS Transition 效果
-- [ ] 任務：Conductor - User Manual Verification '階段 2' (Protocol in workflow.md)
+- [x] 任務：實作 Center 與 Quote 佈局樣式 (486fffa)
+    - [x] 撰寫測試驗證佈局組件是否接收到正確的配置
+    - [x] 在 `components/editor/PreviewRenderers.tsx` 中新增 Center 與 Quote 的 Tailwind 樣式 (已實作於 PreviewPane 以獲得更好的整合性)
+- [x] 任務：實作 Grid (網格) 佈局系統 (486fffa)
+    - [x] 撰寫測試驗證多欄位內容的分配邏輯
+    - [x] 實作基於 CSS Grid 的預覽組件，支援選填的 columns 設定
+- [x] 任務：實作 Alert 佈局樣式 (486fffa)
+    - [x] 撰寫預覽測試：驗證不同類型的 Alert (Info, Warning) 視覺呈現
+    - [x] 新增 Alert 渲染組件
+- [x] 任務：背景與過場動畫預覽整合 (486fffa)
+    - [x] 撰寫測試驗證背景顏色/圖片是否正確應用於預覽容器
+    - [x] 在 `PreviewPane.tsx` 中實作動態背景與 CSS Transition 效果
+- [x] 任務：Conductor - User Manual Verification '階段 2' (Protocol in workflow.md) (486fffa)
 
 ## 階段 3：PPTX 引擎同步 (Export Logic)
 **目標：** 將新的佈局與配置對應至 `pptxgenjs`，確保匯出的檔案與預覽一致。
