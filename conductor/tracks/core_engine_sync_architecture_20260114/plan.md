@@ -13,7 +13,7 @@
 ## 階段 2: 註冊表與 Mock 測試基礎 (Registry & Testing)
 目標：建立核心註冊機制並確保測試環境就緒。
 
-- [ ] 任務 1: 實作 `RendererRegistry` (同步版本)。
+- [x] 任務 1: 實作 `RendererRegistry` (同步版本)。(8eff33d)
 - [ ] 任務 2: 設置 Vitest Mock `pptxgenjs` 並編寫基礎生成引擎的測試腳本。
 - [ ] 任務 3: 實作 `services/ppt/builders/index.ts` 進行手動匯出管理。
 - [ ] Task: Conductor - User Manual Verification '階段 2: 註冊表與 Mock 測試基礎' (Protocol in workflow.md)
