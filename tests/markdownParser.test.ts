@@ -9,7 +9,7 @@ describe('markdownParser', () => {
       'title: My PPT',
       '---',
       '# Slide 1',
-      '===' ,
+      '---' ,
       '---',
       'layout: impact',
       '---',

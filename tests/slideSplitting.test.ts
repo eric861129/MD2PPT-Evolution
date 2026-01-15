@@ -7,7 +7,7 @@ describe('Slide Splitting Logic', () => {
     const blocks: ParsedBlock[] = [
       { type: BlockType.HEADING_1, content: 'Slide 1' },
       { type: BlockType.PARAGRAPH, content: 'Content 1' },
-      { type: BlockType.HORIZONTAL_RULE, content: '===' },
+      { type: BlockType.HORIZONTAL_RULE, content: '---' },
       { type: BlockType.HEADING_1, content: 'Slide 2' },
       { type: BlockType.PARAGRAPH, content: 'Content 2' },
     ];
@@ -21,7 +21,7 @@ describe('Slide Splitting Logic', () => {
   it('should extract background color from boundary parameters', () => {
     const blocks: ParsedBlock[] = [
       { type: BlockType.HEADING_1, content: 'Slide 1' },
-      { type: BlockType.HORIZONTAL_RULE, content: '===', metadata: { bg: '#FF5500' } },
+      { type: BlockType.HORIZONTAL_RULE, content: '---', metadata: { bg: '#FF5500' } },
       { type: BlockType.PARAGRAPH, content: 'Slide 2' },
     ];
 
@@ -33,9 +33,9 @@ describe('Slide Splitting Logic', () => {
   it('should handle a complex sequence of slides with mixed metadata', () => {
     const blocks: ParsedBlock[] = [
       { type: BlockType.HEADING_1, content: 'Title Page' },
-      { type: BlockType.HORIZONTAL_RULE, content: '===', metadata: { bg: '#000', layout: 'impact' } },
+      { type: BlockType.HORIZONTAL_RULE, content: '---', metadata: { bg: '#000', layout: 'impact' } },
       { type: BlockType.HEADING_2, content: 'Impact Message' },
-      { type: BlockType.HORIZONTAL_RULE, content: '===', metadata: { layout: 'two-column' } },
+      { type: BlockType.HORIZONTAL_RULE, content: '---', metadata: { layout: 'two-column' } },
       { type: BlockType.PARAGRAPH, content: 'Col 1' },
       { type: BlockType.PARAGRAPH, content: 'Col 2' },
     ];
