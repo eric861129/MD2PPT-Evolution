@@ -9,9 +9,9 @@
 - [x] 任務：實作 Markdown-to-YAML 解析器 (3b6046e)
     - [x] 撰寫解析測試：驗證 `---` 分隔符號後的 YAML 區塊能正確轉換為物件
     - [x] 修改 `services/markdownParser.ts`，整合 YAML 解析邏輯 (推薦使用 `js-yaml`)
-- [ ] 任務：更新 Zustand Editor Store
-    - [ ] 撰寫測試確保編輯內容變更時，SOM 的 config 能即時更新
-    - [ ] 調整 `hooks/useEditorState.ts` 以存取新的 SOM 結構
+- [x] 任務：更新 Zustand Editor Store (cae3543)
+    - [x] 撰寫測試確保編輯內容變更時，SOM 的 config 能即時更新
+    - [x] 調整 `hooks/useEditorState.ts` 以存取新的 SOM 結構 (實際上更新了 PreviewPane 及其整合測試)
 - [ ] 任務：Conductor - User Manual Verification '階段 1' (Protocol in workflow.md)
 
 ## 階段 2：佈局渲染器實作 (Web 預覽)
