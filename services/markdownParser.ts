@@ -23,48 +23,78 @@ export const parseMarkdown = (text: string): ParseResult => {
     }
   }
 
-  // 2. Split slides by "==="
-  const slideSections = contentToSplit.split(/^===+$/m);
+  // 2. Split slides by "---" (at the start of a line)
+  // We use a more careful approach to distinguish between slide separators and YAML delimiters.
+  const rawSections = contentToSplit.split(/^---+$/m);
   const allBlocks: ParsedBlock[] = [];
 
-  slideSections.forEach((section, idx) => {
-    let slideMarkdown = section.trim();
+  const processedSlides: { markdown: string; metadata: any }[] = [];
+  
+  let i = 0;
+  // If the first section is empty (e.g. text started with ---), skip it or handle as empty slide 1
+  if (rawSections[0].trim() === "" && rawSections.length > 1) {
+    i = 1;
+  }
+
+  while (i < rawSections.length) {
+    let slideMarkdown = rawSections[i].trim();
     let slideMetadata: any = {};
 
-    // 3. Check for slide-level YAML
-    const slideFmMatch = slideMarkdown.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
-    if (slideFmMatch) {
+    // Check if this section is empty AND followed by another section
+    // This happens when we have --- followed by another --- (a YAML block start)
+    if (slideMarkdown === "" && i + 1 < rawSections.length) {
+      // The next section is the YAML content
       try {
-        slideMetadata = yaml.load(slideFmMatch[1]) as object || {};
-        slideMarkdown = slideMarkdown.slice(slideFmMatch[0].length).trim();
+        slideMetadata = yaml.load(rawSections[i + 1]) as object || {};
+        // The section after that is the actual slide content
+        i += 2;
+        slideMarkdown = (rawSections[i] || "").trim();
       } catch (e) {
-        console.warn("Slide YAML parse fail", e);
+        // Not valid YAML or unexpected structure, fallback
+        i++;
+        slideMarkdown = (rawSections[i] || "").trim();
+      }
+    } else {
+      // Standard slide without leading YAML block
+      // But wait, the YAML block might be INSIDE the slideMarkdown if we didn't split correctly
+      // or if the user used the old style: 
+      // ---
+      // layout: grid
+      // ---
+      const slideFmMatch = slideMarkdown.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
+      if (slideFmMatch) {
+        try {
+          slideMetadata = yaml.load(slideFmMatch[1]) as object || {};
+          slideMarkdown = slideMarkdown.slice(slideFmMatch[0].length).trim();
+        } catch (e) {
+          console.warn("Slide YAML parse fail", e);
+        }
       }
     }
 
-    // 4. Inject Page Break Marker
-    // The very first section is slide 1. It carries the global metadata + its own.
+    processedSlides.push({ markdown: slideMarkdown, metadata: slideMetadata });
+    i++;
+  }
+
+  processedSlides.forEach((slide, idx) => {
+    // Inject Page Break Marker (HORIZONTAL_RULE)
     if (idx === 0) {
-      // First slide boundary: we must provide the metadata but NOT a split rule
-      // Actually, we'll use a special invisible marker OR just set metadata on the first actual block.
-      // But splitBlocksToSlides depends on HR. 
-      // Solution: Always start with an HR if we want consistent metadata assignment.
       allBlocks.push({
         type: 'HORIZONTAL_RULE' as any,
-        content: '===',
-        metadata: { ...globalMeta, ...slideMetadata }
+        content: '---',
+        metadata: { ...globalMeta, ...slide.metadata }
       });
     } else {
       allBlocks.push({
         type: 'HORIZONTAL_RULE' as any,
-        content: '===',
-        metadata: slideMetadata
+        content: '---',
+        metadata: slide.metadata
       });
     }
 
-    // 5. Parse Slide Content
-    if (slideMarkdown) {
-      const blocks = parseMarkdownWithAST(slideMarkdown);
+    // Parse Slide Content
+    if (slide.markdown) {
+      const blocks = parseMarkdownWithAST(slide.markdown);
       allBlocks.push(...blocks);
     }
   });
