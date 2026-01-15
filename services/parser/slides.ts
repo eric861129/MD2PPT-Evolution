@@ -24,34 +24,37 @@ export const splitBlocksToSlides = (blocks: ParsedBlock[]): SlideData[] => {
   const slides: SlideData[] = [];
   let currentSlideBlocks: ParsedBlock[] = [];
   let currentSlideMetadata: any = {};
-  let hasContentInCurrentSlide = false;
+  let hasStartedFirstSlide = false;
 
   for (const block of blocks) {
     if (block.type === BlockType.HORIZONTAL_RULE) {
-      // Finish current slide (even if empty, to support multiple ===)
-      slides.push({ 
-        blocks: [...currentSlideBlocks],
-        metadata: { ...currentSlideMetadata }
-      });
-      // Start new slide
-      currentSlideBlocks = [];
+      // If we already have content OR we've already initialized a slide sequence,
+      // we need to finish the previous one.
+      if (hasStartedFirstSlide && (currentSlideBlocks.length > 0 || slides.length > 0)) {
+        slides.push({ 
+          blocks: [...currentSlideBlocks],
+          metadata: { ...currentSlideMetadata }
+        });
+        currentSlideBlocks = [];
+      }
+      
+      // Set metadata for the NEXT upcoming slide
       currentSlideMetadata = block.metadata || {};
-      hasContentInCurrentSlide = false;
+      hasStartedFirstSlide = true;
     } else {
       currentSlideBlocks.push(block);
-      hasContentInCurrentSlide = true;
     }
   }
 
   // Final slide flush: 
-  // Always push the last slide if we had any blocks or if it's the only slide
-  if (hasContentInCurrentSlide || currentSlideBlocks.length > 0 || slides.length > 0 || blocks.length > 0) {
+  // Push if there are blocks, OR if we've initialized a slide (supporting empty last slides)
+  if (currentSlideBlocks.length > 0 || (hasStartedFirstSlide && slides.length === 0) || (currentSlideBlocks.length === 0 && Object.keys(currentSlideMetadata).length > 0)) {
     slides.push({ 
       blocks: [...currentSlideBlocks],
       metadata: { ...currentSlideMetadata }
     });
   }
 
-  // Safety cleanup: Ensure we don't return an empty array
+  // Safety cleanup: Ensure we don't return an empty slide if there's absolutely no content
   return slides.length > 0 ? slides : [{ blocks: [], metadata: {} }];
 };
