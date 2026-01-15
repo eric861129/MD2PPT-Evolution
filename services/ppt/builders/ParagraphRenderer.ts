@@ -4,7 +4,7 @@ import { BlockRenderer, RenderContext } from "./types";
 
 export const paragraphRenderer: BlockRenderer = {
   type: BlockType.PARAGRAPH,
-  render: async (block, ctx) => {
+  render: (block, ctx) => {
     const { slide, x, y, w, options } = ctx;
     const { big, align, isDark, color } = options;
     const textColor = isDark ? "FFFFFF" : (color || PPT_THEME.COLORS.TEXT_MAIN);

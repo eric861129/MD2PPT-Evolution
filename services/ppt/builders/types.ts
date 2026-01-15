@@ -24,5 +24,5 @@ export interface RenderContext {
 
 export interface BlockRenderer {
   type: BlockType;
-  render(block: ParsedBlock, ctx: RenderContext): Promise<number>;
+  render(block: ParsedBlock, ctx: RenderContext): number;
 }

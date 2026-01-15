@@ -31,10 +31,10 @@ function renderList(block: any, ctx: RenderContext, isBullet: boolean): number {
 
 export const bulletListRenderer: BlockRenderer = {
   type: BlockType.BULLET_LIST,
-  render: async (block, ctx) => renderList(block, ctx, true)
+  render: (block, ctx) => renderList(block, ctx, true)
 };
 
 export const numberedListRenderer: BlockRenderer = {
   type: BlockType.NUMBERED_LIST,
-  render: async (block, ctx) => renderList(block, ctx, false)
+  render: (block, ctx) => renderList(block, ctx, false)
 };

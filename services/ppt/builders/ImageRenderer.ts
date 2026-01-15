@@ -3,7 +3,7 @@ import { BlockRenderer, RenderContext } from "./types";
 
 export const imageRenderer: BlockRenderer = {
   type: BlockType.IMAGE,
-  render: async (block, ctx) => {
+  render: (block, ctx) => {
     const { slide, x, y, w, options } = ctx;
     const { align } = options;
 

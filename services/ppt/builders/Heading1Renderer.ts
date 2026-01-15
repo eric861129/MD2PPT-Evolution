@@ -4,7 +4,7 @@ import { BlockRenderer, RenderContext } from "./types";
 
 export const heading1Renderer: BlockRenderer = {
   type: BlockType.HEADING_1,
-  render: async (block, ctx) => {
+  render: (block, ctx) => {
     const { slide, x, y, w, options } = ctx;
     const { big, align } = options;
     

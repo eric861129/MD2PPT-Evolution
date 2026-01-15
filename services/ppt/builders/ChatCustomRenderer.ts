@@ -4,7 +4,7 @@ import { BlockRenderer, RenderContext } from "./types";
 
 export const chatCustomRenderer: BlockRenderer = {
   type: BlockType.CHAT_CUSTOM,
-  render: async (block, ctx) => {
+  render: (block, ctx) => {
     const { slide, pptx, x, y, w } = ctx;
     
     const chatAlign = block.alignment || 'left';
