@@ -24,28 +24,28 @@ export const splitBlocksToSlides = (blocks: ParsedBlock[]): SlideData[] => {
   const slides: SlideData[] = [];
   let currentSlideBlocks: ParsedBlock[] = [];
   let currentSlideMetadata: any = {};
-  let hasContentInCurrentSlide = false;
 
   for (const block of blocks) {
     if (block.type === BlockType.HORIZONTAL_RULE) {
-      // Finish current slide (even if empty, to support multiple ===)
-      slides.push({ 
-        blocks: [...currentSlideBlocks],
-        metadata: { ...currentSlideMetadata }
-      });
-      // Start new slide
-      currentSlideBlocks = [];
+      // Only push if there's actual content or if this isn't the very first HR
+      if (currentSlideBlocks.length > 0 || slides.length > 0) {
+        slides.push({ 
+          blocks: [...currentSlideBlocks],
+          metadata: { ...currentSlideMetadata }
+        });
+        currentSlideBlocks = [];
+      }
+      
+      // Set metadata for the upcoming slide
       currentSlideMetadata = block.metadata || {};
-      hasContentInCurrentSlide = false;
     } else {
       currentSlideBlocks.push(block);
-      hasContentInCurrentSlide = true;
     }
   }
 
   // Final slide flush: 
-  // Always push the last slide if we had any blocks or if it's the only slide
-  if (hasContentInCurrentSlide || currentSlideBlocks.length > 0 || slides.length > 0 || blocks.length > 0) {
+  // Push if we have blocks, or if it's the only slide (even if empty but has metadata)
+  if (currentSlideBlocks.length > 0 || slides.length > 0 || Object.keys(currentSlideMetadata).length > 0) {
     slides.push({ 
       blocks: [...currentSlideBlocks],
       metadata: { ...currentSlideMetadata }
