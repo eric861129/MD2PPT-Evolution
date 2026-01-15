@@ -30,7 +30,7 @@
 ## 階段 4: 最終整合與清理 (Integration & Cleanup)
 目標：移除舊邏輯並確保穩定性。
 
-- [ ] 任務 1: 在 `renderBlocksToArea` 中切換至 Registry 模式，並移除舊的 `switch-case` 邏輯。
+- [x] 任務 1: 在 `renderBlocksToArea` 中切換至 Registry 模式，並移除舊的 `switch-case` 邏輯。(b7abc72)
 - [ ] 任務 2: 執行完整的 Mock 測試與迴歸測試。
 - [ ] 任務 3: 合併分支 (由使用者決定)。
 - [ ] Task: Conductor - User Manual Verification '階段 4: 最終整合與清理' (Protocol in workflow.md)
