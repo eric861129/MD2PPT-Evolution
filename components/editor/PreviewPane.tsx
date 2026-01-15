@@ -31,8 +31,8 @@ const SlideCard: React.FC<{ slide: SlideData; index: number; layout: { width: nu
     return () => resizeObserver.disconnect();
   }, []);
 
-  const bgImage = slide.metadata?.bgImage;
-  const rawBg = slide.metadata?.bg || globalBg || '#FFFFFF';
+  const bgImage = slide.config?.bgImage || slide.metadata?.bgImage;
+  const rawBg = slide.config?.background || slide.config?.bg || slide.metadata?.bg || globalBg || '#FFFFFF';
   const bgColor = rawBg.startsWith('#') ? rawBg : `#${rawBg}`;
   const hex = bgColor.replace('#', '');
   const r = parseInt(hex.substring(0, 2), 16) || 255;
@@ -47,7 +47,7 @@ const SlideCard: React.FC<{ slide: SlideData; index: number; layout: { width: nu
       <div style={{ width: `${DESIGN_WIDTH}px`, height: `${designHeight}px`, transform: `scale(${scale})`, transformOrigin: 'top left', backgroundColor: bgImage ? 'transparent' : bgColor, color: isDark ? '#FFFFFF' : '#1C1917', position: 'absolute', top: 0, left: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {bgImage && <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(${bgImage})` }}><div className="absolute inset-0 bg-black/40"></div></div>}
         <div className={`absolute top-6 right-10 text-xs font-black uppercase tracking-[0.3em] z-20 ${isDark ? 'text-white/20' : 'text-stone-400/20'}`}>Slide {index + 1}</div>
-        <div className="flex-1 relative z-10 flex flex-col p-[80px_100px]"><SlideContent blocks={slide.blocks} layout={slide.metadata?.layout} isDark={isDark} /></div>
+        <div className="flex-1 relative z-10 flex flex-col p-[80px_100px]"><SlideContent blocks={slide.blocks} layout={slide.config?.layout || slide.metadata?.layout} isDark={isDark} /></div>
       </div>
     </div>
   );
