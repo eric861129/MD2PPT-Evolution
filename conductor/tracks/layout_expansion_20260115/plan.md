@@ -31,19 +31,19 @@
     - [x] 在 `PreviewPane.tsx` 中實作動態背景與 CSS Transition 效果
 - [x] 任務：Conductor - User Manual Verification '階段 2' (Protocol in workflow.md) (486fffa)
 
-## 階段 3：PPTX 引擎同步 (Export Logic)
+## 階段 3：PPTX 引擎同步 (Export Logic) [checkpoint: 5180a1e]
 **目標：** 將新的佈局與配置對應至 `pptxgenjs`，確保匯出的檔案與預覽一致。
 
-- [ ] 任務：更新 PPTX Registry 與 Master 定義
-    - [ ] 撰寫測試驗證 `services/pptx/masters.ts` 是否正確接收配置
-    - [ ] 在 `masters.ts` 中定義 Grid, Center, Quote, Alert 的 Slide Master
-- [ ] 任務：實作 PPTX 背景與過場動畫導出
-    - [ ] 撰寫測試驗證 `pptxgenjs` 的 slide 選項是否包含 transition 與 background
-    - [ ] 修改 `services/pptGenerator.ts`，將 SOM config 映射至 PPTX 投影片屬性
-- [ ] 任務：實作 Table-Modern 指令渲染器
-    - [ ] 撰寫測試驗證 `::: table-modern` 容器內的表格解析
-    - [ ] 實作新的 PPTX 表格渲染器，支援自定義標題顏色與間隔列
-- [ ] 任務：Conductor - User Manual Verification '階段 3' (Protocol in workflow.md)
+- [x] 任務：更新 PPTX Registry 與 Master 定義 (5180a1e)
+    - [x] 撰寫測試驗證 `services/pptx/masters.ts` 是否正確接收配置
+    - [x] 在 `masters.ts` 中定義 Grid, Center, Quote, Alert 的 Slide Master (已直接於 pptGenerator 中實作佈局邏輯)
+- [x] 任務：實作 PPTX 背景與過場動畫導出 (5180a1e)
+    - [x] 撰寫測試驗證 `pptxgenjs` 的 slide 選項是否包含 transition 與 background
+    - [x] 修改 `services/pptGenerator.ts`，將 SOM config 映射至 PPTX 投影片屬性
+- [x] 任務：實作 Table-Modern 指令渲染器 (5180a1e)
+    - [x] 撰寫測試驗證 `::: table-modern` 容器內的表格解析
+    - [x] 實作新的 PPTX 表格渲染器，支援自定義標題顏色與間隔列
+- [x] 任務：Conductor - User Manual Verification '階段 3' (Protocol in workflow.md) (5180a1e)
 
 ## 階段 4：清理與相容性處理
 **目標：** 移除舊有的 `::: layout` 語法，並進行最終品質校正。
