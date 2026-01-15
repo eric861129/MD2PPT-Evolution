@@ -3,6 +3,8 @@ import { generatePpt } from '../services/pptGenerator';
 import { BlockType, ParsedBlock } from '../services/types';
 import PptxGenJS from 'pptxgenjs';
 
+import { rendererRegistry } from '../services/ppt/builders/registry';
+
 // Mock pptxgenjs
 vi.mock('pptxgenjs', () => {
   const mockSlide = {
@@ -26,6 +28,13 @@ vi.mock('pptxgenjs', () => {
 });
 
 describe('pptGenerator Architecture', () => {
+  it('should prefer Registry over fallback switch', async () => {
+    const getSpy = vi.spyOn(rendererRegistry, 'getRenderer');
+    const blocks: ParsedBlock[] = [{ type: BlockType.HEADING_1, content: 'Test' }];
+    await generatePpt(blocks);
+    expect(getSpy).toHaveBeenCalledWith(BlockType.HEADING_1);
+  });
+
   it('should call addSlide and addText for a simple heading', async () => {
     const blocks: ParsedBlock[] = [
       { type: BlockType.HEADING_1, content: 'Hello World' }
