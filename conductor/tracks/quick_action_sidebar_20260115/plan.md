@@ -45,9 +45,9 @@ layout: grid
 ## 階段 4：整合驗證與清理
 **目標：** 進行端到端測試，確保所有功能流暢運作，並清理未使用的程式碼。
 
-- [ ] 任務：UI 細節打磨
-    - [ ] 優化 Tooltip 提示，確保使用者知道每個按鈕的用途
-    - [ ] 統一深色/淺色主題下的 Sidebar 樣式
-- [ ] 任務：E2E 流程測試
-    - [ ] 手動驗證：點擊側欄 -> 插入內容 -> 拖放圖片 -> 設定背景 -> 匯出 PPTX
-- [ ] 任務：Conductor - User Manual Verification '階段 4' (Protocol in workflow.md)
+- [x] 任務：UI 細節打磨
+    - [x] 優化 Tooltip 提示，確保使用者知道每個按鈕的用途
+    - [x] 統一深色/淺色主題下的 Sidebar 樣式
+- [x] 任務：E2E 流程測試
+    - [x] 手動驗證：點擊側欄 -> 插入內容 -> 拖放圖片 -> 設定背景 -> 匯出 PPTX
+- [x] 任務：Conductor - User Manual Verification '階段 4' (Protocol in workflow.md)
