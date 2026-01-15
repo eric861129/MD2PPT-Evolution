@@ -1,6 +1,6 @@
 # 執行計畫：快捷動作側欄與直覺式資產管理 (quick_action_sidebar_20260115)
 
-## 階段 1：快捷動作側欄 (UI & Component)
+## 階段 1：快捷動作側欄 (UI & Component) [checkpoint: d8013f4]
 **目標：** 建立左側欄 UI，支援展開/收合狀態管理，並定義動作按鈕清單。
 
 - [x] 任務：建立 QuickActionSidebar 組件
