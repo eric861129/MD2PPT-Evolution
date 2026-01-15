@@ -12,7 +12,7 @@
     - [x] 確保 EditorPane 在 Sidebar 展開/收合時能響應式調整寬度
 - [x] 任務：Conductor - User Manual Verification '階段 1' (Protocol in workflow.md)
 
-## 階段 2：編輯器動作與語法插入邏輯
+## 階段 2：編輯器動作與語法插入邏輯 [checkpoint: 919c8a8]
 **目標：** 實現點擊按鈕後，將特定語法模板插入 Monaco Editor 的游標位置。
 
 - [ ] 任務：開發 EditorActionService
