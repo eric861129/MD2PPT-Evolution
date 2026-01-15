@@ -6,7 +6,7 @@ export class RendererRegistry {
   private renderers: Map<BlockType, BlockRenderer> = new Map();
 
   constructor() {
-      this.registerAllManual();
+    this.registerAllManual();
   }
 
   register(renderer: BlockRenderer): void {
@@ -17,15 +17,15 @@ export class RendererRegistry {
     return this.renderers.get(type);
   }
 
-  registerAllManual() {
-      // FORCE DISABLE ALL RENDERERS FOR DEBUGGING
-      /*
-      Object.values(Renderers).forEach(renderer => {
-          if (renderer && renderer.type && typeof renderer.render === 'function') {
-              this.register(renderer);
-          }
-      });
-      */
+  /**
+   * Registers all renderers from the index file.
+   */
+  private registerAllManual(): void {
+    Object.values(Renderers).forEach(renderer => {
+      if (renderer && (renderer as any).type && typeof (renderer as any).render === 'function') {
+        this.register(renderer as BlockRenderer);
+      }
+    });
   }
 }
 
