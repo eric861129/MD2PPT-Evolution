@@ -5,6 +5,11 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
 並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [0.3.1] - 2026-01-14
+
+### 修復 (Fixed)
+- **PPT 匯出損壞**: 修復了因 `PPT_THEME` 中定義了 CSS 風格的字型堆疊（如 `"Segoe UI", "Microsoft JhengHei"`）導致 PptxGenJS 生成無效 XML 結構，進而造成匯出檔案損壞且內容空白的嚴重問題。現在匯出引擎會正確使用單一字型名稱。
+
 ## [0.3.0] - 2026-01-14
 
 ### 新增 (Added)
