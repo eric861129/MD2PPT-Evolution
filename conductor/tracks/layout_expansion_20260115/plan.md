@@ -6,9 +6,9 @@
 - [x] 任務：定義新的 Slide Object Model (SOM) 結構 (647bb76)
     - [x] 撰寫測試驗證 SOM 是否能包含 `config` 欄位（layout, background, transition）
     - [x] 更新 `services/parser/slides.ts` 中的類型定義
-- [ ] 任務：實作 Markdown-to-YAML 解析器
-    - [ ] 撰寫解析測試：驗證 `---` 分隔符號後的 YAML 區塊能正確轉換為物件
-    - [ ] 修改 `services/markdownParser.ts`，整合 YAML 解析邏輯 (推薦使用 `js-yaml`)
+- [x] 任務：實作 Markdown-to-YAML 解析器 (3b6046e)
+    - [x] 撰寫解析測試：驗證 `---` 分隔符號後的 YAML 區塊能正確轉換為物件
+    - [x] 修改 `services/markdownParser.ts`，整合 YAML 解析邏輯 (推薦使用 `js-yaml`)
 - [ ] 任務：更新 Zustand Editor Store
     - [ ] 撰寫測試確保編輯內容變更時，SOM 的 config 能即時更新
     - [ ] 調整 `hooks/useEditorState.ts` 以存取新的 SOM 結構
