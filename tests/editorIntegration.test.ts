@@ -8,7 +8,7 @@ describe('Editor Integration (Parser + SOM)', () => {
 title: Presentation
 ---
 # Slide 1
----
+===
 ---
 layout: grid
 background: "#00ff00"

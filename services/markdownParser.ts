@@ -23,56 +23,59 @@ export const parseMarkdown = (text: string): ParseResult => {
     }
   }
 
-  // 2. Split slides by "---" (at the start of a line)
-  // We use a more careful approach to distinguish between slide separators and YAML delimiters.
-  const rawSections = contentToSplit.split(/^---+$/m);
+  // 2. Split slides by separators "---" or "===" that are NOT part of a YAML block.
+  // We look for separators on their own line.
+  const rawSections = contentToSplit.split(/^(?:---+|===+)$/m);
   const allBlocks: ParsedBlock[] = [];
 
   const processedSlides: { markdown: string; metadata: any }[] = [];
   
   let i = 0;
-  // If the first section is empty (e.g. text started with ---), skip it or handle as empty slide 1
-  if (rawSections[0].trim() === "" && rawSections.length > 1) {
+  // Handle leading separators
+  if (rawSections.length > 0 && rawSections[0].trim() === "") {
     i = 1;
   }
 
   while (i < rawSections.length) {
-    let slideMarkdown = rawSections[i].trim();
+    let sectionContent = rawSections[i];
     let slideMetadata: any = {};
 
-    // Check if this section is empty AND followed by another section
-    // This happens when we have --- followed by another --- (a YAML block start)
-    if (slideMarkdown === "" && i + 1 < rawSections.length) {
-      // The next section is the YAML content
-      try {
-        slideMetadata = yaml.load(rawSections[i + 1]) as object || {};
-        // The section after that is the actual slide content
-        i += 2;
-        slideMarkdown = (rawSections[i] || "").trim();
-      } catch (e) {
-        // Not valid YAML or unexpected structure, fallback
-        i++;
-        slideMarkdown = (rawSections[i] || "").trim();
-      }
-    } else {
-      // Standard slide without leading YAML block
-      // But wait, the YAML block might be INSIDE the slideMarkdown if we didn't split correctly
-      // or if the user used the old style: 
+    // Check if this section starts with a YAML block.
+    // We need to be careful: the split might have happened AT the first --- of a YAML block
+    // if the user didn't provide a slide separator but just a YAML block.
+    // However, our logic assumes a separator precedes each slide config.
+    
+    // A robust way is to check if the next section(s) combined form a YAML block
+    // if the current section is empty.
+    if (sectionContent.trim() === "" && i + 2 < rawSections.length) {
+      // Potentially: empty_section (from separator) -> yaml_content -> rest_of_slide
+      // This happens if the user wrote:
+      // ===
       // ---
       // layout: grid
       // ---
-      const slideFmMatch = slideMarkdown.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
+      try {
+        const yamlContent = rawSections[i + 1];
+        slideMetadata = yaml.load(yamlContent) as object || {};
+        i += 2;
+        sectionContent = rawSections[i] || "";
+      } catch (e) {
+        // Not a YAML block, just an empty slide maybe
+      }
+    } else {
+      // Check if YAML is inside the current section content
+      const slideFmMatch = sectionContent.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
       if (slideFmMatch) {
         try {
           slideMetadata = yaml.load(slideFmMatch[1]) as object || {};
-          slideMarkdown = slideMarkdown.slice(slideFmMatch[0].length).trim();
+          sectionContent = sectionContent.slice(slideFmMatch[0].length);
         } catch (e) {
-          console.warn("Slide YAML parse fail", e);
+          // Parse fail
         }
       }
     }
 
-    processedSlides.push({ markdown: slideMarkdown, metadata: slideMetadata });
+    processedSlides.push({ markdown: sectionContent.trim(), metadata: slideMetadata });
     i++;
   }
 

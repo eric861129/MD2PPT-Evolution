@@ -74,7 +74,17 @@ const SlideContent: React.FC<{ blocks: ParsedBlock[], layout?: string, isDark?: 
   const titleBlocks = blocks.filter(b => b.type === BlockType.HEADING_1 || b.type === BlockType.HEADING_2);
   const otherBlocks = blocks.filter(b => b.type !== BlockType.HEADING_1 && b.type !== BlockType.HEADING_2);
 
-  if (layout === 'impact' || layout === 'full-bg') return (<div className="flex flex-col h-full items-center justify-center text-center scale-125 origin-center"><div className={`w-full ${isDark ? 'drop-shadow-[0_4px_15px_rgba(0,0,0,0.6)]' : ''}`}>{renderBlocks(blocks)}</div></div>);
+  if (layout === 'impact' || layout === 'full-bg' || layout === 'center') {
+    const isImpact = layout === 'impact' || layout === 'full-bg';
+    return (
+      <div className={`flex flex-col h-full items-center justify-center text-center ${isImpact ? 'scale-125 origin-center' : ''}`}>
+        <div className={`w-full ${isDark && isImpact ? 'drop-shadow-[0_4px_15px_rgba(0,0,0,0.6)]' : ''}`}>
+          {renderBlocks(blocks)}
+        </div>
+      </div>
+    );
+  }
+  
   if (layout === 'two-column') {
     const mid = Math.ceil(otherBlocks.length / 2);
     return (<div className="flex flex-col h-full">{titleBlocks.length > 0 && <div className="mb-16">{renderBlocks(titleBlocks)}</div>}<div className="flex-1 grid grid-cols-2 gap-24 overflow-hidden text-left"><div>{renderBlocks(otherBlocks.slice(0, mid))}</div><div>{renderBlocks(otherBlocks.slice(mid))}</div></div></div>);
@@ -95,8 +105,8 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewR
           <span className="w-2 h-2 rounded-full bg-[#EA580C] animate-pulse"></span> Evolution Engine
         </div>
       </div>
-      <div ref={previewRef} className="flex-1 overflow-y-auto p-10 lg:p-16 scroll-smooth bg-transparent">
-        <div className="w-full max-w-[1400px] mx-auto space-y-24 pb-60">
+      <div ref={previewRef} className="flex-1 overflow-y-auto p-4 lg:p-8 scroll-smooth bg-transparent">
+        <div className="w-full max-w-[1600px] mx-auto space-y-12 pb-60">
           {slides.length > 0 ? slides.map((slide, index) => (
             <SlideCard key={index} slide={slide} index={index} layout={selectedLayout} globalBg={documentMeta.bg} />
           )) : (
