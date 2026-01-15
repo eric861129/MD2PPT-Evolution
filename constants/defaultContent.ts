@@ -220,7 +220,7 @@ ${BT}${BT}${BT}
 
 ===
 
-# 4. Character Dialogues
+# 7. Character Dialogues
 
 Gemini ":: Left-aligned dialogue
 
@@ -233,7 +233,7 @@ System :": Centered system message
 bg: "#333333"
 ---
 
-# 5. Conclusion
+# 8. Conclusion
 
 Thank you!
 `;
