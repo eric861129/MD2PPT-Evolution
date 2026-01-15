@@ -15,7 +15,8 @@ vi.mock('pptxgenjs', () => {
   const mockPptx = {
     addSlide: vi.fn().mockReturnValue(mockSlide),
     writeFile: vi.fn().mockResolvedValue(undefined),
-    layout: ''
+    layout: '',
+    ShapeType: { rect: 'rect', roundRect: 'roundRect' }
   };
   return {
     default: vi.fn().mockImplementation(function() {
@@ -43,5 +44,15 @@ describe('pptGenerator Architecture', () => {
       'Hello World',
       expect.objectContaining({ fontSize: 36 })
     );
+  });
+
+  it('should run pre-processing for images and code blocks without crashing', async () => {
+    const blocks: ParsedBlock[] = [
+      { type: BlockType.CODE_BLOCK, content: 'const x = 1;', metadata: { language: 'javascript' } },
+      { type: BlockType.IMAGE, content: 'https://example.com/test.png' }
+    ];
+    
+    // This should execute the pre-processing logic in generatePpt
+    await expect(generatePpt(blocks)).resolves.not.toThrow();
   });
 });
