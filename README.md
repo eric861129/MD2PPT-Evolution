@@ -1,6 +1,6 @@
 # MD2PPT-EVOLUTION
 
-![Version](https://img.shields.io/badge/version-0.3.0-orange.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Version](https://img.shields.io/badge/version-0.4.0-orange.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 **MD2PPT-EVOLUTION** 是一個基於 Web 的工具，專為將 **Markdown** 直接轉換為專業的 **PowerPoint (PPTX)** 簡報而設計。
 
