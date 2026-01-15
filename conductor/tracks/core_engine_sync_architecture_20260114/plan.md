@@ -7,7 +7,7 @@
 
 - [x] 任務 1: 建立並切換至 `refactor/core-engine-sync-architecture` 分支。(20d67d0)
 - [x] 任務 2: 更新 `services/types.ts`，定義 `SlideMetadata` 介面並強化 `ParsedBlock` 的型別。(4751e21)
-- [ ] 任務 3: 建立新的目錄結構 `services/ppt/builders/` 並定義同步介面 `BlockRenderer` 與 `RenderContext`。
+- [x] 任務 3: 建立新的目錄結構 `services/ppt/builders/` 並定義同步介面 `BlockRenderer` 與 `RenderContext`。(b61478b)
 - [ ] Task: Conductor - User Manual Verification '階段 1: 環境準備與型別定義' (Protocol in workflow.md)
 
 ## 階段 2: 註冊表與 Mock 測試基礎 (Registry & Testing)
