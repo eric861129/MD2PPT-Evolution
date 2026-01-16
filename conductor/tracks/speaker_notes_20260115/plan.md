@@ -32,7 +32,7 @@
     - [x] 確保備忘錄展開時，預覽區域的滾動與間距依然維持美觀
 - [x] 任務：Conductor - User Manual Verification '階段 3' (Protocol in workflow.md) (PHASE_3_SHA)
 
-## 階段 4：PPTX 匯出與最終磨合 [checkpoint: PHASE_4_SHA]
+## 階段 4：PPTX 匯出與最終磨合 [checkpoint: 057eccb]
 **目標：** 確保匯出的 PPTX 檔案包含原生備忘錄，並更新快捷側欄。
 
 - [x] 任務：同步 PPTX 匯出引擎 (PHASE_4_SHA)
