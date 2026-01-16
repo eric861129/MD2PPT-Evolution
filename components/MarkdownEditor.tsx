@@ -18,10 +18,12 @@ import { EditorActionService } from '../services/editorActionService';
 import { ACTION_TEMPLATES } from '../constants/templates';
 import { fileToBase64 } from '../utils/imageUtils';
 import { updateSlideYaml } from '../services/markdownUpdater';
+import { ThemePanel } from './editor/ThemePanel';
 
 const MarkdownEditor: React.FC = () => {
   const darkModeState = useDarkMode();
   const editorState = useMarkdownEditor();
+  const [isThemePanelOpen, setIsThemePanelOpen] = React.useState(false);
   
   const {
     content,
@@ -39,6 +41,9 @@ const MarkdownEditor: React.FC = () => {
     const service = new EditorActionService(textareaRef.current);
     
     switch (action.type) {
+        case 'TOGGLE_THEME_PANEL':
+            setIsThemePanelOpen(!isThemePanelOpen);
+            break;
         // Structure & Layouts
         case 'INSERT_SLIDE':
             service.insertText(ACTION_TEMPLATES.INSERT_SLIDE, setContent);
@@ -109,24 +114,9 @@ const MarkdownEditor: React.FC = () => {
         try {
           const base64 = await fileToBase64(file);
           const service = new EditorActionService(textareaRef.current);
-          const template = `![${file.name.split('.')[0]}|](${base64})`;
-          // We use | as a marker for where we want to split or focus, but insertText expects $cursor
-          // Let's adapt template:
-          const insertTemplate = `![${file.name.split('.')[0]}](${base64})`;
-          // Actually, spec said "cursor stays in alt text".
-          // "![|](...)" -> "![|]($cursor...)"
-          // Let's just insert standard image markdown for now or adapt EditorActionService to support selection inside brackets.
-          // For simplicity, let's insert it and select the Alt text part if possible, or just insert it.
-          
-          // Spec: "智慧語法插入：自動插入 ![|](data:image/...)，並將游標聚焦於 | 所在位置 (Alt Text)。"
-          // Let's manually construct it.
           const altText = file.name.split('.')[0];
           const fullText = `![${altText}](${base64})`;
-          
           service.insertText(fullText, setContent);
-          
-          // Ideally we would select "altText", but insertText puts cursor at end.
-          // This is acceptable for Phase 3 MVP.
         } catch (err) {
           console.error("Failed to process dropped image", err);
         }
@@ -139,13 +129,26 @@ const MarkdownEditor: React.FC = () => {
     setContent(newContent);
   };
 
+  const handleInsertColor = (hex: string) => {
+    if (!textareaRef.current) return;
+    const service = new EditorActionService(textareaRef.current);
+    service.insertText(hex, setContent);
+  };
+
   return (
     <EditorProvider editorState={editorState} darkModeState={darkModeState}>
-      <div className="flex flex-col h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden transition-colors">
+      <div className="flex flex-col h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden transition-colors relative">
         <EditorHeader />
 
-        <main className="flex flex-1 overflow-hidden">
+        <main className="flex flex-1 overflow-hidden relative">
           <QuickActionSidebar onAction={handleAction} />
+          
+          {isThemePanelOpen && (
+            <ThemePanel 
+              onClose={() => setIsThemePanelOpen(false)} 
+              onInsertColor={handleInsertColor}
+            />
+          )}
           
           <div className="flex flex-1 overflow-hidden">
             <div 

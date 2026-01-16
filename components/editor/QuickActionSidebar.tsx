@@ -25,10 +25,12 @@ import {
   AreaChart,
   Columns,
   AlignCenter,
-  MessageSquare
+  MessageSquare,
+  Palette
 } from 'lucide-react';
 
 export type ActionType = 
+  | 'TOGGLE_THEME_PANEL'
   | 'INSERT_SLIDE'
   | 'LAYOUT_GRID'
   | 'LAYOUT_TWO_COLUMN'
@@ -93,7 +95,6 @@ const ACTION_GROUPS: ActionGroup[] = [
   },
   {
     label: 'Formatting',
-
     items: [
       { type: 'FORMAT_BOLD', icon: Bold, label: 'Bold', tooltip: 'Bold Text' },
       { type: 'FORMAT_ITALIC', icon: Italic, label: 'Italic', tooltip: 'Italic Text' },
@@ -114,17 +115,27 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
       `}
     >
       {/* Header / Toggle */}
-      <div className="flex items-center justify-between p-3 border-b border-[#E7E5E4] dark:border-[#44403C] h-14">
+      <div className={`flex items-center border-b border-[#E7E5E4] dark:border-[#44403C] h-14 ${isExpanded ? 'justify-between p-3' : 'flex-col gap-1 py-2 justify-center'}`}>
         {isExpanded && (
           <span className="font-bold text-sm uppercase tracking-wider text-stone-500">Quick Actions</span>
         )}
-        <button 
-          onClick={() => setIsExpanded(!isExpanded)}
-          aria-label="Toggle Sidebar"
-          className="p-1.5 rounded-md hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors mx-auto"
-        >
-          {isExpanded ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
-        </button>
+        <div className={`flex ${isExpanded ? 'gap-1' : 'flex-col gap-1'}`}>
+          <button 
+            onClick={() => onAction({ type: 'TOGGLE_THEME_PANEL' })}
+            aria-label="Theme & Colors"
+            title="Theme & Colors"
+            className="p-1.5 rounded-md hover:bg-[#FFF7ED] dark:hover:bg-[#44403C] text-[#EA580C] transition-colors"
+          >
+            <Palette size={18} />
+          </button>
+          <button 
+            onClick={() => setIsExpanded(!isExpanded)}
+            aria-label="Toggle Sidebar"
+            className="p-1.5 rounded-md hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors"
+          >
+            {isExpanded ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+          </button>
+        </div>
       </div>
 
       {/* Actions List */}
