@@ -71,7 +71,7 @@ export const EditorHeader: React.FC = () => {
             src={logoPath} 
             alt="Logo" 
             className="w-6 h-6 lg:w-7 lg:h-7" 
-            style={{ filter: 'invert(48%) sepia(91%) saturate(1841%) hue-rotate(345deg) brightness(95%) contrast(92%)' }}
+            style={{ filter: 'invert(48%) sepia(91%) saturate(1841%) hue-rotate(345deg) brightness(95%) contrast(92%)' }} 
           />
         </div>
         <div className="flex flex-col">
@@ -85,7 +85,7 @@ export const EditorHeader: React.FC = () => {
       </div>
       
       {/* Right: Actions */}
-      <div className="flex items-center gap-2 lg:gap-4 overflow-hidden">
+      <div className="flex items-center gap-2 lg:gap-4">
         
         {/* Color Tool Toggle */}
         <IconButton 
@@ -101,7 +101,7 @@ export const EditorHeader: React.FC = () => {
         <div className="w-[1px] h-6 bg-white/10 mx-0.5 lg:mx-1 shrink-0" />
 
         {/* Custom Theme Dropdown */}
-        <div className="relative shrink-0" ref={dropdownRef}>
+        <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setIsThemeDropdownOpen(!isThemeDropdownOpen)}
             className="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 bg-white/5 border border-white/10 rounded-xl hover:border-[#EA580C]/50 transition-all text-white min-w-[140px] lg:min-w-[180px]"
@@ -117,7 +117,7 @@ export const EditorHeader: React.FC = () => {
           </button>
 
           {isThemeDropdownOpen && (
-            <div className="absolute top-full mt-2 right-0 w-60 lg:w-64 bg-[#1C1917] border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] py-2 z-50 animate-in zoom-in-95 fade-in duration-200 origin-top-right">
+            <div className="absolute top-full mt-2 right-0 w-60 lg:w-64 bg-[#1C1917] border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] py-2 z-[60] animate-in zoom-in-95 fade-in duration-200 origin-top-right">
               <div className="px-4 py-2 mb-1 border-b border-white/5">
                 <span className="text-[10px] font-black text-stone-500 uppercase tracking-widest">Select PPT Theme</span>
               </div>
@@ -149,12 +149,31 @@ export const EditorHeader: React.FC = () => {
 
         <div className="w-[1px] h-6 bg-white/10 mx-0.5 lg:mx-1 shrink-0 hidden md:block" />
 
+        {/* Paper Size Selector - Restored and Beautified */}
+        <div className="relative shrink-0">
+          <select 
+            value={selectedSizeIndex}
+            onChange={(e) => setSelectedSizeIndex(Number(e.target.value))}
+            className="h-10 pl-10 pr-8 bg-white/5 border border-white/10 rounded-xl text-white text-[10px] lg:text-xs font-bold outline-none hover:border-[#EA580C]/50 transition-all appearance-none cursor-pointer min-w-[120px] lg:min-w-[150px]"
+            style={{ backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'white\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpolyline points=\'6 9 12 15 18 9\'%3E%3C/polyline%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.75rem center', backgroundSize: '1em' }}
+          >
+              {pageSizes.map((size, index) => (
+                <option key={index} value={index} className="text-slate-900 bg-white">
+                  {t(`sizes.${size.name}`)}
+                </option>
+              ))}
+          </select>
+          <Settings2 className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#FB923C] pointer-events-none" />
+        </div>
+
+        <div className="w-[1px] h-6 bg-white/10 mx-0.5 lg:mx-1 shrink-0 hidden lg:block" />
+
         {/* Controls Group */}
         <div className="flex items-center bg-white/5 p-1 rounded-xl border border-white/10 backdrop-blur-md shrink-0">
-          <IconButton onClick={resetToDefault} title={t('reset')} onBrand className="hidden md:flex">
+          <IconButton onClick={resetToDefault} title={t('reset')} onBrand className="hidden xl:flex">
             <RotateCcw className="w-4 h-4" />
           </IconButton>
-          <div className="w-[1px] h-4 bg-white/10 mx-1 hidden md:block" />
+          <div className="w-[1px] h-4 bg-white/10 mx-1 hidden xl:block" />
           <IconButton onClick={toggleLanguage} className="gap-2 px-2 lg:px-3 w-auto" onBrand>
             <Languages className="w-4 h-4" />
             <span className="text-[10px] font-black uppercase">{language === 'zh' ? 'EN' : 'ZH'}</span>
@@ -173,27 +192,11 @@ export const EditorHeader: React.FC = () => {
           </IconButton>
         </div>
 
-        {/* Paper Size Selector - Hidden on very small screens */}
-        <div className="w-32 lg:w-40 hidden sm:block shrink-0">
-          <select 
-            value={selectedSizeIndex}
-            onChange={(e) => setSelectedSizeIndex(Number(e.target.value))}
-            className="w-full h-10 px-2 lg:px-3 bg-white/5 border border-white/10 rounded-xl text-white text-[10px] lg:text-xs font-bold outline-none hover:border-[#EA580C]/50 transition-all appearance-none cursor-pointer"
-            style={{ backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'white\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpolyline points=\'6 9 12 15 18 9\'%3E%3C/polyline%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.5rem center', backgroundSize: '1em' }}
-          >
-              {pageSizes.map((size, index) => (
-                <option key={index} value={index} className="text-slate-900 bg-white">
-                  {t(`sizes.${size.name}`)}
-                </option>
-              ))}
-          </select>
-        </div>
-
         <Button
           onClick={handleExportMarkdown}
           disabled={!hasContent}
           variant="outline-white"
-          className="h-10 px-3 lg:px-4 font-bold border-white/10 shrink-0"
+          className="h-10 px-3 lg:px-4 font-bold border-white/10 shrink-0 hidden sm:flex"
         >
           <FileText className="w-4 h-4" />
           <span className="hidden lg:block">MD</span>
