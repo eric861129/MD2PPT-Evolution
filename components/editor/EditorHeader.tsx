@@ -5,11 +5,12 @@
  */
 
 import React from 'react';
-import { Settings2, Download, Sun, Moon, RotateCcw, Languages, FileText, StickyNote } from 'lucide-react';
+import { Settings2, Download, Sun, Moon, RotateCcw, Languages, FileText, StickyNote, Palette, Check } from 'lucide-react';
 import { useEditor } from '../../contexts/EditorContext';
 import { Button } from '../ui/Button';
 import { IconButton } from '../ui/IconButton';
 import { Select } from '../ui/Select';
+import { PRESET_THEMES } from '../../constants/themes';
 
 export const EditorHeader: React.FC = () => {
   const {
@@ -27,8 +28,18 @@ export const EditorHeader: React.FC = () => {
     isGenerating,
     parsedBlocks,
     isDark,
-    toggleDarkMode
+    toggleDarkMode,
+    activeTheme,
+    setActiveThemeId
   } = useEditor();
+
+  const [showThemeSaved, setShowThemeSaved] = React.useState(false);
+
+  const handleThemeChange = (id: string) => {
+    setActiveThemeId(id);
+    setShowThemeSaved(true);
+    setTimeout(() => setShowThemeSaved(false), 2000);
+  };
 
   const logoPath = `${import.meta.env.BASE_URL}logo.svg`;
   const hasContent = parsedBlocks.length > 0;
@@ -39,14 +50,13 @@ export const EditorHeader: React.FC = () => {
     <header className={`${headerBg} px-8 py-3 flex justify-between items-center z-20 shadow-2xl relative transition-all duration-500 border-b border-white/5`}>
       {/* Left: Brand */}
       <div className="flex items-center gap-5">
-        {/* Logo Container: Using a subtle dark background to make the orange/white logo pop */}
         <div className="bg-stone-900 p-1.5 rounded-lg shadow-inner ring-1 ring-white/10">
           <img 
             src={logoPath} 
             alt="Logo" 
             className="w-7 h-7" 
-            style={{
-              filter: 'invert(48%) sepia(91%) saturate(1841%) hue-rotate(345deg) brightness(95%) contrast(92%)' // Target #EA580C
+            style={{ 
+              filter: 'invert(48%) sepia(91%) saturate(1841%) hue-rotate(345deg) brightness(95%) contrast(92%)' 
             }} 
           />
         </div>
@@ -62,6 +72,28 @@ export const EditorHeader: React.FC = () => {
       
       {/* Right: Actions */}
       <div className="flex items-center gap-4">
+        {/* Theme Selector */}
+        <div className="relative group">
+          <Select 
+            icon={<Palette className="w-4 h-4 text-[#FB923C]" />}
+            value={activeTheme.name}
+            onChange={(e) => handleThemeChange(e.target.value)}
+            containerClassName="bg-white/5 border-white/10 hover:border-[#EA580C]/50 w-48"
+            className="text-white text-xs font-bold"
+          >
+            {Object.values(PRESET_THEMES).map((theme) => (
+              <option key={theme.name} value={theme.name} className="text-slate-900 bg-white">
+                {theme.label}
+              </option>
+            ))}
+          </Select>
+          {showThemeSaved && (
+            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1 text-[10px] text-green-400 font-bold animate-in fade-in slide-in-from-top-1">
+              <Check size={10} /> THEME APPLIED
+            </div>
+          )}
+        </div>
+
         {/* Controls Group */}
         <div className="flex items-center bg-white/5 p-1 rounded-xl border border-white/10 backdrop-blur-md">
           <IconButton onClick={resetToDefault} title={t('reset')} onBrand>
@@ -85,6 +117,7 @@ export const EditorHeader: React.FC = () => {
             <StickyNote className="w-4 h-4" />
           </IconButton>
         </div>
+
         <Select 
           icon={<Settings2 className="w-4 h-4 text-[#FB923C]" />}
           value={selectedSizeIndex}

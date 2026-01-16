@@ -9,26 +9,24 @@ import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell
 } from 'recharts';
-import { ParsedBlock } from '../../services/types';
+import { ParsedBlock, PptTheme } from '../../services/types';
 import { transformTableToChartData } from '../../utils/chartDataTransformer';
-
-// Define chart colors (Amber/Orange theme + accents)
-const COLORS = ['#EA580C', '#F59E0B', '#0EA5E9', '#84CC16', '#10B981', '#6366F1'];
 
 interface ChartPreviewProps {
   block: ParsedBlock;
   isDark?: boolean;
+  theme: PptTheme;
 }
 
-export const ChartPreview: React.FC<ChartPreviewProps> = ({ block, isDark }) => {
+export const ChartPreview: React.FC<ChartPreviewProps> = ({ block, isDark, theme }) => {
   const { chartType, title, showLegend, showValues } = block.metadata || {};
+  const chartColors = theme.colors.chart;
   
   const { data, seriesNames } = useMemo(() => {
     if (!block.tableRows) return { data: [], seriesNames: [] };
     
     const transformed = transformTableToChartData(block.tableRows);
     
-    // Convert to Recharts format: [{ name: 'Label', Series1: 100, Series2: 200 }, ...]
     const rechartsData = transformed.labels.map((label, i) => {
       const item: any = { name: label };
       transformed.datasets.forEach(ds => {
@@ -69,7 +67,7 @@ export const ChartPreview: React.FC<ChartPreviewProps> = ({ block, isDark }) => 
                 key={name} 
                 type="monotone" 
                 dataKey={name} 
-                stroke={COLORS[i % COLORS.length]} 
+                stroke={chartColors[i % chartColors.length]} 
                 strokeWidth={3}
                 dot={{ r: 4 }}
               />
@@ -90,8 +88,8 @@ export const ChartPreview: React.FC<ChartPreviewProps> = ({ block, isDark }) => 
                 key={name} 
                 type="monotone" 
                 dataKey={name} 
-                stroke={COLORS[i % COLORS.length]} 
-                fill={COLORS[i % COLORS.length]} 
+                stroke={chartColors[i % chartColors.length]} 
+                fill={chartColors[i % chartColors.length]} 
                 fillOpacity={0.3}
               />
             ))}
@@ -99,10 +97,7 @@ export const ChartPreview: React.FC<ChartPreviewProps> = ({ block, isDark }) => 
         );
 
       case 'pie':
-        // Pie chart typically uses only the first series
         const pieDataKey = seriesNames[0];
-        // Need to reshape data for Pie: [{ name: 'Jan', value: 100 }, ...]
-        // Actually, our current 'data' structure works if we map dataKey to value
         return (
           <PieChart>
             <Pie
@@ -116,7 +111,7 @@ export const ChartPreview: React.FC<ChartPreviewProps> = ({ block, isDark }) => 
               label={showValues}
             >
               {data.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell key={`cell-${index}`} fill={chartColors[index % chartColors.length]} />
               ))}
             </Pie>
             <Tooltip contentStyle={tooltipStyle} />
@@ -134,7 +129,7 @@ export const ChartPreview: React.FC<ChartPreviewProps> = ({ block, isDark }) => 
             <Tooltip contentStyle={tooltipStyle} />
             {showLegend !== false && <Legend />}
             {seriesNames.map((name, i) => (
-              <Bar key={name} dataKey={name} fill={COLORS[i % COLORS.length]} radius={[4, 4, 0, 0]} />
+              <Bar key={name} dataKey={name} fill={chartColors[i % chartColors.length]} radius={[4, 4, 0, 0]} />
             ))}
           </BarChart>
         );

@@ -6,7 +6,7 @@
 
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import { Sparkles, StickyNote } from 'lucide-react';
-import { ParsedBlock, BlockType } from '../../services/types';
+import { ParsedBlock, BlockType, PptTheme } from '../../services/types';
 import { PreviewBlock, RenderRichText } from './PreviewRenderers';
 import { splitBlocksToSlides, SlideData } from '../../services/parser/slides';
 import { useEditor } from '../../contexts/EditorContext';
@@ -24,10 +24,11 @@ const SlideCard: React.FC<{
   slide: SlideData; 
   index: number; 
   layout: { width: number; height: number }; 
+  theme: PptTheme;
   globalBg?: string;
   onUpdateConfig?: (index: number, key: string, value: string) => void;
   showNotes?: boolean;
-}> = ({ slide, index, layout, globalBg, onUpdateConfig, showNotes }) => {
+}> = ({ slide, index, layout, theme, globalBg, onUpdateConfig, showNotes }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
@@ -58,14 +59,24 @@ const SlideCard: React.FC<{
   };
 
   const bgImage = slide.config?.bgImage || slide.metadata?.bgImage;
-  const rawBg = slide.config?.background || slide.config?.bg || slide.metadata?.bg || globalBg || '#FFFFFF';
+  
+  // Theme Overrides
+  const themeBg = theme.colors.background.startsWith('#') ? theme.colors.background : `#${theme.colors.background}`;
+  const themeText = theme.colors.text.startsWith('#') ? theme.colors.text : `#${theme.colors.text}`;
+  
+  const rawBg = slide.config?.background || slide.config?.bg || slide.metadata?.bg || globalBg || themeBg;
   const bgColor = rawBg.startsWith('#') ? rawBg : `#${rawBg}`;
+  
+  // Calculate brightness for auto-text-color if not on theme default
   const hex = bgColor.replace('#', '');
   const r = parseInt(hex.substring(0, 2), 16) || 255;
   const g = parseInt(hex.substring(2, 4), 16) || 255;
   const b = parseInt(hex.substring(4, 6), 16) || 255;
   const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  
   const isDark = bgImage ? true : brightness < 128;
+  const textColor = bgImage ? '#FFFFFF' : (isDark ? '#FFFFFF' : themeText);
+  
   const designHeight = DESIGN_WIDTH * (layout.height / layout.width);
   const transitionType = slide.config?.transition || 'none';
 
@@ -85,10 +96,24 @@ const SlideCard: React.FC<{
         } ${isDragging ? 'ring-4 ring-orange-500 scale-[1.02]' : ''}`} 
         style={{ aspectRatio: `${layout.width} / ${layout.height}` }}
       >
-        <div style={{ width: `${DESIGN_WIDTH}px`, height: `${designHeight}px`, transform: `scale(${scale})`, transformOrigin: 'top left', backgroundColor: bgImage ? 'transparent' : bgColor, color: isDark ? '#FFFFFF' : '#1C1917', position: 'absolute', top: 0, left: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div style={{ 
+          width: `${DESIGN_WIDTH}px`, 
+          height: `${designHeight}px`, 
+          transform: `scale(${scale})`, 
+          transformOrigin: 'top left', 
+          backgroundColor: bgImage ? 'transparent' : bgColor, 
+          color: textColor, 
+          fontFamily: theme.fonts.main,
+          position: 'absolute', 
+          top: 0, 
+          left: 0, 
+          display: 'flex', 
+          flexDirection: 'column', 
+          overflow: 'hidden' 
+        }}>
           {bgImage && <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(${bgImage})` }}><div className="absolute inset-0 bg-black/40"></div></div>}
           <div className={`absolute top-6 right-10 text-xs font-black uppercase tracking-[0.3em] z-20 ${isDark ? 'text-white/20' : 'text-stone-400/20'}`}>Slide {index + 1}</div>
-          <div className="flex-1 relative z-10 flex flex-col p-[80px_100px]"><SlideContent slide={slide} isDark={isDark} /></div>
+          <div className="flex-1 relative z-10 flex flex-col p-[80px_100px]"><SlideContent slide={slide} isDark={isDark} theme={theme} /></div>
         </div>
       </div>
 
@@ -106,7 +131,7 @@ const SlideCard: React.FC<{
   );
 };
 
-const SlideContent: React.FC<{ slide: SlideData, isDark?: boolean }> = ({ slide, isDark }) => {
+const SlideContent: React.FC<{ slide: SlideData, isDark?: boolean, theme: PptTheme }> = ({ slide, isDark, theme }) => {
   const { blocks, config } = slide;
   const layout = config?.layout;
 
@@ -121,8 +146,8 @@ const SlideContent: React.FC<{ slide: SlideData, isDark?: boolean }> = ({ slide,
         const type = block.type;
         while (i < contentBlocks.length && contentBlocks[i].type === type) { listItems.push(contentBlocks[i]); i++; }
         const ListTag = isOrdered ? 'ol' : 'ul';
-        elements.push(<ListTag key={`list-${i}`} className={`ml-14 mb-8 ${isOrdered ? 'list-decimal' : ''}`}>{listItems.map((item, idx) => (<li key={idx} className={`mb-5 pl-4 leading-relaxed text-4xl ${!isOrdered ? "relative list-none before:content-[''] before:absolute before:left-[-1.5em] before:top-[0.6em] before:w-3.5 before:h-3.5 before:bg-[#EA580C] before:rounded-full" : ""}`}><RenderRichText text={item.content} /></li>))}</ListTag>);
-      } else { elements.push(<PreviewBlock key={i} block={block} isDark={isDark} />); i++; }
+        elements.push(<ListTag key={`list-${i}`} className={`ml-14 mb-8 ${isOrdered ? 'list-decimal' : ''}`}>{listItems.map((item, idx) => (<li key={idx} className={`mb-5 pl-4 leading-relaxed text-4xl ${!isOrdered ? "relative list-none before:content-[''] before:absolute before:left-[-1.5em] before:top-[0.6em] before:w-3.5 before:h-3.5 before:rounded-full" : ""}`} style={{ '--tw-before-bg': `#${theme.colors.primary}` } as any}><span className="before:bg-[var(--tw-before-bg)] absolute left-[-1.5em] top-[0.6em] w-3.5 h-3.5 rounded-full" style={{ backgroundColor: `#${theme.colors.primary}` }}></span><RenderRichText text={item.content} /></li>))}</ListTag>);
+      } else { elements.push(<PreviewBlock key={i} block={block} isDark={isDark} theme={theme} />); i++; }
     }
     return elements;
   };
@@ -137,11 +162,11 @@ const SlideContent: React.FC<{ slide: SlideData, isDark?: boolean }> = ({ slide,
     return (
       <div className={`flex flex-col h-full items-center justify-center text-center ${isImpact ? 'scale-125 origin-center' : ''}`}>
         <div className={`w-full ${isDark && isImpact ? 'drop-shadow-[0_4px_15px_rgba(0,0,0,0.6)]' : ''} ${isQuote ? 'italic opacity-90 relative' : ''}`}>
-          {isQuote && <div className="absolute -top-20 left-1/2 -translate-x-1/2 text-[160px] leading-none text-orange-500/20 pointer-events-none font-serif">“</div>}
+          {isQuote && <div className="absolute -top-20 left-1/2 -translate-x-1/2 text-[160px] leading-none opacity-20 pointer-events-none font-serif" style={{ color: `#${theme.colors.primary}` }}>“</div>}
           <div className={isQuote ? 'text-6xl md:text-7xl font-medium tracking-tight px-10' : ''}>
             {renderBlocks(blocks)}
           </div>
-          {isQuote && <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 text-[160px] leading-none text-orange-500/20 pointer-events-none font-serif mt-10">”</div>}
+          {isQuote && <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 text-[160px] leading-none opacity-20 pointer-events-none font-serif mt-10" style={{ color: `#${theme.colors.primary}` }}>”</div>}
         </div>
       </div>
     );
@@ -150,8 +175,8 @@ const SlideContent: React.FC<{ slide: SlideData, isDark?: boolean }> = ({ slide,
   if (layout === 'alert') {
     return (
       <div className="flex flex-col h-full items-center justify-center p-10">
-        <div className="w-full bg-orange-500/10 border-4 border-orange-500 p-16 rounded-3xl text-center">
-          <div className="text-orange-500 mb-8 flex justify-center scale-[3]">
+        <div className="w-full p-16 rounded-3xl text-center border-4" style={{ backgroundColor: `#${theme.colors.primary}15`, borderColor: `#${theme.colors.primary}` }}>
+          <div className="mb-8 flex justify-center scale-[3]" style={{ color: `#${theme.colors.primary}` }}>
             <Sparkles />
           </div>
           <div className="space-y-6">
@@ -172,8 +197,6 @@ const SlideContent: React.FC<{ slide: SlideData, isDark?: boolean }> = ({ slide,
           style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
         >
           {Array.from({ length: cols }).map((_, colIdx) => {
-            // Sequential distribution: Divide blocks evenly among columns
-            // This keeps headers and their content together better than round-robin
             const itemsPerCol = Math.ceil(otherBlocks.length / cols);
             const colBlocks = otherBlocks.slice(colIdx * itemsPerCol, (colIdx + 1) * itemsPerCol);
             return <div key={colIdx}>{renderBlocks(colBlocks)}</div>;
@@ -186,7 +209,7 @@ const SlideContent: React.FC<{ slide: SlideData, isDark?: boolean }> = ({ slide,
 };
 
 export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewRef, onUpdateSlideConfig }) => {
-  const { pageSizes, selectedSizeIndex, documentMeta, showNotes } = useEditor();
+  const { pageSizes, selectedSizeIndex, documentMeta, showNotes, activeTheme } = useEditor();
   const selectedLayout = pageSizes[selectedSizeIndex];
   const slides = splitBlocksToSlides(parsedBlocks);
 
@@ -195,7 +218,7 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewR
       <div className="bg-white dark:bg-[#1C1917] px-6 py-2.5 border-b border-[#E7E5E4] dark:border-[#44403C] flex justify-between items-center shrink-0">
         <span className="text-[10px] font-black text-stone-400 uppercase tracking-[0.3em]">Canvas Preview</span>
         <div className="flex items-center gap-2 text-[#EA580C] font-black text-[10px] uppercase tracking-tighter">
-          <span className="w-2 h-2 rounded-full bg-[#EA580C] animate-pulse"></span> Evolution Engine
+          <span className="w-2 h-2 rounded-full bg-[#EA580C] animate-pulse"></span> {activeTheme.label}
         </div>
       </div>
       <div ref={previewRef} className="flex-1 overflow-y-auto p-4 lg:p-8 scroll-smooth bg-transparent">
@@ -206,6 +229,7 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewR
               slide={slide} 
               index={index} 
               layout={selectedLayout} 
+              theme={activeTheme}
               globalBg={documentMeta.bg}
               onUpdateConfig={onUpdateSlideConfig} 
               showNotes={showNotes}
