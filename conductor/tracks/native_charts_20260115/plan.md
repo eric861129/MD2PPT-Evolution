@@ -22,7 +22,7 @@
     - [x] 確保圖表配色能響應當前 UI 主題 (Dark/Light)
 - [x] 任務：Conductor - User Manual Verification '階段 2' (Protocol in workflow.md)
 
-## 階段 3：PPTX 引擎導出同步 [checkpoint: PHASE_3_SHA]
+## 階段 3：PPTX 引擎導出同步 [checkpoint: 5df7ef7]
 **目標：** 調用 `pptxgenjs` API 生成原生圖表物件。
 
 - [x] 任務：開發 PPTX Chart 渲染器
