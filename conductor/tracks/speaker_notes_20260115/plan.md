@@ -22,7 +22,7 @@
     - [x] 根據 `showNotes` 狀態實作按鈕的高亮效果
 - [x] 任務：Conductor - User Manual Verification '階段 2' (Protocol in workflow.md) (PHASE_2_SHA)
 
-## 階段 3：預覽介面渲染 [checkpoint: PHASE_3_SHA]
+## 階段 3：預覽介面渲染 [checkpoint: 98634d4]
 **目標：** 在網頁預覽中，當開關開啟時顯示每張投影片的備忘錄。
 
 - [x] 任務：實作 SlideNotes 渲染組件 (PHASE_3_SHA)
