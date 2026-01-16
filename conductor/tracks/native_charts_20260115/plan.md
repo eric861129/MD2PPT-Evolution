@@ -34,12 +34,12 @@
     - [x] 驗證匯出檔案的可編輯性（數據連結是否保留）
 - [x] 任務：Conductor - User Manual Verification '階段 3' (Protocol in workflow.md)
 
-## 階段 4：優化與預設內容更新
+## 階段 4：優化與預設內容更新 [checkpoint: PHASE_4_SHA]
 **目標：** 提供教學範例並確保功能的易用性。
 
-- [ ] 任務：更新快捷動作側欄
-    - [ ] 在 `QuickActionSidebar` 中新增插入圖表模板的按鈕
-    - [ ] 在 `constants/templates.ts` 中定義圖表示範模板
-- [ ] 任務：更新預設教學內容
-    - [ ] 修改 `constants/defaultContent.ts`，加入一個展示圖表功能的投影片
-- [ ] 任務：Conductor - User Manual Verification '階段 4' (Protocol in workflow.md)
+- [x] 任務：更新快捷動作側欄
+    - [x] 在 `QuickActionSidebar` 中新增插入圖表模板的按鈕
+    - [x] 在 `constants/templates.ts` 中定義圖表示範模板
+- [x] 任務：更新預設教學內容
+    - [x] 修改 `constants/defaultContent.ts`，加入一個展示圖表功能的投影片
+- [x] 任務：Conductor - User Manual Verification '階段 4' (Protocol in workflow.md)

@@ -57,6 +57,12 @@ const MarkdownEditor: React.FC = () => {
         case 'INSERT_TABLE':
             service.insertText(ACTION_TEMPLATES.INSERT_TABLE, setContent);
             break;
+        case 'INSERT_CHART_BAR':
+            service.insertText(ACTION_TEMPLATES.INSERT_CHART_BAR, setContent);
+            break;
+        case 'INSERT_CHART_PIE':
+            service.insertText(ACTION_TEMPLATES.INSERT_CHART_PIE, setContent);
+            break;
         case 'INSERT_IMAGE':
             service.insertText(ACTION_TEMPLATES.INSERT_IMAGE, setContent);
             break;

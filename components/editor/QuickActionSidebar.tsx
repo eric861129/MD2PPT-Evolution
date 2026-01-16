@@ -5,20 +5,22 @@
  */
 
 import React, { useState } from 'react';
-import { 
-  Plus, 
-  LayoutGrid, 
-  Quote, 
-  AlertTriangle, 
-  Table, 
-  Image, 
-  Bold, 
-  Italic, 
+import {
+  Plus,
+  LayoutGrid,
+  Quote,
+  AlertTriangle,
+  Table,
+  Image,
+  Bold,
+  Italic,
   Code,
   StickyNote,
   ChevronRight,
   ChevronLeft,
-  Settings2
+  Settings2,
+  BarChart,
+  PieChart
 } from 'lucide-react';
 
 export type ActionType = 
@@ -29,6 +31,8 @@ export type ActionType =
   | 'INSERT_TABLE'
   | 'INSERT_IMAGE'
   | 'INSERT_NOTE'
+  | 'INSERT_CHART_BAR'
+  | 'INSERT_CHART_PIE'
   | 'FORMAT_BOLD'
   | 'FORMAT_ITALIC'
   | 'FORMAT_CODE';
@@ -66,12 +70,15 @@ const ACTION_GROUPS: ActionGroup[] = [
     label: 'Components',
     items: [
       { type: 'INSERT_TABLE', icon: Table, label: 'Table', tooltip: 'Modern Table' },
+      { type: 'INSERT_CHART_BAR', icon: BarChart, label: 'Bar Chart', tooltip: 'Insert Bar Chart' },
+      { type: 'INSERT_CHART_PIE', icon: PieChart, label: 'Pie Chart', tooltip: 'Insert Pie Chart' },
       { type: 'INSERT_IMAGE', icon: Image, label: 'Image', tooltip: 'Insert Image' },
       { type: 'INSERT_NOTE', icon: StickyNote, label: 'Note', tooltip: 'Speaker Note' },
     ]
   },
   {
     label: 'Formatting',
+
     items: [
       { type: 'FORMAT_BOLD', icon: Bold, label: 'Bold', tooltip: 'Bold Text' },
       { type: 'FORMAT_ITALIC', icon: Italic, label: 'Italic', tooltip: 'Italic Text' },

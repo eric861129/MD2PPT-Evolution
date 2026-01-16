@@ -85,15 +85,33 @@ layout: two-column
 
 ===
 ---
+layout: center
+background: "#FFF7ED"
+---
+
+# 5. 原生圖表支援 (v0.6)
+
+::: chart-bar { "title": "季營收成長", "showLegend": true }
+
+| 季度 | 2024年 | 2025年 |
+| :--- | :--- | :--- |
+| Q1 | 100 | 150 |
+| Q2 | 120 | 180 |
+| Q3 | 130 | 200 |
+
+:::
+
+===
+---
 bgImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
 ---
 
-# 5. 背景圖片演示
+# 6. 背景圖片演示
 ## 透過 YAML 設定背景，內容可自由疊加
 
 ===
 
-# 6. 程式碼高亮支援
+# 7. 程式碼高亮支援
 
 ${BT}${BT}${BT}typescript
 // 現在您可以使用 === 作為分頁符號
@@ -200,15 +218,33 @@ layout: two-column
 
 ===
 ---
+layout: center
+background: "#FFF7ED"
+---
+
+# 5. Native Charts (v0.6)
+
+::: chart-bar { "title": "Quarterly Growth", "showLegend": true }
+
+| Quarter | 2024 | 2025 |
+| :--- | :--- | :--- |
+| Q1 | 100 | 150 |
+| Q2 | 120 | 180 |
+| Q3 | 130 | 200 |
+
+:::
+
+===
+---
 bgImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
 ---
 
-# 5. Background Image
+# 6. Background Image
 ## Set via YAML, text layers on top
 
 ===
 
-# 6. Syntax Highlighting
+# 7. Syntax Highlighting
 
 ${BT}${BT}${BT}typescript
 // You can now use === as slide separator
