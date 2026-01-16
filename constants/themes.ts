@@ -26,11 +26,11 @@ export const PRESET_THEMES: Record<string, PptTheme> = {
     name: 'midnight-cyber',
     label: '科技深夜',
     colors: {
-      primary: '0EA5E9',
+      primary: '38BDF8',
       background: '0F172A',
       text: 'F8FAFC',
-      accent: 'F43F5E',
-      chart: ['#0EA5E9', '#F43F5E', '#10B981', '#F59E0B', '#6366F1', '#D946EF']
+      accent: 'F472B6',
+      chart: ['#38BDF8', '#F472B6', '#4ADE80', '#FB923C', '#818CF8', '#A78BFA']
     },
     fonts: {
       main: 'Segoe UI',
@@ -41,15 +41,15 @@ export const PRESET_THEMES: Record<string, PptTheme> = {
     name: 'academic-clean',
     label: '簡約學術',
     colors: {
-      primary: '1E293B',
-      background: 'FAFAFA',
-      text: '0F172A',
+      primary: '0F172A',
+      background: 'FFFFFF',
+      text: '334155',
       accent: '64748B',
-      chart: ['#1E293B', '#475569', '#94A3B8', '#CBD5E1', '#E2E8F0', '#F1F5F9']
+      chart: ['#0F172A', '#334155', '#64748B', '#94A3B8', '#CBD5E1', '#E2E8F0']
     },
     fonts: {
-      main: 'Cambria',
-      heading: 'Georgia'
+      main: 'Times New Roman',
+      heading: 'Calibri'
     }
   },
   'material-teal': {

@@ -1,30 +1,9 @@
 # MD2PPT-EVOLUTION 🚀
 
-![Version](https://img.shields.io/badge/version-0.7.0-orange.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg) ![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
-
-**將 Markdown 筆記瞬間轉換為專業 PowerPoint (PPTX) 的極致工具。**
-
-> 專為開發者、技術講者與教育工作者設計。告別繁瑣的排版，專注於內容創作。
-
-[🔴 Live Demo (Coming Soon)](#) | [📖 完整文件](CUSTOMIZATION.md) | [🐛 回報問題](../../issues)
-
----
-
-## ✨ 為什麼選擇 MD2PPT?
-
-### 1. 極致的寫作流暢度
-- **所見即所得 (WYSIWYG)**: 右側預覽區提供 1:1 的 PPTX 模擬，字體大小、間距與配色完全同步。
-- **快捷動作側欄**: 左側懸浮工具列讓您一鍵插入複雜的佈局與元件，無需記憶語法。
-- **拖放式資產管理**: 
-    - 🖼️ **插入圖片**: 直接拖入編輯器，自動轉 Base64。
-    - 🎨 **設定背景**: 將圖片拖到預覽卡片上，立即設為該頁背景。
-
-### 2. 強大的原生圖表 (Native Charts)
-不再需要 Excel 截圖！直接在 Markdown 中定義數據，生成 **PowerPoint 原生可編輯圖表**。
-- 支援 **長條圖 (Bar)**、**折線圖 (Line)**、**圓餅圖 (Pie)** 與 **區域圖 (Area)**。
-- 點擊 PPT 中的圖表即可修改數據，保持簡報的靈活性。
-
-### 3. 企業級排版系統
+![Version](https://img.shields.io/badge/version-0.8.0-orange.svg)
+...
+### 🎨 專業排版系統
+- **全域主題管理器 (Theme Manager)**: 左側新增配色面板，支援 4 種預設主題（琥珀石墨、科技深夜、簡約學術、現代翠綠）一鍵切換，並支援客製化字體與背景。
 - **演講者備忘錄 (Speaker Notes)**: 支援 `<!-- note: ... -->` 語法，可在預覽中切換顯示，並同步匯出至 PPTX 備忘錄欄位。
 - **分層配置 (YAML)**: 使用 `===` 分頁，並透過每頁頂部的 YAML 區塊 (`---`) 獨立控制佈局、背景與轉場。
 - **專業佈局庫**: 內建 `Grid` (網格)、`Quote` (引用)、`Center` (居中)、`Alert` (告警) 等多種響應式版面。

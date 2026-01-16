@@ -5,6 +5,16 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
 並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [0.8.0] - 2026-01-16
+
+### 新增 (Added)
+- **全域主題管理器 (Theme Manager)**: 
+    - 在側欄新增「主題與配色」面板（Icon: Palette）。
+    - 內建 4 種專業主題：`Amber Graphite` (商務)、`Midnight Cyber` (科技)、`Academic Clean` (簡約)、`Material Teal` (現代)。
+    - **色號配色盤**: 提供一鍵點擊插入色號至編輯器的功能。
+    - **混合驅動架構**: 支援透過全域 YAML `theme: ...` 定義主題，並與 UI 選擇器自動同步。
+- **動態樣式注入**: PPTX 匯出引擎現在會根據所選主題自動調整字體、背景色、強調色及圖表色盤。
+
 ## [0.7.0] - 2026-01-16
 
 ### 新增 (Added)
