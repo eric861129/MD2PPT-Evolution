@@ -22,6 +22,7 @@ export enum BlockType {
   NUMBERED_LIST = 'NUMBERED_LIST',
   TABLE = 'TABLE',
   CHART = 'CHART',
+  NOTE = 'NOTE',
   IMAGE = 'IMAGE',
   HORIZONTAL_RULE = 'HORIZONTAL_RULE',
   TOC = 'TOC'

@@ -98,7 +98,21 @@ export const parseMarkdown = (text: string): ParseResult => {
     // Parse Slide Content
     if (slide.markdown) {
       const blocks = parseMarkdownWithAST(slide.markdown);
-      allBlocks.push(...blocks);
+      
+      // Extract Notes: find all NOTE blocks, merge their content, and remove them
+      const noteBlocks = blocks.filter(b => b.type === 'NOTE' as any);
+      const otherBlocks = blocks.filter(b => b.type !== 'NOTE' as any);
+      
+      if (noteBlocks.length > 0) {
+        const mergedNote = noteBlocks.map(b => b.content).join('\n\n');
+        // Find the last added HR (which represents this slide's start)
+        const lastHr = allBlocks[allBlocks.length - 1];
+        if (lastHr && lastHr.type === 'HORIZONTAL_RULE' as any) {
+          lastHr.metadata = { ...lastHr.metadata, note: mergedNote };
+        }
+      }
+      
+      allBlocks.push(...otherBlocks);
     }
   });
 

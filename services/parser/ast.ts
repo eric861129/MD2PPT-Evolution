@@ -134,6 +134,14 @@ export const parseMarkdownWithAST = (markdown: string, lineOffset: number = 0, c
         addBlock({ type: BlockType.HORIZONTAL_RULE, content: token.raw.trim() });
         break;
         
+      case 'html':
+        const html = token.text || token.raw;
+        const noteMatch = html.match(/<!--\s*note:\s*([\s\S]*?)\s*-->/);
+        if (noteMatch) {
+          addBlock({ type: BlockType.NOTE, content: noteMatch[1].trim() });
+        }
+        break;
+
       case 'space': break;
       default: console.warn(`Unknown token type: ${token.type}`, token); break;
     }
