@@ -5,6 +5,15 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
 並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [0.7.0] - 2026-01-16
+
+### 新增 (Added)
+- **演講者備忘錄 (Speaker Notes)**: 
+    - 支援 `<!-- note: ... -->` 語法，可在 Markdown 中撰寫隱藏的備忘錄。
+    - 網頁預覽支援全域顯示/隱藏切換，並以琥珀色系卡片呈現。
+    - PPTX 匯出時自動同步至 PowerPoint 原生備忘錄欄位。
+- **Header 控制項**: 在頂部工具列新增「顯示/隱藏備忘錄」按鈕。
+
 ## [0.6.1] - 2026-01-16
 
 ### 優化 (Improved)

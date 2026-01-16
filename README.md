@@ -1,6 +1,6 @@
 # MD2PPT-EVOLUTION 🚀
 
-![Version](https://img.shields.io/badge/version-0.6.1-orange.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg) ![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-0.7.0-orange.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg) ![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
 
 **將 Markdown 筆記瞬間轉換為專業 PowerPoint (PPTX) 的極致工具。**
 
@@ -25,6 +25,7 @@
 - 點擊 PPT 中的圖表即可修改數據，保持簡報的靈活性。
 
 ### 3. 企業級排版系統
+- **演講者備忘錄 (Speaker Notes)**: 支援 `<!-- note: ... -->` 語法，可在預覽中切換顯示，並同步匯出至 PPTX 備忘錄欄位。
 - **分層配置 (YAML)**: 使用 `===` 分頁，並透過每頁頂部的 YAML 區塊 (`---`) 獨立控制佈局、背景與轉場。
 - **專業佈局庫**: 內建 `Grid` (網格)、`Quote` (引用)、`Center` (居中)、`Alert` (告警) 等多種響應式版面。
 - **現代化表格**: 自動將 Markdown 表格轉換為具備主題色與斑馬紋 (Zebra striping) 的專業表格。
@@ -71,6 +72,8 @@ transition: zoom
 
 # 第三頁：轉場頁
 垂直居中 + 深色背景 + 縮放特效
+
+<!-- note: 這是演講者備忘錄，只會出現在預覽與 PPTX 備忘錄欄位。 -->
 ```
 
 ### 圖表語法範例
@@ -166,7 +169,7 @@ npm run build
 
 - [x] **v0.5.0**: 快捷側欄、拖放圖片、YAML 配置系統。
 - [x] **v0.6.0**: 原生圖表 (Native Charts) 支援。
-- [ ] **v0.7.0**: 演講者備忘錄 (Speaker Notes)。
+- [x] **v0.7.0**: 演講者備忘錄 (Speaker Notes)。
 - [ ] **v0.8.0**: 全域主題管理器 (Theme Manager)。
 
 ## 🤝 貢獻 (Contributing)
