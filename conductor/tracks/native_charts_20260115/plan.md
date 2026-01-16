@@ -1,6 +1,6 @@
 # 執行計畫：原生可編輯圖表支援 (native_charts_v060)
 
-## 階段 1：基礎建設與解析器擴展 [checkpoint: PHASE_1_SHA]
+## 階段 1：基礎建設與解析器擴展 [checkpoint: 9950ea7]
 **目標：** 更新 Markdown 解析器以識別圖表容器指令，並實作數據轉換邏輯。
 
 - [x] 任務：更新 AST 解析器支援 Chart 指令
