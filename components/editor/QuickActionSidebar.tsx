@@ -5,6 +5,7 @@
  */
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Plus,
   LayoutGrid,
@@ -51,58 +52,49 @@ interface QuickActionSidebarProps {
   onAction: (action: { type: ActionType }) => void;
 }
 
-interface ActionGroup {
-  label: string;
-  items: {
-    type: ActionType;
-    icon: React.ElementType;
-    label: string;
-    tooltip: string;
-  }[];
-}
-
-const ACTION_GROUPS: ActionGroup[] = [
-  {
-    label: 'Structure',
-    items: [
-      { type: 'INSERT_SLIDE', icon: Plus, label: 'New Slide', tooltip: 'Insert new slide (===)' },
-    ]
-  },
-  {
-    label: 'Layouts',
-    items: [
-      { type: 'LAYOUT_GRID', icon: LayoutGrid, label: 'Grid', tooltip: 'Grid Layout' },
-      { type: 'LAYOUT_TWO_COLUMN', icon: Columns, label: '2-Col', tooltip: 'Two Columns' },
-      { type: 'LAYOUT_CENTER', icon: AlignCenter, label: 'Center', tooltip: 'Center Layout' },
-      { type: 'LAYOUT_QUOTE', icon: Quote, label: 'Quote', tooltip: 'Quote Layout' },
-      { type: 'LAYOUT_ALERT', icon: AlertTriangle, label: 'Alert', tooltip: 'Alert Layout' },
-    ]
-  },
-  {
-    label: 'Components',
-    items: [
-      { type: 'INSERT_TABLE', icon: Table, label: 'Table', tooltip: 'Table' },
-      { type: 'INSERT_CHAT', icon: MessageSquare, label: 'Chat', tooltip: 'Dialogue' },
-      { type: 'INSERT_CHART_BAR', icon: BarChart, label: 'Bar', tooltip: 'Bar Chart' },
-      { type: 'INSERT_CHART_LINE', icon: LineChart, label: 'Line', tooltip: 'Line Chart' },
-      { type: 'INSERT_CHART_PIE', icon: PieChart, label: 'Pie', tooltip: 'Pie Chart' },
-      { type: 'INSERT_CHART_AREA', icon: AreaChart, label: 'Area', tooltip: 'Area Chart' },
-      { type: 'INSERT_IMAGE', icon: Image, label: 'Image', tooltip: 'Insert Image' },
-      { type: 'INSERT_NOTE', icon: StickyNote, label: 'Note', tooltip: 'Speaker Note' },
-    ]
-  },
-  {
-    label: 'Formatting',
-    items: [
-      { type: 'FORMAT_BOLD', icon: Bold, label: 'Bold', tooltip: 'Bold Text' },
-      { type: 'FORMAT_ITALIC', icon: Italic, label: 'Italic', tooltip: 'Italic Text' },
-      { type: 'FORMAT_CODE', icon: Code, label: 'Code', tooltip: 'Inline Code' },
-    ]
-  }
-];
-
 export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction }) => {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const ACTION_GROUPS = [
+    {
+      label: t('sidebar.structure'),
+      items: [
+        { type: 'INSERT_SLIDE', icon: Plus, label: t('sidebar.newSlide'), tooltip: t('sidebar.newSlide') },
+      ]
+    },
+    {
+      label: t('sidebar.layouts'),
+      items: [
+        { type: 'LAYOUT_GRID', icon: LayoutGrid, label: t('sidebar.grid'), tooltip: t('sidebar.grid') },
+        { type: 'LAYOUT_TWO_COLUMN', icon: Columns, label: t('sidebar.twoCol'), tooltip: t('sidebar.twoCol') },
+        { type: 'LAYOUT_CENTER', icon: AlignCenter, label: t('sidebar.center'), tooltip: t('sidebar.center') },
+        { type: 'LAYOUT_QUOTE', icon: Quote, label: t('sidebar.quote'), tooltip: t('sidebar.quote') },
+        { type: 'LAYOUT_ALERT', icon: AlertTriangle, label: t('sidebar.alert'), tooltip: t('sidebar.alert') },
+      ]
+    },
+    {
+      label: t('sidebar.components'),
+      items: [
+        { type: 'INSERT_TABLE', icon: Table, label: t('sidebar.table'), tooltip: t('sidebar.table') },
+        { type: 'INSERT_CHAT', icon: MessageSquare, label: t('sidebar.chat'), tooltip: t('sidebar.chat') },
+        { type: 'INSERT_CHART_BAR', icon: BarChart, label: t('sidebar.bar'), tooltip: t('sidebar.bar') },
+        { type: 'INSERT_CHART_LINE', icon: LineChart, label: t('sidebar.line'), tooltip: t('sidebar.line') },
+        { type: 'INSERT_CHART_PIE', icon: PieChart, label: t('sidebar.pie'), tooltip: t('sidebar.pie') },
+        { type: 'INSERT_CHART_AREA', icon: AreaChart, label: t('sidebar.area'), tooltip: t('sidebar.area') },
+        { type: 'INSERT_IMAGE', icon: Image, label: t('sidebar.image'), tooltip: t('sidebar.image') },
+        { type: 'INSERT_NOTE', icon: StickyNote, label: t('sidebar.note'), tooltip: t('sidebar.note') },
+      ]
+    },
+    {
+      label: t('sidebar.formatting'),
+      items: [
+        { type: 'FORMAT_BOLD', icon: Bold, label: t('sidebar.bold'), tooltip: t('sidebar.bold') },
+        { type: 'FORMAT_ITALIC', icon: Italic, label: t('sidebar.italic'), tooltip: t('sidebar.italic') },
+        { type: 'FORMAT_CODE', icon: Code, label: t('sidebar.code'), tooltip: t('sidebar.code') },
+      ]
+    }
+  ];
 
   return (
     <div 
@@ -115,7 +107,7 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
       {/* Header / Toggle */}
       <div className={`flex items-center border-b border-[#E7E5E4] dark:border-[#44403C] h-14 ${isExpanded ? 'justify-between p-3' : 'justify-center'}`}>
         {isExpanded && (
-          <span className="font-bold text-sm uppercase tracking-wider text-stone-500">Quick Actions</span>
+          <span className="font-bold text-sm uppercase tracking-wider text-stone-500">{t('sidebar.title')}</span>
         )}
         <button 
           onClick={() => setIsExpanded(!isExpanded)}
@@ -131,7 +123,7 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
         {ACTION_GROUPS.map((group, idx) => (
           <div key={idx} className="mb-4">
             {isExpanded && (
-              <div className="px-4 py-2 text-xs font-semibold text-stone-400 uppercase tracking-widest">
+              <div className="px-4 py-2 text-xs font-semibold text-stone-400 uppercase tracking-widest whitespace-nowrap">
                 {group.label}
               </div>
             )}
@@ -139,7 +131,7 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
               {group.items.map((item) => (
                 <button
                   key={item.type}
-                  onClick={() => onAction({ type: item.type })}
+                  onClick={() => onAction({ type: item.type as ActionType })}
                   aria-label={item.label}
                   title={item.tooltip}
                   className={`
@@ -149,9 +141,9 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
                     ${isExpanded ? 'justify-start px-3' : 'justify-center'}
                   `}
                 >
-                  <item.icon size={20} strokeWidth={2} />
+                  <item.icon size={20} strokeWidth={2} className="shrink-0" />
                   {isExpanded && (
-                    <span className="ml-3 text-sm font-medium">{item.label}</span>
+                    <span className="ml-3 text-sm font-medium truncate">{item.label}</span>
                   )}
                 </button>
               ))}
@@ -173,7 +165,7 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
           `}
         >
           <Settings2 size={20} />
-          {isExpanded && <span className="ml-3 text-sm font-medium">Settings</span>}
+          {isExpanded && <span className="ml-3 text-sm font-medium">{t('sidebar.settings')}</span>}
         </button>
       </div>
     </div>

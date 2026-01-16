@@ -31,6 +31,31 @@ const resources = {
         "16x10": '16:10 (現代)',
         "4x3": '4:3 (標準)',
         "a4": 'A4 (橫向)'
+      },
+      sidebar: {
+        title: '快捷動作',
+        structure: '結構',
+        layouts: '版面佈局',
+        components: '元件',
+        formatting: '格式',
+        settings: '設定',
+        newSlide: '新增投影片',
+        grid: '網格佈局',
+        twoCol: '雙欄佈局',
+        center: '居中佈局',
+        quote: '引用佈局',
+        alert: '告警佈局',
+        table: '表格',
+        chat: '對話角色',
+        bar: '長條圖',
+        line: '折線圖',
+        pie: '圓餅圖',
+        area: '區域圖',
+        image: '插入圖片',
+        note: '演講備忘錄',
+        bold: '粗體',
+        italic: '斜體',
+        code: '行內程式碼'
       }
     }
   },
@@ -55,6 +80,31 @@ const resources = {
         "16x10": '16:10 (Modern)',
         "4x3": '4:3 (Standard)',
         "a4": 'A4 (Landscape)'
+      },
+      sidebar: {
+        title: 'Quick Actions',
+        structure: 'Structure',
+        layouts: 'Layouts',
+        components: 'Components',
+        formatting: 'Formatting',
+        settings: 'Settings',
+        newSlide: 'New Slide',
+        grid: 'Grid',
+        twoCol: '2-Col',
+        center: 'Center',
+        quote: 'Quote',
+        alert: 'Alert',
+        table: 'Table',
+        chat: 'Chat',
+        bar: 'Bar',
+        line: 'Line',
+        pie: 'Pie',
+        area: 'Area',
+        image: 'Image',
+        note: 'Note',
+        bold: 'Bold',
+        italic: 'Italic',
+        code: 'Code'
       }
     }
   }
