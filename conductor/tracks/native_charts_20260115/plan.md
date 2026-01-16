@@ -34,7 +34,7 @@
     - [x] 驗證匯出檔案的可編輯性（數據連結是否保留）
 - [x] 任務：Conductor - User Manual Verification '階段 3' (Protocol in workflow.md)
 
-## 階段 4：優化與預設內容更新 [checkpoint: PHASE_4_SHA]
+## 階段 4：優化與預設內容更新 [checkpoint: e55371d]
 **目標：** 提供教學範例並確保功能的易用性。
 
 - [x] 任務：更新快捷動作側欄
