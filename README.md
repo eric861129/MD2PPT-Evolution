@@ -1,6 +1,6 @@
 # MD2PPT-EVOLUTION 🚀
 
-![Version](https://img.shields.io/badge/version-0.8.0-orange.svg)
+![Version](https://img.shields.io/badge/version-0.8.1-orange.svg)
 ...
 ### 🎨 專業排版系統
 - **全域主題管理器 (Theme Manager)**: 左側新增配色面板，支援 4 種預設主題（琥珀石墨、科技深夜、簡約學術、現代翠綠）一鍵切換，並支援客製化字體與背景。
