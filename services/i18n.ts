@@ -20,6 +20,8 @@ const resources = {
       reset: '重置為範例文件',
       resetConfirm: '確定要重置內容嗎？您目前的編輯將會遺失並恢復為預設範例。',
       switchLangConfirm: '切換語言將會重置當前內容為該語言的範例文件。確定要繼續嗎？',
+      showNotes: '顯示備忘錄',
+      hideNotes: '隱藏備忘錄',
       theme: {
         light: '切換至亮色模式',
         dark: '切換至深色模式'
@@ -42,6 +44,8 @@ const resources = {
       reset: 'Reset to Example',
       resetConfirm: 'Are you sure you want to reset? Your current changes will be lost.',
       switchLangConfirm: 'Switching language will reset the content to the default example of that language. Continue?',
+      showNotes: 'Show Speaker Notes',
+      hideNotes: 'Hide Speaker Notes',
       theme: {
         light: 'Switch to Light Mode',
         dark: 'Switch to Dark Mode'

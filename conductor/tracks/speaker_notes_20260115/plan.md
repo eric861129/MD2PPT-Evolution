@@ -11,16 +11,16 @@
     - [x] 確保備忘錄內容從正文區塊中移除，避免出現在投影片畫面上
 - [x] 任務：Conductor - User Manual Verification '階段 1' (Protocol in workflow.md)
 
-## 階段 2：UI 狀態管理與工具列整合
+## 階段 2：UI 狀態管理與工具列整合 [checkpoint: PHASE_2_SHA]
 **目標：** 在全域狀態中新增顯示開關，並在頂部工具列提供操作按鈕。
 
-- [ ] 任務：擴充 Editor 狀態
-    - [ ] 在 `hooks/useEditorState.ts` 中新增 `showNotes` 狀態與 `toggleNotes` 函式
-    - [ ] 更新 `contexts/EditorContext.tsx` 導出此狀態
-- [ ] 任務：實作 Header 切換按鈕
-    - [ ] 在 `components/editor/EditorHeader.tsx` 中新增 `StickyNote` 按鈕
-    - [ ] 根據 `showNotes` 狀態實作按鈕的高亮效果
-- [ ] 任務：Conductor - User Manual Verification '階段 2' (Protocol in workflow.md)
+- [x] 任務：擴充 Editor 狀態 (PHASE_2_SHA)
+    - [x] 在 `hooks/useEditorState.ts` 中新增 `showNotes` 狀態與 `toggleNotes` 函式
+    - [x] 更新 `contexts/EditorContext.tsx` 導出此狀態
+- [x] 任務：實作 Header 切換按鈕 (PHASE_2_SHA)
+    - [x] 在 `components/editor/EditorHeader.tsx` 中新增 `StickyNote` 按鈕
+    - [x] 根據 `showNotes` 狀態實作按鈕的高亮效果
+- [x] 任務：Conductor - User Manual Verification '階段 2' (Protocol in workflow.md) (PHASE_2_SHA)
 
 ## 階段 3：預覽介面渲染
 **目標：** 在網頁預覽中，當開關開啟時顯示每張投影片的備忘錄。

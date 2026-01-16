@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Settings2, Download, Sun, Moon, RotateCcw, Languages, FileText } from 'lucide-react';
+import { Settings2, Download, Sun, Moon, RotateCcw, Languages, FileText, StickyNote } from 'lucide-react';
 import { useEditor } from '../../contexts/EditorContext';
 import { Button } from '../ui/Button';
 import { IconButton } from '../ui/IconButton';
@@ -22,6 +22,8 @@ export const EditorHeader: React.FC = () => {
     language,
     toggleLanguage,
     t,
+    showNotes,
+    toggleNotes,
     isGenerating,
     parsedBlocks,
     isDark,
@@ -43,7 +45,7 @@ export const EditorHeader: React.FC = () => {
             src={logoPath} 
             alt="Logo" 
             className="w-7 h-7" 
-            style={{ 
+            style={{
               filter: 'invert(48%) sepia(91%) saturate(1841%) hue-rotate(345deg) brightness(95%) contrast(92%)' // Target #EA580C
             }} 
           />
@@ -73,8 +75,16 @@ export const EditorHeader: React.FC = () => {
           <IconButton onClick={toggleDarkMode} title={isDark ? t('theme.light') : t('theme.dark')} onBrand>
             {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </IconButton>
+          <div className="w-[1px] h-4 bg-white/10 mx-1" />
+          <IconButton 
+            onClick={toggleNotes} 
+            title={showNotes ? t('hideNotes') : t('showNotes')} 
+            onBrand
+            className={showNotes ? 'bg-orange-500/20 text-[#FB923C]' : ''}
+          >
+            <StickyNote className="w-4 h-4" />
+          </IconButton>
         </div>
-
         <Select 
           icon={<Settings2 className="w-4 h-4 text-[#FB923C]" />}
           value={selectedSizeIndex}

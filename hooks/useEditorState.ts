@@ -16,6 +16,9 @@ export const useEditorState = () => {
   
   const [parsedBlocks, setParsedBlocks] = useState<ParsedBlock[]>([]);
   const [documentMeta, setDocumentMeta] = useState<DocumentMeta>({});
+  const [showNotes, setShowNotes] = useState(() => {
+    return localStorage.getItem('show_notes') === 'true';
+  });
 
   // Parsing & Auto-save (Debounced)
   useEffect(() => {
@@ -32,6 +35,10 @@ export const useEditorState = () => {
 
     return () => clearTimeout(timer);
   }, [content]);
+
+  useEffect(() => {
+    localStorage.setItem('show_notes', showNotes.toString());
+  }, [showNotes]);
 
   // Language Toggle Logic
   const toggleLanguage = () => {
@@ -57,6 +64,8 @@ export const useEditorState = () => {
     setContent,
     parsedBlocks,
     documentMeta,
+    showNotes,
+    toggleNotes: () => setShowNotes(!showNotes),
     language,
     toggleLanguage,
     resetToDefault,

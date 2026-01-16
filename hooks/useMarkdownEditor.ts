@@ -19,6 +19,8 @@ export const useMarkdownEditor = () => {
     setContent, 
     parsedBlocks, 
     documentMeta, 
+    showNotes,
+    toggleNotes,
     language, 
     toggleLanguage, 
     resetToDefault, 
@@ -63,6 +65,8 @@ export const useMarkdownEditor = () => {
     setContent,
     parsedBlocks,
     documentMeta,
+    showNotes,
+    toggleNotes,
     isGenerating: isExporting,
     
     // UI Config
