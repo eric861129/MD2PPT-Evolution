@@ -150,36 +150,39 @@ Before marking any task complete, verify:
 
 ## Development Commands
 
-**AI AGENT INSTRUCTION: This section should be adapted to the project's specific language, framework, and build tools.**
-
 ### Setup
 ```bash
-# Example: Commands to set up the development environment (e.g., install dependencies, configure database)
-# e.g., for a Node.js project: npm install
-# e.g., for a Go project: go mod tidy
+# 安裝所有必要依賴
+npm install
 ```
 
 ### Daily Development
 ```bash
-# Example: Commands for common daily tasks (e.g., start dev server, run tests, lint, format)
-# e.g., for a Node.js project: npm run dev, npm test, npm run lint
-# e.g., for a Go project: go run main.go, go test ./..., go fmt ./...
+# 啟動開發伺服器 (Vite)
+npm run dev
+
+# 執行單元測試 (Vitest)
+npm test
+
+# 執行單元測試並產生覆蓋率報告
+npx vitest run --coverage
 ```
 
 ### Before Committing
 ```bash
-# Example: Commands to run all pre-commit checks (e.g., format, lint, type check, run tests)
-# e.g., for a Node.js project: npm run check
-# e.g., for a Go project: make check (if a Makefile exists)
+# 執行完整建置以檢查語法與編譯錯誤
+npm run build
+
+# 執行 Lint 檢查 (如有配置)
+# npm run lint
 ```
 
 ## Testing Requirements
 
 ### Unit Testing
-- Every module must have corresponding tests.
-- Use appropriate test setup/teardown mechanisms (e.g., fixtures, beforeEach/afterEach).
-- Mock external dependencies.
-- Test both success and failure cases.
+- 核心解析器 (`services/parser/`) 必須具備 90% 以上的測試覆蓋率。
+- 所有的渲染器 (`services/ppt/builders/`) 必須通過 Mock 測試驗證 PPTX API 的呼叫。
+- 使用 `tests/*.test.ts` 作為測試檔案命名規範。
 
 ### Integration Testing
 - Test complete user flows
