@@ -3,26 +3,26 @@
 ## 階段 1：基礎設施 - 主題狀態與型別定義 [checkpoint: a0b8d9d]
 **目標：** 定義主題數據結構，並在全域 Context 中建立主題管理邏輯與持久化機制。
 
-- [ ] 任務：定義主題與配色型別
-    - [ ] 在 `services/types.ts` 中定義 `ThemeConfig` 與 `PptTheme` 介面
-    - [ ] 建立 `constants/themes.ts` 存放 4 種預設主題的數值 (Amber, Midnight, Academic, Material)
-- [ ] 任務：擴充全域狀態管理
-    - [ ] 修改 `hooks/useEditorState.ts` 新增 `activeTheme` 與 `customThemeSettings` 狀態
-    - [ ] 實作主題持久化邏輯（將選擇的主題儲存於 `localStorage`）
-    - [ ] 更新 `contexts/EditorContext.tsx` 以便全域存取主題設定
-- [ ] 任務：Conductor - User Manual Verification '階段 1' (Protocol in workflow.md)
+- [x] 任務：定義主題與配色型別 (a0b8d9d)
+    - [x] 在 `services/types.ts` 中定義 `ThemeConfig` 與 `PptTheme` 介面
+    - [x] 建立 `constants/themes.ts` 存放 4 種預設主題的數值 (Amber, Midnight, Academic, Material)
+- [x] 任務：擴充全域狀態管理 (a0b8d9d)
+    - [x] 修改 `hooks/useEditorState.ts` 新增 `activeTheme` 與 `customThemeSettings` 狀態
+    - [x] 實作主題持久化邏輯（將選擇的主題儲存於 `localStorage`）
+    - [x] 更新 `contexts/EditorContext.tsx` 以便全域存取主題設定
+- [x] 任務：Conductor - User Manual Verification '階段 1' (Protocol in workflow.md) (a0b8d9d)
 
-## 階段 2：UI 實作 - 配色盤面板與側欄整合
+## 階段 2：UI 實作 - 配色盤面板與側欄整合 [checkpoint: 63759fe]
 **目標：** 在側欄新增觸發按鈕，並實作可插入色號的主題配置面板。
 
-- [ ] 任務：整合側欄按鈕
-    - [ ] 修改 `components/editor/QuickActionSidebar.tsx`，在最上方加入 `Palette` 按鈕
-    - [ ] 實作點擊按鈕切換「主題面板」顯示的邏輯
-- [ ] 任務：開發 ThemePanel 組件
-    - [ ] 實作配色矩陣：包含品牌核心色與常用簡報色
-    - [ ] 整合色號點擊插入邏輯（利用 `EditorActionService` 於游標處插入 HEX）
-    - [ ] 實作主題選擇器 (Dropdown) 與全域設定（字體、預設背景）的 UI
-- [ ] 任務：Conductor - User Manual Verification '階段 2' (Protocol in workflow.md)
+- [x] 任務：整合側欄按鈕 (63759fe)
+    - [x] 修改 `components/editor/QuickActionSidebar.tsx`，在最上方加入 `Palette` 按鈕
+    - [x] 實作點擊按鈕切換「主題面板」顯示的邏輯
+- [x] 任務：開發 ThemePanel 組件 (63759fe)
+    - [x] 實作配色矩陣：包含品牌核心色與常用簡報色
+    - [x] 整合色號點擊插入邏輯（利用 `EditorActionService` 於游標處插入 HEX）
+    - [x] 實作主題選擇器 (Dropdown) 與全域設定（字體、預設背景）的 UI
+- [x] 任務：Conductor - User Manual Verification '階段 2' (Protocol in workflow.md) (63759fe)
 
 ## 階段 3：混合驅動邏輯與 PPTX 引擎同步
 **目標：** 實現 YAML 優先的主題讀取邏輯，並讓 PPT 導出引擎能動態套用樣式。
