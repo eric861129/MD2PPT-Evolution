@@ -6,15 +6,15 @@ This file tracks all major development tracks for MD2PPT-Evolution. Completed tr
 
 ## 🚀 進行中 (Active Tracks)
 
-- [x] **Track: 實作演講者備忘錄系統，支援 <!-- note: ... --> 語法、預覽切換顯示及 PPTX 原生備忘錄匯出。**
-    *Link: [./tracks/speaker_notes_20260115/](./tracks/speaker_notes_20260115/)*
-
 - [ ] **Track: 全域主題管理器 (Global Theme Manager)**
     *待規劃：實作一鍵切換整份簡報的配色方案。*
 
 ---
 
 ## ✅ 已完成 (History)
+
+- [x] **Track: 演講者備忘錄系統 (Speaker Notes v0.7.0)**
+    *Link: [./archive/speaker_notes_20260115/](./archive/speaker_notes_20260115/)*
 
 - [x] **Track: 原生圖表支援 (Native Charts v0.6.0)**
     *Link: [./archive/native_charts_20260115/](./archive/native_charts_20260115/)*

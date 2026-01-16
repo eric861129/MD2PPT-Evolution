@@ -1,0 +1,8 @@
+{
+  "track_id": "speaker_notes_20260115",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-15T18:23:00Z",
+  "updated_at": "2026-01-15T18:23:00Z",
+  "description": "實作演講者備忘錄系統，支援 <!-- note: ... --> 語法、預覽切換顯示及 PPTX 原生備忘錄匯出。"
+}
