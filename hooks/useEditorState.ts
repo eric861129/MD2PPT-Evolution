@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { parseMarkdown } from '../services/markdownParser';
 import { ParsedBlock, DocumentMeta } from '../services/types';
 import { INITIAL_CONTENT_ZH, INITIAL_CONTENT_EN } from '../constants/defaultContent';
+import { PRESET_THEMES, DEFAULT_THEME_ID } from '../constants/themes';
+import { PptTheme } from '../services/types';
 
 export const useEditorState = () => {
   const { t, i18n } = useTranslation();
@@ -19,6 +21,26 @@ export const useEditorState = () => {
   const [showNotes, setShowNotes] = useState(() => {
     return localStorage.getItem('show_notes') === 'true';
   });
+
+  const [activeThemeId, setActiveThemeId] = useState(() => {
+    return localStorage.getItem('active_theme_id') || DEFAULT_THEME_ID;
+  });
+
+  const [customThemeSettings, setCustomThemeSettings] = useState<Partial<PptTheme>>(() => {
+    const saved = localStorage.getItem('custom_theme_settings');
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  // Theme Logic
+  const activeTheme = useMemo(() => {
+    const preset = PRESET_THEMES[activeThemeId] || PRESET_THEMES[DEFAULT_THEME_ID];
+    return {
+      ...preset,
+      ...customThemeSettings,
+      colors: { ...preset.colors, ...customThemeSettings.colors },
+      fonts: { ...preset.fonts, ...customThemeSettings.fonts }
+    };
+  }, [activeThemeId, customThemeSettings]);
 
   // Parsing & Auto-save (Debounced)
   useEffect(() => {
@@ -39,6 +61,14 @@ export const useEditorState = () => {
   useEffect(() => {
     localStorage.setItem('show_notes', showNotes.toString());
   }, [showNotes]);
+
+  useEffect(() => {
+    localStorage.setItem('active_theme_id', activeThemeId);
+  }, [activeThemeId]);
+
+  useEffect(() => {
+    localStorage.setItem('custom_theme_settings', JSON.stringify(customThemeSettings));
+  }, [customThemeSettings]);
 
   // Language Toggle Logic
   const toggleLanguage = () => {
@@ -66,6 +96,9 @@ export const useEditorState = () => {
     documentMeta,
     showNotes,
     toggleNotes: () => setShowNotes(!showNotes),
+    activeTheme,
+    setActiveThemeId,
+    updateCustomTheme: (settings: Partial<PptTheme>) => setCustomThemeSettings(prev => ({ ...prev, ...settings })),
     language,
     toggleLanguage,
     resetToDefault,

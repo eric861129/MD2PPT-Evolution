@@ -21,6 +21,9 @@ export const useMarkdownEditor = () => {
     documentMeta, 
     showNotes,
     toggleNotes,
+    activeTheme,
+    setActiveThemeId,
+    updateCustomTheme,
     language, 
     toggleLanguage, 
     resetToDefault, 
@@ -67,6 +70,9 @@ export const useMarkdownEditor = () => {
     documentMeta,
     showNotes,
     toggleNotes,
+    activeTheme,
+    setActiveThemeId,
+    updateCustomTheme,
     isGenerating: isExporting,
     
     // UI Config

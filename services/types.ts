@@ -61,6 +61,28 @@ export interface DocumentMeta extends SlideMetadata {
   keywords?: string;
   header?: boolean; // Show header? Default true
   footer?: boolean; // Show page number footer? Default true
+  theme?: string;   // Added for Theme Manager
+}
+
+export interface PptTheme {
+  name: string;
+  label: string;
+  colors: {
+    primary: string;
+    background: string;
+    text: string;
+    accent: string;
+    chart: string[];
+  };
+  fonts: {
+    main: string;
+    heading: string;
+  };
+}
+
+export interface ThemeConfig {
+  activeTheme: string;
+  customSettings?: Partial<PptTheme>;
 }
 
 export interface ParseResult {
