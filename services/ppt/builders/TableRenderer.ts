@@ -19,17 +19,20 @@ export const TableRenderer: BlockRenderer = {
 
     const rows = block.tableRows.map((row, index) => {
       const isHeader = index === 0;
+      const primaryColor = options.theme ? options.theme.colors.primary : "EA580C";
+      const textColor = isHeader && isModern ? "FFFFFF" : (options.color || "1C1917");
+      
       return row.map(cell => ({
         text: cell,
         options: {
           fill: isHeader 
-            ? (isModern ? "EA580C" : "F3F4F6") 
-            : (isModern && index % 2 === 0 ? "FFF7ED" : "FFFFFF"),
-          color: isHeader && isModern ? "FFFFFF" : "1C1917",
+            ? (isModern ? primaryColor : "F3F4F6") 
+            : (isModern && index % 2 === 0 ? (options.isDark ? "292524" : "FFF7ED") : (options.isDark ? "1C1917" : "FFFFFF")),
+          color: textColor,
           bold: isHeader,
           align: 'center',
           valign: 'middle',
-          border: { pt: 1, color: "E7E5E4" }
+          border: { pt: 1, color: options.isDark ? "44403C" : "E7E5E4" }
         }
       }));
     });

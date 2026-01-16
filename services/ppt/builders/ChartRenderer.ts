@@ -40,6 +40,8 @@ export const ChartRenderer: BlockRenderer = {
       case 'bar': default: type = pptx.ChartType.bar; break;
     }
 
+    const chartColors = options.theme?.colors.chart || COLORS;
+
     // Chart Options
     const chartOpts: any = {
       x, y, w, h: 3.5,
@@ -47,13 +49,13 @@ export const ChartRenderer: BlockRenderer = {
       title: title || '',
       showLegend: showLegend !== false,
       showValue: !!showValues,
-      chartColors: COLORS,
+      chartColors: chartColors,
       legendPos: 'b',
       barDir: 'col', // vertical bars
       // Theme integration
-      titleColor: options.isDark ? "FFFFFF" : PPT_THEME.COLORS.TEXT_MAIN,
+      titleColor: options.isDark ? "FFFFFF" : (options.theme?.colors.text || PPT_THEME.COLORS.TEXT_MAIN),
       titleFontSize: 14,
-      valColor: options.isDark ? "E7E5E4" : "44403C",
+      valColor: options.isDark ? "E7E5E4" : (options.theme?.colors.text || "44403C"),
       catAxisLabelColor: options.isDark ? "A8A29E" : "57534E",
       valAxisLabelColor: options.isDark ? "A8A29E" : "57534E",
       gridLineColor: options.isDark ? "44403C" : "E5E7EB"

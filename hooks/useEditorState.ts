@@ -33,14 +33,17 @@ export const useEditorState = () => {
 
   // Theme Logic
   const activeTheme = useMemo(() => {
-    const preset = PRESET_THEMES[activeThemeId] || PRESET_THEMES[DEFAULT_THEME_ID];
+    // 1. Priority: Markdown YAML Global metadata > UI Selection
+    const targetId = documentMeta.theme || activeThemeId;
+    const preset = PRESET_THEMES[targetId] || PRESET_THEMES[DEFAULT_THEME_ID];
+    
     return {
       ...preset,
       ...customThemeSettings,
       colors: { ...preset.colors, ...customThemeSettings.colors },
       fonts: { ...preset.fonts, ...customThemeSettings.fonts }
     };
-  }, [activeThemeId, customThemeSettings]);
+  }, [activeThemeId, customThemeSettings, documentMeta.theme]);
 
   // Parsing & Auto-save (Debounced)
   useEffect(() => {

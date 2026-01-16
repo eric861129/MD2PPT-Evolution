@@ -8,12 +8,15 @@ export const heading1Renderer: BlockRenderer = {
     const { slide, x, y, w, options } = ctx;
     const { big, align } = options;
     
+    const primaryColor = options.theme ? options.theme.colors.primary : PPT_THEME.COLORS.PRIMARY;
+    const fontFace = options.fontFace || PPT_THEME.FONTS.HEADING;
+
     slide.addText(block.content, { 
       x, y, w, h: 0.8, 
       fontSize: big ? 44 : PPT_THEME.FONT_SIZES.TITLE, 
       bold: true, 
-      color: PPT_THEME.COLORS.PRIMARY, 
-      fontFace: PPT_THEME.FONTS.HEADING, 
+      color: primaryColor, 
+      fontFace: fontFace, 
       align: align || 'left'
     });
     

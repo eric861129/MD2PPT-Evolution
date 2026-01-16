@@ -13,7 +13,7 @@ export const paragraphRenderer: BlockRenderer = {
       x, y, w, h: 0.5, 
       fontSize: big ? 24 : 20, 
       color: textColor, 
-      fontFace: PPT_THEME.FONTS.MAIN, 
+      fontFace: options.fontFace || PPT_THEME.FONTS.MAIN, 
       align: align || 'left' 
     });
     

@@ -6,7 +6,7 @@
  */
 
 import PptxGenJS from "pptxgenjs";
-import { ParsedBlock, BlockType } from "./types";
+import { ParsedBlock, BlockType, PptTheme } from "./types";
 import { PPT_THEME } from "../constants/theme";
 import { splitBlocksToSlides } from "./parser/slides";
 import { imageUrlToBase64 } from "../utils/imageUtils";
@@ -16,12 +16,18 @@ import { highlighterService } from "./ppt/HighlighterService";
 
 export interface PptConfig {
   layoutName?: string; title?: string; author?: string; bg?: string;
+  theme?: PptTheme;
 }
 
 const renderBlocksToArea = (slide: any, blocks: ParsedBlock[], x: number, y: number, w: number, pptx: PptxGenJS, globalOptions: any = {}) => {
   let currentY = y;
   const isDark = globalOptions.isDark || false;
-  const textColor = isDark ? "FFFFFF" : (globalOptions.color || PPT_THEME.COLORS.TEXT_MAIN);
+  const theme = globalOptions.theme as PptTheme;
+  
+  // Resolve colors from theme or fallback to defaults
+  const themeTextColor = theme ? theme.colors.text : PPT_THEHE.COLORS.TEXT_MAIN;
+  const textColor = isDark ? "FFFFFF" : (globalOptions.color || themeTextColor);
+  const themeFont = theme ? theme.fonts.main : PPT_THEME.FONTS.MAIN;
   
   let accumulatedList: { type: BlockType, content: string[] } | null = null;
 
@@ -36,7 +42,7 @@ const renderBlocksToArea = (slide: any, blocks: ParsedBlock[], x: number, y: num
         };
         const context: RenderContext = {
           pptx, slide, x, y: currentY, w,
-          options: { ...globalOptions, align: globalOptions.align || 'left' }
+          options: { ...globalOptions, align: globalOptions.align || 'left', theme, fontFace: themeFont, color: textColor }
         };
         currentY = renderer.render(mergedBlock, context);
       }
@@ -73,7 +79,7 @@ const renderBlocksToArea = (slide: any, blocks: ParsedBlock[], x: number, y: num
         x,
         y: currentY,
         w,
-        options: { ...globalOptions, align }
+        options: { ...globalOptions, align, theme, fontFace: themeFont, color: textColor }
       };
       currentY = renderer.render(block, context);
     } else {
@@ -86,6 +92,7 @@ const renderBlocksToArea = (slide: any, blocks: ParsedBlock[], x: number, y: num
 };
 
 export const generatePpt = async (blocks: ParsedBlock[], config: PptConfig = {}): Promise<void> => {
+  const theme = config.theme;
   // Init Highlighter
   try { await highlighterService.init(); } catch (e) { console.warn("Highlighter init failed", e); }
   const highlighter = highlighterService.getHighlighter();
@@ -122,7 +129,8 @@ export const generatePpt = async (blocks: ParsedBlock[], config: PptConfig = {})
     const transition = slideCfg.transition;
     
     // 1. Background Logic
-    const rawBg = slideCfg.background || slideCfg.bg || slideData.metadata?.bg || config.bg || PPT_THEME.COLORS.BG_SLIDE;
+    const themeBg = theme ? theme.colors.background : PPT_THEME.COLORS.BG_SLIDE;
+    const rawBg = slideCfg.background || slideCfg.bg || slideData.metadata?.bg || config.bg || themeBg;
     const bgImage = slideCfg.bgImage || slideData.metadata?.bgImage;
     const bgColor = rawBg.replace('#', '');
     const isDark = bgImage ? true : parseInt(bgColor, 16) < 0x888888;
@@ -158,18 +166,21 @@ export const generatePpt = async (blocks: ParsedBlock[], config: PptConfig = {})
     const titleBlocks = slideData.blocks.filter(b => b.type === BlockType.HEADING_1 || b.type === BlockType.HEADING_2);
     const otherBlocks = slideData.blocks.filter(b => b.type !== BlockType.HEADING_1 && b.type !== BlockType.HEADING_2);
 
+    const renderOpts = { isDark, theme, color: bgImage ? "FFFFFF" : undefined };
+
     // 4. Enhanced Layout Engine
     if (layout === 'impact' || layout === 'full-bg' || layout === 'center') {
       const isImpact = layout !== 'center';
-      renderBlocksToArea(slide, slideData.blocks, margin, isImpact ? 1.8 : 1.2, contentWidth, pptx, { align: 'center', big: isImpact, isDark, color: bgImage ? "FFFFFF" : undefined });
+      renderBlocksToArea(slide, slideData.blocks, margin, isImpact ? 1.8 : 1.2, contentWidth, pptx, { ...renderOpts, align: 'center', big: isImpact });
     } else if (layout === 'quote') {
-      renderBlocksToArea(slide, slideData.blocks, margin + 1, 1.5, contentWidth - 2, pptx, { align: 'center', italic: true, isDark, color: bgImage ? "FFFFFF" : undefined });
+      renderBlocksToArea(slide, slideData.blocks, margin + 1, 1.5, contentWidth - 2, pptx, { ...renderOpts, align: 'center', italic: true });
     } else if (layout === 'alert') {
       // Alert Box Simulation
-      slide.addShape(pptx.ShapeType.rect, { x: 1, y: 1.5, w: 8, h: 3, fill: { color: "FF5500", transparency: 90 }, line: { color: "FF5500", width: 2 } });
-      renderBlocksToArea(slide, slideData.blocks, 1.5, 2, 7, pptx, { align: 'center', isDark, color: "FF5500" });
+      const alertColor = theme ? theme.colors.primary : "FF5500";
+      slide.addShape(pptx.ShapeType.rect, { x: 1, y: 1.5, w: 8, h: 3, fill: { color: alertColor, transparency: 90 }, line: { color: alertColor, width: 2 } });
+      renderBlocksToArea(slide, slideData.blocks, 1.5, 2, 7, pptx, { ...renderOpts, align: 'center', color: alertColor });
     } else if (layout === 'two-column' || layout === 'grid') {
-      if (titleBlocks.length > 0) renderBlocksToArea(slide, titleBlocks, margin, 0.6, contentWidth, pptx, { isDark, color: bgImage ? "FFFFFF" : undefined });
+      if (titleBlocks.length > 0) renderBlocksToArea(slide, titleBlocks, margin, 0.6, contentWidth, pptx, renderOpts);
       
       const cols = layout === 'two-column' ? 2 : (slideCfg.columns || 2);
       const gap = 0.4;
@@ -178,14 +189,15 @@ export const generatePpt = async (blocks: ParsedBlock[], config: PptConfig = {})
       const itemsPerCol = Math.ceil(otherBlocks.length / cols);
       
       for (let c = 0; c < cols; c++) {
-        // Sequential distribution to match PreviewPane
         const colBlocks = otherBlocks.slice(c * itemsPerCol, (c + 1) * itemsPerCol);
-        renderBlocksToArea(slide, colBlocks, margin + (c * (colWidth + gap)), 1.6, colWidth, pptx, { isDark, color: bgImage ? "FFFFFF" : undefined });
+        renderBlocksToArea(slide, colBlocks, margin + (c * (colWidth + gap)), 1.6, colWidth, pptx, renderOpts);
       }
     } else {
-      if (titleBlocks.length > 0) renderBlocksToArea(slide, titleBlocks, margin, 0.6, contentWidth, pptx, { isDark, color: bgImage ? "FFFFFF" : undefined });
-      renderBlocksToArea(slide, otherBlocks, margin, 1.6, contentWidth, pptx, { isDark, color: bgImage ? "FFFFFF" : undefined });
+      if (titleBlocks.length > 0) renderBlocksToArea(slide, titleBlocks, margin, 0.6, contentWidth, pptx, renderOpts);
+      renderBlocksToArea(slide, otherBlocks, margin, 1.6, contentWidth, pptx, renderOpts);
     }
   }
+  await pptx.writeFile({ fileName: config.title ? `${config.title}.pptx` : "Presentation.pptx" });
+};
   await pptx.writeFile({ fileName: config.title ? `${config.title}.pptx` : "Presentation.pptx" });
 };

@@ -8,12 +8,15 @@ export const heading2Renderer: BlockRenderer = {
     const { slide, x, y, w, options } = ctx;
     const { big, align, isDark } = options;
     
+    const accentColor = options.theme ? options.theme.colors.accent : (isDark ? "CCCCCC" : "666666");
+    const fontFace = options.fontFace || PPT_THEME.FONTS.HEADING;
+
     slide.addText(block.content, { 
       x, y, w, h: 0.6, 
       fontSize: big ? 32 : PPT_THEME.FONT_SIZES.SUBTITLE, 
       bold: true, 
-      color: isDark ? "CCCCCC" : "666666", 
-      fontFace: PPT_THEME.FONTS.HEADING, 
+      color: accentColor, 
+      fontFace: fontFace, 
       align: align || 'left'
     });
     

@@ -26,7 +26,7 @@ function renderList(block: any, ctx: RenderContext, isBullet: boolean): number {
             const textOpt: any = {
                 color: textColor,
                 fontSize: big ? 24 : 20,
-                fontFace: PPT_THEME.FONTS.MAIN,
+                fontFace: options.fontFace || PPT_THEME.FONTS.MAIN,
             };
 
             // Apply styles
@@ -39,7 +39,8 @@ function renderList(block: any, ctx: RenderContext, isBullet: boolean): number {
 
             // Apply bullet only to the first segment of the item
             if (isFirstSeg) {
-                textOpt.bullet = isBullet ? { code: '25AA', color: PPT_THEME.COLORS.PRIMARY } : { type: 'number' };
+                const bulletColor = options.theme ? options.theme.colors.primary : PPT_THEME.COLORS.PRIMARY;
+                textOpt.bullet = isBullet ? { code: '25AA', color: bulletColor } : { type: 'number' };
                 // Specific fix for numbered lists to ensure continuity if needed, 
                 // but usually auto-numbering works if in same addText call.
                 if (!isBullet) {
