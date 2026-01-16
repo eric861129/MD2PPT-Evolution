@@ -1,112 +1,136 @@
-# MD2PPT-EVOLUTION
+# MD2PPT-EVOLUTION 🚀
 
-![Version](https://img.shields.io/badge/version-0.6.1-orange.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Version](https://img.shields.io/badge/version-0.6.1-orange.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg) ![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
 
-**MD2PPT-EVOLUTION** 是一個專為技術講者、開發者與教育工作者打造的現代化工具。它能將您的 **Markdown** 筆記瞬間轉換為專業級的 **PowerPoint (PPTX)** 簡報，讓您專注於內容創作，而非排版微調。
+**將 Markdown 筆記瞬間轉換為專業 PowerPoint (PPTX) 的極致工具。**
 
----
+> 專為開發者、技術講者與教育工作者設計。告別繁瑣的排版，專注於內容創作。
 
-## 🚀 核心功能 (v0.6.0)
-
-### ✍️ 極致寫作體驗
-- **快捷動作側欄 (Quick Actions)**: 左側懸浮工具列，一鍵插入投影片、佈局模版與常用元件，無需記憶語法。
-- **拖放式資產管理 (Drag & Drop)**: 
-    - **插入圖片**: 直接將圖片拖入編輯器，自動轉為 Base64 格式。
-    - **設定背景**: 將圖片拖至右側預覽區的投影片上，自動設為該頁背景。
-- **所見即所得 (WYSIWYG)**: 獨家的 1:1 動態縮放預覽系統，確保網頁看到的畫面與匯出的 PPTX 完全一致。
-
-### 🎨 專業排版系統
-- **原生圖表 (Native Charts)**: 支援將 Markdown 表格數據轉為 PPTX 原生可編輯圖表（Bar, Line, Pie, Area）。
-- **分層配置架構**: 採用 `===` 作為分頁符號，並支援每頁獨立的 YAML 配置區塊 (`---`)。
-- **多樣化佈局支援**:
-    - **Grid**: 網格佈局，支援自定義欄數。
-    - **Quote**: 藝術化的大字體引用佈局。
-    - **Center**: 垂直水平居中的轉場頁佈局。
-    - **Alert**: 醒目的告警與提示佈局。
-    - **Two-Column**: 經典的圖文雙欄佈局。
-- **現代化表格**: 支援 `::: table-modern` 指令，生成具備主題色標題與交錯列底色的原生表格。
-
-### 🛡️ 企業級設計
-- **琥珀與石墨主題**: 內建高對比度的深色/淺色模式，兼具護眼與商務專業感。
-- **隱私優先**: 全靜態 Web 應用，所有轉換皆在瀏覽器端完成，資料絕不上傳伺服器。
+[🔴 Live Demo (Coming Soon)](#) | [📖 完整文件](CUSTOMIZATION.md) | [🐛 回報問題](../../issues)
 
 ---
 
-## 📝 語法速查表 (Cheat Sheet)
+## ✨ 為什麼選擇 MD2PPT?
 
-### 基礎結構
+### 1. 極致的寫作流暢度
+- **所見即所得 (WYSIWYG)**: 右側預覽區提供 1:1 的 PPTX 模擬，字體大小、間距與配色完全同步。
+- **快捷動作側欄**: 左側懸浮工具列讓您一鍵插入複雜的佈局與元件，無需記憶語法。
+- **拖放式資產管理**: 
+    - 🖼️ **插入圖片**: 直接拖入編輯器，自動轉 Base64。
+    - 🎨 **設定背景**: 將圖片拖到預覽卡片上，立即設為該頁背景。
+
+### 2. 強大的原生圖表 (Native Charts)
+不再需要 Excel 截圖！直接在 Markdown 中定義數據，生成 **PowerPoint 原生可編輯圖表**。
+- 支援 **長條圖 (Bar)**、**折線圖 (Line)**、**圓餅圖 (Pie)** 與 **區域圖 (Area)**。
+- 點擊 PPT 中的圖表即可修改數據，保持簡報的靈活性。
+
+### 3. 企業級排版系統
+- **分層配置 (YAML)**: 使用 `===` 分頁，並透過每頁頂部的 YAML 區塊 (`---`) 獨立控制佈局、背景與轉場。
+- **專業佈局庫**: 內建 `Grid` (網格)、`Quote` (引用)、`Center` (居中)、`Alert` (告警) 等多種響應式版面。
+- **現代化表格**: 自動將 Markdown 表格轉換為具備主題色與斑馬紋 (Zebra striping) 的專業表格。
+
+### 4. 隱私優先 (Privacy First)
+- **100% 用戶端運算**: 所有解析與生成皆在您的瀏覽器中完成。
+- **資料不落地**: 您的筆記與圖片**絕不會**上傳至任何伺服器。
+
+---
+
+## ⚡ 快速上手 (Quick Start)
+
+### 基礎語法範例
+
 ```markdown
-# 第一頁標題
-內容...
+---
+title: "我的簡報"
+author: "Presenter"
+---
+
+# 第一頁：標題頁
+這是簡報的開場白。
 
 ===
 ---
 layout: two-column
 ---
 
-# 第二頁標題
-這頁使用了雙欄佈局。
+# 第二頁：雙欄佈局
+
+### 左邊內容
+- 重點 1
+- 重點 2
+
+### 右邊內容
+這裡會自動分到右側欄位。
+
+===
+---
+layout: center
+background: "#1e293b"
+transition: zoom
+---
+
+# 第三頁：轉場頁
+垂直居中 + 深色背景 + 縮放特效
 ```
 
-### YAML 配置參數
-在 `---` 區塊中可設定以下參數：
+### 圖表語法範例
 
-| 參數 | 說明 | 範例 |
+```markdown
+::: chart-bar { "title": "季度營收", "showValues": true }
+
+| 季度 | 2024 | 2025 |
 | :--- | :--- | :--- |
-| `layout` | 版面類型 | `grid`, `center`, `quote`, `alert`, `impact` |
-| `background` | 背景顏色 (Hex) | `"#1e293b"` |
-| `bgImage` | 背景圖片 (Base64/URL) | `data:image/...` |
-| `columns` | Grid 佈局欄位數 | `3` |
-| `transition` | 過場動畫 | `fade`, `slide`, `zoom` |
+| Q1   | 100  | 150  |
+| Q2   | 120  | 180  |
 
-### 特殊指令
-- **現代化表格**:
-  ```markdown
-  ::: table-modern
-  | 標題 1 | 標題 2 |
-  | :--- | :--- |
-  | 內容 A | 內容 B |
-  :::
-  ```
+:::
+```
+
+👉 **更多進階語法與 YAML 參數，請參閱 [客製化指南 (CUSTOMIZATION.md)](CUSTOMIZATION.md)。**
 
 ---
 
-## 🛠️ 技術堆疊
+## 🛠️ 開發與部署
 
-- **核心框架**: React 19, TypeScript, Vite 6
-- **狀態管理**: React Hooks (Context API)
-- **樣式系統**: Tailwind CSS (Dark Mode 支援)
-- **PPT 引擎**: `pptxgenjs` (Client-side Generation)
-- **解析引擎**: `marked` (AST) + `js-yaml` (Frontmatter)
+### 本地開發 (Local Development)
 
----
+本專案基於 **React 19**, **TypeScript** 與 **Vite** 構建。
 
-## 📦 快速開始
-
-### 開發環境設置
 ```bash
-# 1. 安裝依賴
+# 1. Clone 專案
+git clone https://github.com/your-username/MD2PPT-Evolution.git
+
+# 2. 安裝依賴
 npm install
 
-# 2. 啟動開發伺服器
+# 3. 啟動開發伺服器
 npm run dev
 ```
 
-### 建置專案
+### 部署 (Deployment)
+
+您可以將此專案部署至任何靜態網站託管服務 (GitHub Pages, Vercel, Netlify)。
+
 ```bash
 # 建置生產版本
 npm run build
 
-# 預覽建置結果
-npm run preview
+# 產物將位於 dist/ 目錄
 ```
 
 ---
 
-## 🤝 參與貢獻
+## 🗺️ 開發藍圖 (Roadmap)
 
-我們歡迎任何形式的貢獻！無論是回報 Bug、建議新功能或提交 PR，請參考 [CONTRIBUTING.md](CONTRIBUTING.md)。
+- [x] **v0.5.0**: 快捷側欄、拖放圖片、YAML 配置系統。
+- [x] **v0.6.0**: 原生圖表 (Native Charts) 支援。
+- [ ] **v0.7.0**: 演講者備忘錄 (Speaker Notes)。
+- [ ] **v0.8.0**: 全域主題管理器 (Theme Manager)。
 
-## 📄 授權條款
+## 🤝 貢獻 (Contributing)
+
+我們非常歡迎社群貢獻！如果您想新增佈局或修復 Bug，請查看 [CONTRIBUTING.md](CONTRIBUTING.md) (Coming Soon)。
+
+## 📄 授權 (License)
 
 MIT © 2026 EricHuang

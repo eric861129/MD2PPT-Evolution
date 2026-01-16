@@ -1,125 +1,122 @@
-# 進階客製化指南 (Customization Guide)
+# 使用者手冊與客製化指南
 
-歡迎使用 **MD2PPT-EVOLUTION**！本指南將協助您掌握 v0.5.0 版本引入的強大配置系統，讓您能透過簡單的 YAML 設定與指令，創作出獨一無二的專業簡報。
+本文件將引導您掌握 **MD2PPT-Evolution** 的所有進階功能。透過靈活的 YAML 配置與特殊指令，您可以製作出媲美專業設計師的簡報。
 
-## 🎯 目錄
+## 📚 目錄
 
-1. [YAML 配置系統詳解](#1-yaml-配置系統詳解)
-2. [專業佈局圖鑑 (Layout Gallery)](#2-專業佈局圖鑑-layout-gallery)
-3. [進階樣式指令](#3-進階樣式指令)
-4. [開發者指南：修改核心設計](#4-開發者指南修改核心設計)
+1.  [投影片結構與 YAML 配置](#1-投影片結構與-yaml-配置)
+2.  [專業佈局圖鑑 (Layouts)](#2-專業佈局圖鑑-layouts)
+3.  [原生圖表指南 (Native Charts)](#3-原生圖表指南-native-charts)
+4.  [進階元件與樣式](#4-進階元件與樣式)
 
 ---
 
-## 1. YAML 配置系統詳解
+## 1. 投影片結構與 YAML 配置
 
-在每一張投影片的頂部（即 `===` 分頁符號之後），您可以插入一個 YAML 區塊來控制該頁的視覺表現。
+### 分頁符號 `===
+`
+MD2PPT 使用三個等號 `===` 作為投影片的邊界。這比標準的 `---` 更醒目，能有效區分「分頁」與「YAML 設定」。
 
-### 基礎語法
+### YAML 配置區塊 `---`
+在每張投影片的頂部（緊接在 `===` 之後），您可以插入一個 YAML 區塊來定義該頁的屬性。
+
+**完整參數列表：**
+
+| 參數 | 類型 | 預設值 | 說明 |
+| :--- | :--- | :--- | :--- |
+| **`layout`** | `string` | `default` | 版面模式。可選值：`grid`, `center`, `quote`, `alert`, `two-column`, `impact`, `full-bg`。 |
+| **`background`** | `string` | `#FFFFFF` | 背景顏色 (Hex)。例如 `"#1e293b"` (深藍色)。 |
+| **`bgImage`** | `string` | - | 背景圖片 URL 或 Base64。建議使用拖放功能自動設定。 |
+| **`transition`** | `string` | `none` | 過場動畫。可選值：`fade`, `slide`, `zoom`, `morph` (部分支援)。 |
+| **`columns`** | `number` | `2` | 僅適用於 `layout: grid`，指定網格的欄位數量 (2~4)。 |
+| **`note`** | `string` | - | 演講者備忘錄內容。 |
+
+**範例：**
 ```markdown
 ===
 ---
 layout: center
-background: "#1e293b"
+background: "#000000"
 transition: fade
 ---
-# 您的標題
+# 這是深色背景的標題頁
 ```
 
-### 完整參數列表
+---
 
-| 參數 | 類型 | 預設值 | 說明 |
-| :--- | :--- | :--- | :--- |
-| **`layout`** | `string` | `default` | 版面配置模式。支援：`grid`, `center`, `quote`, `alert`, `two-column`, `impact`, `full-bg`。 |
-| **`background`** | `string` | `#FFFFFF` | 背景顏色，支援 Hex 色碼 (如 `#FF5500`)。 |
-| **`bgImage`** | `string` | `undefined` | 背景圖片網址或 Base64 字串。支援透過拖放自動設定。 |
-| **`transition`** | `string` | `none` | 投影片過場動畫。支援：`fade` (淡入), `slide` (滑入), `zoom` (縮放)。 |
-| **`columns`** | `number` | `2` | 僅適用於 `layout: grid`，指定網格的欄位數量。 |
-| **`note`** | `string` | `undefined` | 演講者備忘錄內容 (Speaker Notes)。 |
+## 2. 專業佈局圖鑑 (Layouts)
+
+### `grid` (網格佈局)
+自動將內容分配到多個欄位。適合展示特點、團隊成員或圖片集。
+- **參數**: `columns: 2` (預設), `3`, `4`
+- **行為**: 採用「順序填充 (Sequential Filling)」邏輯，將內容依序填入欄位。
+
+### `two-column` (雙欄佈局)
+經典的左文右圖或左右對照。
+- **行為**: 標題 (`H1/H2`) 橫跨頂部，其餘內容自動平分為左右兩欄。
+
+### `quote` (引用佈局)
+專為名言佳句設計。
+- **樣式**: 自動添加裝飾性大引號，字體放大並套用襯線體 (Serif)。
+- **建議格式**: 引用內容寫在第一行，作者寫在第二行 (可使用 `- 作者名`)。
+
+### `alert` (告警佈局)
+用於強調核心結論、警告或提示。
+- **樣式**: 帶有醒目的邊框與背景色塊，通常為置中顯示。
 
 ---
 
-## 2. 專業佈局圖鑑 (Layout Gallery)
+## 3. 原生圖表指南 (Native Charts)
 
-我們內建了多種經過設計師調校的佈局，滿足不同場景需求。
+MD2PPT 支援將 Markdown 表格轉換為 **PowerPoint 原生圖表**。這意味著您可以在 PPT 中點擊圖表來編輯數據！
 
-### 1. `center` (居中佈局)
-- **用途**: 轉場頁、大標題頁、金句強調。
-- **特性**: 內容垂直且水平完全居中。
-- **範例**:
-  ```markdown
-  layout: center
-  background: "#000000"
-  ```
+### 通用語法
+使用容器指令 `::: chart-[type]` 包裹標準表格。
 
-### 2. `quote` (引用佈局)
-- **用途**: 展示名人名言或客戶證言。
-- **特性**: 自動添加裝飾性的大引號，字體放大且套用襯線體 (Serif) 風格。
-- **範例**:
-  ```markdown
-  layout: quote
-  ```
-
-### 3. `grid` (網格佈局)
-- **用途**: 展示產品特點、團隊成員或多點比較。
-- **特性**: 自動將內容依序填入欄位。可透過 `columns` 參數自定義欄數 (預設 2 欄，支援 3, 4 欄)。
-- **範例**:
-  ```markdown
-  layout: grid
-  columns: 3
-  ```
-
-### 4. `alert` (告警佈局)
-- **用途**: 提示注意事項、警告或核心結論。
-- **特性**: 帶有醒目的邊框與圖示，背景呈現半透明強調色。
-- **範例**:
-  ```markdown
-  layout: alert
-  ```
-
-### 5. `two-column` (雙欄佈局)
-- **用途**: 左圖右文、對照比較。
-- **特性**: 經典的 50/50 分割。標題橫跨頂部，其餘內容自動分為左右兩欄。
-
----
-
-## 3. 進階樣式指令
-
-### 現代化表格 (Modern Table)
-將標準 Markdown 表格轉換為具備專業配色的 PPT 原生表格。
-
-**語法**:
 ```markdown
-::: table-modern
-| 標題 1 | 標題 2 |
-| :--- | :--- |
-| 資料 A | 資料 B |
+::: chart-bar { "title": "圖表標題", "showLegend": true }
+| 類別 (X軸) | 數值 1 | 數值 2 |
+| :--- | :--- | :--- |
+| A | 10 | 20 |
+| B | 15 | 25 |
 :::
 ```
 
-**效果**:
-- 標題列套用主題色 (如琥珀橘)。
-- 資料列採用交錯底色 (Zebra striping)，提升易讀性。
-- 表格線條細緻化。
+### 支援圖表類型
+
+| 類型 | 指令 | 適用場景 | 數據格式要求 |
+| :--- | :--- | :--- | :--- |
+| **長條圖** | `chart-bar` | 數據比較 | 第一列為類別，後續列為數值。 |
+| **折線圖** | `chart-line` | 趨勢分析 | 第一列為時間/順序，後續列為數值。 |
+| **圓餅圖** | `chart-pie` | 佔比分析 | 僅使用**第一列數值**作為數據，第一列文字作為標籤。 |
+| **區域圖** | `chart-area` | 累積趨勢 | 同折線圖，但下方有填色。 |
+
+### 配置參數 (JSON)
+在指令後方可選填 JSON 參數：
+- `title`: (string) 圖表標題。
+- `showLegend`: (boolean) 是否顯示圖例。
+- `showValues`: (boolean) 是否在圖上顯示具體數值。
+- `colors`: (string) 配色方案 (目前預設為 `theme`)。
 
 ---
 
-## 4. 開發者指南：修改核心設計
+## 4. 進階元件與樣式
 
-如果您是開發者，希望從程式碼層面修改預設值，請參考以下檔案：
+### 現代化表格
+所有標準 Markdown 表格在匯出時，預設皆會套用 **Modern Style**：
+- **標題列**: 使用主題色背景 (如琥珀橘) 與白色文字。
+- **資料列**: 使用斑馬紋 (Zebra striping) 交錯底色，提升易讀性。
+- **對齊**: 依據 Markdown 的 `:---:` 語法自動對齊。
 
-### 全局主題配置
-**檔案路徑**: `constants/theme.ts`
-- 修改 `PPT_THEME` 可調整全域字體大小、預設顏色與間距。
+### 程式碼高亮
+支援多種語言的語法高亮 (Syntax Highlighting)。在 PPT 中會渲染為帶有背景色的文字方塊，且文字**保持可編輯**。
 
-### 預覽渲染邏輯
-**檔案路徑**: `components/editor/PreviewPane.tsx`
-- 所有的佈局邏輯 (Grid, Center, etc.) 都定義在 `SlideCard` 與 `SlideContent` 元件中。
-
-### PPT 生成邏輯
-**檔案路徑**: `services/pptGenerator.ts`
-- 這裡定義了如何將 Markdown AST 轉換為 `pptxgenjs` 的 API 呼叫。
+```markdown
+```typescript
+const hello = "world";
+```
+```
 
 ---
 
-Happy Presenting!
+**MD2PPT-Evolution** 致力於讓您的簡報製作流程更流暢。Happy Presenting!
