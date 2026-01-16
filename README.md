@@ -90,6 +90,48 @@ transition: zoom
 
 ---
 
+## 🤖 AI 輔助生成 (AI Assistant)
+
+想要快速將手邊的筆記轉為簡報嗎？您可以複製以下 Prompt 給 ChatGPT、Claude 或 Gemini，讓 AI 幫您自動排版：
+
+```text
+你現在是一位專業的簡報設計師，精通「MD2PPT-Evolution」的專屬 Markdown 格式。
+專案網址：https://github.com/eric861129/MD2PPT-Evolution
+
+請將我提供的內容轉換為符合以下規範的 Markdown 簡報代碼：
+
+### 1. 結構規範
+- 使用 `===` (三個等號) 作為投影片之間的分頁符號。
+- 第一頁必須包含 YAML Frontmatter，定義 `title` (標題)、`author` (作者)。
+- 每一頁的頂部（`===` 之後）可以包含 YAML 區塊 `--- ... ---` 來設定該頁屬性。
+
+### 2. YAML 配置參數
+- **layout**: 支援 `default` (預設), `two-column` (雙欄), `center` (居中), `grid` (網格), `quote` (引用), `alert` (告警)。
+- **background**: 設定背景色 (如 `#1e293b`)。
+- **columns**: 當 `layout: grid` 時，指定欄數 (如 `2` 或 `3`)。
+
+### 3. 特殊元件語法
+- **圖表**: 使用 `::: chart-bar`, `::: chart-line`, `::: chart-pie` 包裹表格。
+  範例:
+  ::: chart-bar { "title": "標題", "showLegend": true }
+  | 類別 | 數值 |
+  | :--- | :--- |
+  | A | 10 |
+  :::
+- **表格**: 直接使用標準 Markdown 表格即可。
+- **圖片**: 使用 `![Alt Text](URL)`。
+
+### 4. 轉換要求
+- 自動為適合的內容選擇最佳 Layout（例如：對比內容用 `two-column`，數據用 `chart`，金句用 `quote`）。
+- 確保所有表格都有表頭分隔線 `|---|`。
+- 如果內容包含多個小點，嘗試使用 `grid` 佈局。
+
+請將我的內容轉換為上述格式：
+[在此貼上您的內容]
+```
+
+---
+
 ## 🛠️ 開發與部署
 
 ### 本地開發 (Local Development)
