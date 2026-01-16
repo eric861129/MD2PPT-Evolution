@@ -156,7 +156,10 @@ const SlideContent: React.FC<{ slide: SlideData, isDark?: boolean }> = ({ slide,
           style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
         >
           {Array.from({ length: cols }).map((_, colIdx) => {
-            const colBlocks = otherBlocks.filter((_, idx) => idx % cols === colIdx);
+            // Sequential distribution: Divide blocks evenly among columns
+            // This keeps headers and their content together better than round-robin
+            const itemsPerCol = Math.ceil(otherBlocks.length / cols);
+            const colBlocks = otherBlocks.slice(colIdx * itemsPerCol, (colIdx + 1) * itemsPerCol);
             return <div key={colIdx}>{renderBlocks(colBlocks)}</div>;
           })}
         </div>

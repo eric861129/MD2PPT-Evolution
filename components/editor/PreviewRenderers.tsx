@@ -124,6 +124,10 @@ export const PreviewBlock: React.FC<{ block: ParsedBlock, isDark?: boolean }> = 
           <div className="text-3xl italic leading-relaxed text-slate-800"><RenderRichText text={block.content} /></div>
         </div>
       );
+    case BlockType.QUOTE_BLOCK:
+      // Remove > markers for cleaner display
+      const cleanQuote = block.content.replace(/^>\s*/gm, '').trim();
+      return <p className="text-4xl leading-relaxed mb-10 text-center font-serif italic opacity-90"><RenderRichText text={cleanQuote} /></p>;
     default:
       return <p className="text-3xl leading-relaxed mb-10 text-justify tracking-tight opacity-90"><RenderRichText text={block.content} /></p>;
   }

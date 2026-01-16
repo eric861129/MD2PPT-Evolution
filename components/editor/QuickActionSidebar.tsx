@@ -20,19 +20,29 @@ import {
   ChevronLeft,
   Settings2,
   BarChart,
-  PieChart
+  PieChart,
+  LineChart,
+  AreaChart,
+  Columns,
+  AlignCenter,
+  MessageSquare
 } from 'lucide-react';
 
 export type ActionType = 
   | 'INSERT_SLIDE'
   | 'LAYOUT_GRID'
+  | 'LAYOUT_TWO_COLUMN'
+  | 'LAYOUT_CENTER'
   | 'LAYOUT_QUOTE'
   | 'LAYOUT_ALERT'
   | 'INSERT_TABLE'
+  | 'INSERT_CHAT'
   | 'INSERT_IMAGE'
   | 'INSERT_NOTE'
   | 'INSERT_CHART_BAR'
+  | 'INSERT_CHART_LINE'
   | 'INSERT_CHART_PIE'
+  | 'INSERT_CHART_AREA'
   | 'FORMAT_BOLD'
   | 'FORMAT_ITALIC'
   | 'FORMAT_CODE';
@@ -62,6 +72,8 @@ const ACTION_GROUPS: ActionGroup[] = [
     label: 'Layouts',
     items: [
       { type: 'LAYOUT_GRID', icon: LayoutGrid, label: 'Grid', tooltip: 'Grid Layout' },
+      { type: 'LAYOUT_TWO_COLUMN', icon: Columns, label: '2-Col', tooltip: 'Two Columns' },
+      { type: 'LAYOUT_CENTER', icon: AlignCenter, label: 'Center', tooltip: 'Center Layout' },
       { type: 'LAYOUT_QUOTE', icon: Quote, label: 'Quote', tooltip: 'Quote Layout' },
       { type: 'LAYOUT_ALERT', icon: AlertTriangle, label: 'Alert', tooltip: 'Alert Layout' },
     ]
@@ -69,9 +81,12 @@ const ACTION_GROUPS: ActionGroup[] = [
   {
     label: 'Components',
     items: [
-      { type: 'INSERT_TABLE', icon: Table, label: 'Table', tooltip: 'Modern Table' },
-      { type: 'INSERT_CHART_BAR', icon: BarChart, label: 'Bar Chart', tooltip: 'Insert Bar Chart' },
-      { type: 'INSERT_CHART_PIE', icon: PieChart, label: 'Pie Chart', tooltip: 'Insert Pie Chart' },
+      { type: 'INSERT_TABLE', icon: Table, label: 'Table', tooltip: 'Table' },
+      { type: 'INSERT_CHAT', icon: MessageSquare, label: 'Chat', tooltip: 'Dialogue' },
+      { type: 'INSERT_CHART_BAR', icon: BarChart, label: 'Bar', tooltip: 'Bar Chart' },
+      { type: 'INSERT_CHART_LINE', icon: LineChart, label: 'Line', tooltip: 'Line Chart' },
+      { type: 'INSERT_CHART_PIE', icon: PieChart, label: 'Pie', tooltip: 'Pie Chart' },
+      { type: 'INSERT_CHART_AREA', icon: AreaChart, label: 'Area', tooltip: 'Area Chart' },
       { type: 'INSERT_IMAGE', icon: Image, label: 'Image', tooltip: 'Insert Image' },
       { type: 'INSERT_NOTE', icon: StickyNote, label: 'Note', tooltip: 'Speaker Note' },
     ]

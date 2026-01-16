@@ -46,6 +46,12 @@ const MarkdownEditor: React.FC = () => {
         case 'LAYOUT_GRID':
             service.insertText(ACTION_TEMPLATES.LAYOUT_GRID, setContent);
             break;
+        case 'LAYOUT_TWO_COLUMN':
+            service.insertText(ACTION_TEMPLATES.LAYOUT_TWO_COLUMN, setContent);
+            break;
+        case 'LAYOUT_CENTER':
+            service.insertText(ACTION_TEMPLATES.LAYOUT_CENTER, setContent);
+            break;
         case 'LAYOUT_QUOTE':
             service.insertText(ACTION_TEMPLATES.LAYOUT_QUOTE, setContent);
             break;
@@ -57,11 +63,20 @@ const MarkdownEditor: React.FC = () => {
         case 'INSERT_TABLE':
             service.insertText(ACTION_TEMPLATES.INSERT_TABLE, setContent);
             break;
+        case 'INSERT_CHAT':
+            service.insertText(ACTION_TEMPLATES.INSERT_CHAT, setContent);
+            break;
         case 'INSERT_CHART_BAR':
             service.insertText(ACTION_TEMPLATES.INSERT_CHART_BAR, setContent);
             break;
+        case 'INSERT_CHART_LINE':
+            service.insertText(ACTION_TEMPLATES.INSERT_CHART_LINE, setContent);
+            break;
         case 'INSERT_CHART_PIE':
             service.insertText(ACTION_TEMPLATES.INSERT_CHART_PIE, setContent);
+            break;
+        case 'INSERT_CHART_AREA':
+            service.insertText(ACTION_TEMPLATES.INSERT_CHART_AREA, setContent);
             break;
         case 'INSERT_IMAGE':
             service.insertText(ACTION_TEMPLATES.INSERT_IMAGE, setContent);

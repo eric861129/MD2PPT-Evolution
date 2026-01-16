@@ -12,7 +12,8 @@ export const TableRenderer: BlockRenderer = {
   type: BlockType.TABLE,
   render: (block: ParsedBlock, context: RenderContext): number => {
     const { slide, x, y, w, options } = context;
-    const isModern = options?.tableStyle === 'modern';
+    // Default to modern style unless explicitly disabled
+    const isModern = options?.tableStyle !== 'basic';
     
     if (!block.tableRows || block.tableRows.length === 0) return y;
 

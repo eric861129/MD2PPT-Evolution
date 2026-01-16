@@ -12,3 +12,4 @@ export * from './CodeBlockRenderer';
 export * from './ChatCustomRenderer';
 export * from './TableRenderer';
 export * from './ChartRenderer';
+export * from './QuoteBlockRenderer';

@@ -23,22 +23,46 @@ const renderBlocksToArea = (slide: any, blocks: ParsedBlock[], x: number, y: num
   const isDark = globalOptions.isDark || false;
   const textColor = isDark ? "FFFFFF" : (globalOptions.color || PPT_THEME.COLORS.TEXT_MAIN);
   
-  let currentTableStyle: string | undefined = undefined;
+  let accumulatedList: { type: BlockType, content: string[] } | null = null;
+
+  const flushList = () => {
+    if (accumulatedList) {
+      const renderer = rendererRegistry.getRenderer(accumulatedList.type);
+      if (renderer) {
+        // Construct a temporary block for the merged list
+        const mergedBlock: ParsedBlock = {
+          type: accumulatedList.type,
+          content: accumulatedList.content.join('\n')
+        };
+        const context: RenderContext = {
+          pptx, slide, x, y: currentY, w,
+          options: { ...globalOptions, align: globalOptions.align || 'left' }
+        };
+        currentY = renderer.render(mergedBlock, context);
+      }
+      accumulatedList = null;
+    }
+  };
 
   for (const block of blocks) {
     if (currentY > 5.2) break;
     const align = globalOptions.align || 'left';
 
-    // Handle table-modern directive
-    if (block.type === BlockType.PARAGRAPH) {
-      if (block.content.trim() === '::: table-modern') {
-        currentTableStyle = 'modern';
+    // List Merging Logic
+    if (block.type === BlockType.BULLET_LIST || block.type === BlockType.NUMBERED_LIST) {
+      if (accumulatedList && accumulatedList.type === block.type) {
+        // Merge into existing list
+        accumulatedList.content.push(block.content);
+        continue; // Skip rendering this block individually
+      } else {
+        // New list type or first list
+        flushList(); // Render previous list if any
+        accumulatedList = { type: block.type, content: [block.content] };
         continue;
       }
-      if (block.content.trim() === ':::') {
-        currentTableStyle = undefined;
-        continue;
-      }
+    } else {
+      // Non-list block
+      flushList(); // Render pending list first
     }
 
     const renderer = rendererRegistry.getRenderer(block.type);
@@ -49,13 +73,16 @@ const renderBlocksToArea = (slide: any, blocks: ParsedBlock[], x: number, y: num
         x,
         y: currentY,
         w,
-        options: { ...globalOptions, align, tableStyle: currentTableStyle }
+        options: { ...globalOptions, align }
       };
       currentY = renderer.render(block, context);
     } else {
       console.warn(`No renderer found for block type: ${block.type}`);
     }
   }
+  
+  // Flush any remaining list at the end
+  flushList();
 };
 
 export const generatePpt = async (blocks: ParsedBlock[], config: PptConfig = {}): Promise<void> => {
@@ -148,8 +175,11 @@ export const generatePpt = async (blocks: ParsedBlock[], config: PptConfig = {})
       const gap = 0.4;
       const colWidth = (contentWidth - (gap * (cols - 1))) / cols;
       
+      const itemsPerCol = Math.ceil(otherBlocks.length / cols);
+      
       for (let c = 0; c < cols; c++) {
-        const colBlocks = otherBlocks.filter((_, idx) => idx % cols === c);
+        // Sequential distribution to match PreviewPane
+        const colBlocks = otherBlocks.slice(c * itemsPerCol, (c + 1) * itemsPerCol);
         renderBlocksToArea(slide, colBlocks, margin + (c * (colWidth + gap)), 1.6, colWidth, pptx, { isDark, color: bgImage ? "FFFFFF" : undefined });
       }
     } else {
