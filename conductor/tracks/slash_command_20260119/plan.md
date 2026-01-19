@@ -1,6 +1,6 @@
 # 實作計畫: Slash Command (斜線指令系統) - `slash_command_20260119`
 
-## 第一階段：基礎設施與 UI 組件 (Foundation & UI)
+## 第一階段：基礎設施與 UI 組件 (Foundation & UI) [checkpoint: 2207fd9]
 本階段目標是建立選單的視覺組件，並能在編輯器中正確觸發彈出。
 
 - [x] Task: 建立 SlashMenu 基礎組件 (cf1f4cf)
@@ -9,7 +9,7 @@
 - [x] Task: 實作觸發偵測與座標計算 (c92c030)
     - [ ] 在 `hooks/useMarkdownEditor.ts` 或相關 Context 中實作偵測 `/` 的邏輯。
     - [ ] 實作游標座標計算函數，確保選單能精確顯示在游標下方。
-- [ ] Task: Conductor - User Manual Verification '第一階段：基礎設施與 UI' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification '第一階段：基礎設施與 UI' (Protocol in workflow.md)
 
 ## 第二階段：互動邏輯與鍵盤導航 (Interaction & Navigation)
 本階段目標是讓選單具備搜尋過濾功能，並支援完全的鍵盤操作。
