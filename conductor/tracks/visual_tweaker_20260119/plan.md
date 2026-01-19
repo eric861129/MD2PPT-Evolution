@@ -11,16 +11,16 @@
     - [x] 實作全域 `TweakerOverlay` 組件，負責根據座標渲染隨選彈窗 (Popover)。
 - [x] Task: Conductor - User Manual Verification '第一階段：基礎設施' (Protocol in workflow.md) 9413c5f
 
-## 第二階段：混合模式回寫引擎 (Hybrid Updater Engine)
+## 第二階段：混合模式回寫引擎 (Hybrid Updater Engine) [checkpoint: c507c74]
 本階段目標是實作核心的「Markdown 回寫」邏輯，區分即時與確認後更新的處理方式。
 
 - [x] Task: 實作智慧內容替換器 (Smart Content Replacer) 9dff127
     - [x] 開發工具函式，根據行號與原始內容，精確替換 Markdown 中的特定區塊。
     - [x] 實作「即時同步 (Real-time)」與「確認後更新 (Commit)」兩種策略的 API 介面。
-- [x] Task: 實作文字快速編輯 (Text Tweaker) 310665a
+- [x] Task: 實作文字快速編輯 (Text Tweaker) fbeb1af
     - [x] 開發 `TextTweaker` 組件，支援 `contentEditable` 互動。
     - [x] 整合即時回寫邏輯，驗證輸入時編輯器同步更新。
-- [x] Task: Conductor - User Manual Verification '第二階段：回寫引擎與文字編輯' (Protocol in workflow.md) 310665a
+- [x] Task: Conductor - User Manual Verification '第二階段：回寫引擎與文字編輯' (Protocol in workflow.md) c507c74
 
 ## 第三階段：進階元件互動 (Charts & Images)
 本階段目標是實作圖表與圖片的專屬調整介面。
