@@ -3,12 +3,12 @@
 ## 第一階段：雙向綁定基礎設施 (Infrastructure)
 本階段目標是建立預覽元素與 Markdown 原始碼之間的映射關係，並實作通用的彈窗控制器。
 
-- [x] Task: 實作 Markdown Source Mapping
-    - [ ] 修改 `markdownParser.ts`，在產生的 AST 節點中注入行號 (Line Number) 與區塊資訊。
-    - [ ] 修改渲染器 (Renderers)，在 HTML 元素上加入 `data-source-line` 等屬性以便識別。
-- [x] Task: 建立 VisualTweaker 容器與 Context
-    - [ ] 建立 `VisualTweakerContext` 來管理當前選中的元素與彈窗狀態。
-    - [ ] 實作全域 `TweakerOverlay` 組件，負責根據座標渲染隨選彈窗 (Popover)。
+- [x] Task: 實作 Markdown Source Mapping 81b62c9
+    - [x] 修改 `markdownParser.ts`，在產生的 AST 節點中注入行號 (Line Number) 與區塊資訊。
+    - [x] 修改渲染器 (Renderers)，在 HTML 元素上加入 `data-source-line` 等屬性以便識別。
+- [x] Task: 建立 VisualTweaker 容器與 Context 25d1de6
+    - [x] 建立 `VisualTweakerContext` 來管理當前選中的元素與彈窗狀態。
+    - [x] 實作全域 `TweakerOverlay` 組件，負責根據座標渲染隨選彈窗 (Popover)。
 - [ ] Task: Conductor - User Manual Verification '第一階段：基礎設施' (Protocol in workflow.md)
 
 ## 第二階段：混合模式回寫引擎 (Hybrid Updater Engine)
