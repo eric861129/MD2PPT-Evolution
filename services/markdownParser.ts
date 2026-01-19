@@ -53,9 +53,49 @@ export const parseMarkdown = (text: string): ParseResult => {
     // Or if we are at start of line (cursor points to start), search for separator directly.
     
     // Simple heuristic: search for the regex in remainingText
-    const separatorRegex = /^(?:---+|===+)$/m;
-    const match = remainingText.match(separatorRegex);
+    // Fix: We need to ignore `---` if it's actually the start of a Frontmatter block at the beginning of the slide.
     
+    let match = null;
+    let searchOffset = 0;
+    
+    while (true) {
+        const tempText = remainingText.slice(searchOffset);
+        const tempMatch = tempText.match(/^(?:---+|===+)$/m);
+        
+        if (!tempMatch || tempMatch.index === undefined) {
+            match = null;
+            break;
+        }
+        
+        const absoluteIndex = searchOffset + tempMatch.index;
+        
+        // Check if this separator is `---` and acts as Frontmatter start
+        // Condition: It is `---` AND it is at the "start" of the slide content (only whitespace before it)
+        const contentBefore = remainingText.slice(0, absoluteIndex);
+        
+        if (tempMatch[0].startsWith('-') && contentBefore.trim() === '') {
+            // Potential Frontmatter. Check if it has a closing `---`
+            // We look at the text starting from this `---`
+            const potentialFm = remainingText.slice(absoluteIndex);
+            const fmCheck = potentialFm.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
+            
+            if (fmCheck) {
+                // Yes, it's Frontmatter. It is part of the CONTENT, not a separator.
+                // Skip past it and continue searching for the REAL separator.
+                searchOffset = absoluteIndex + fmCheck[0].length;
+                continue;
+            }
+        }
+        
+        // Valid separator found
+        match = {
+            ...tempMatch,
+            index: absoluteIndex,
+            0: tempMatch[0] // Preserve the matched string
+        };
+        break;
+    }
+
     let slideContent = "";
     let separatorLength = 0;
     let separatorLines = 0;
@@ -101,21 +141,31 @@ export const parseMarkdown = (text: string): ParseResult => {
     // layout: grid
     // ---
     // The === is consumed as separator. Then slideContent starts with ---
+    // Note: slideContent might start with newlines if the user put empty lines after separator.
+    // We should trimStart only for finding the --- match, but keep track of lines?
+    // Or just allow whitespace in regex.
     
-    const fmMatch = markdownToParse.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
+    const fmMatch = markdownToParse.match(/^\s*---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
     if (fmMatch) {
         try {
             slideMeta = yaml.load(fmMatch[1]) as object || {};
             const fmLength = fmMatch[0].length;
             const fmLines = (fmMatch[0].match(/\n/g) || []).length;
             
-            markdownToParse = markdownToParse.slice(fmLength);
-            // The AST parser will start parsing AFTER the frontmatter
-            // So we need to add frontmatter lines to the currentLine count 
-            // when passing to parseMarkdownWithAST? 
-            // NO. parseMarkdownWithAST takes an absolute lineOffset.
-            // So we add fm lines to the base currentLine for the *content* parsing.
+            // If we matched with leading whitespace, we need to be careful with slice.
+            // fmMatch[0] includes the leading whitespace.
+            
+            markdownToParse = markdownToParse.slice(fmMatch.index! + fmLength);
+            
+            // Adjust line offset based on what we consumed (whitespace + FM)
+            // But wait, if we consume lines from markdownToParse, we need to add them to localLineOffset.
+            // fmLines calculation above counts newlines in the matched string (including leading \n).
+            // So it should be correct.
             localLineOffset += fmLines;
+            
+            // However, we also need to account for lines *before* the match if fmMatch.index > 0?
+            // Actually fmMatch[0] is the whole match. If regex starts with ^\s*, the match includes the whitespace.
+            // So fmLines accounts for it.
         } catch (e) {
             // Not a YAML block
         }

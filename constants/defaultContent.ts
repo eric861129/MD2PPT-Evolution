@@ -151,13 +151,35 @@ columns: 2
 | YAML 配置 | ⭐⭐⭐ | 每一頁獨立設定 |
 
 ### 試試看這些操作！
+
 1. **拖放圖片**：直接把電腦裡的圖片拖進來。
+
 2. **快捷側欄**：點擊左側按鈕，一鍵插入內容。
+
 3. **更換背景**：把圖片拖到右邊的預覽卡片上！
+
 4. **斜線指令**：輸入 / 呼叫選單，快速插入圖表或佈局！
 
+
+
 ===
+
+
+
+# 7. 圖片互動演示
+
+## 點擊下方圖片即可開啟 Tweaker 進行即時調整
+
+
+
+![Unsplash Demo](https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop)
+
+
+
+===
+
 ---
+
 bgImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
 ---
 
@@ -317,13 +339,35 @@ columns: 2
 | YAML Config | ⭐⭐⭐ | Per-slide settings |
 
 ### Try These!
+
 1. **Drag & Drop**: Drag an image directly into the editor.
+
 2. **Sidebar**: Use the left sidebar to insert templates.
+
 3. **Set Background**: Drag an image onto a slide preview card!
+
 4. **Slash Command**: Type / to open the menu and insert charts instantly!
 
+
+
 ===
+
+
+
+# 7. Image Interaction
+
+## Click the image below to open the Tweaker for real-time adjustments.
+
+
+
+![Unsplash Demo](https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop)
+
+
+
+===
+
 ---
+
 bgImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
 ---
 
