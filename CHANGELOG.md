@@ -5,6 +5,16 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
 並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [0.9.0] - 2026-01-19
+
+### 新增 (Added)
+- **斜線指令系統 (Slash Commands)**:
+    - **快速喚起**: 在編輯器輸入 `/` 即可跳出懸浮選單，無需記憶複雜語法。
+    - **豐富模板**: 支援一鍵插入「新投影片」、「圖表 (Bar/Line/Pie)」、「佈局 (Grid/Two-Column/Quote)」及「多媒體元件」。
+    - **即時過濾**: 輸入 `/ch` 自動篩選出 Chart 相關指令，支援模糊搜尋。
+    - **智慧導航**: 完整支援鍵盤操作 (`↑`/`↓`/`Enter`/`Esc`)，插入模板後游標自動定位至關鍵編輯點 (`$cursor`)。
+    - **視覺優化**: 選單具備 **Auto-flip** 機制，當底部空間不足時自動向上彈出，避免畫面遮擋。
+
 ## [0.8.1] - 2026-01-16
 
 ### 優化 (Improved)

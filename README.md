@@ -1,8 +1,9 @@
 # MD2PPT-EVOLUTION 🚀
 
-![Version](https://img.shields.io/badge/version-0.8.1-orange.svg)
+![Version](https://img.shields.io/badge/version-0.9.0-orange.svg)
 ...
 ### 🎨 專業排版系統
+- **斜線指令 (Slash Commands)**: 輸入 `/` 喚起懸浮選單，快速插入圖表、佈局與元件，支援鍵盤導航與智慧游標定位。
 - **全域主題管理器 (Theme Manager)**: 左側新增配色面板，支援 4 種預設主題（琥珀石墨、科技深夜、簡約學術、現代翠綠）一鍵切換，並支援客製化字體與背景。
 - **演講者備忘錄 (Speaker Notes)**: 支援 `<!-- note: ... -->` 語法，可在預覽中切換顯示，並同步匯出至 PPTX 備忘錄欄位。
 - **分層配置 (YAML)**: 使用 `===` 分頁，並透過每頁頂部的 YAML 區塊 (`---`) 獨立控制佈局、背景與轉場。
@@ -149,7 +150,8 @@ npm run build
 - [x] **v0.5.0**: 快捷側欄、拖放圖片、YAML 配置系統。
 - [x] **v0.6.0**: 原生圖表 (Native Charts) 支援。
 - [x] **v0.7.0**: 演講者備忘錄 (Speaker Notes)。
-- [ ] **v0.8.0**: 全域主題管理器 (Theme Manager)。
+- [x] **v0.8.0**: 全域主題管理器 (Theme Manager)。
+- [x] **v0.9.0**: 斜線指令系統 (Slash Commands)。
 
 ## 🤝 貢獻 (Contributing)
 
