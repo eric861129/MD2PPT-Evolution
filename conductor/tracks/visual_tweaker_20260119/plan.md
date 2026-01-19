@@ -17,10 +17,10 @@
 - [x] Task: 實作智慧內容替換器 (Smart Content Replacer) 9dff127
     - [x] 開發工具函式，根據行號與原始內容，精確替換 Markdown 中的特定區塊。
     - [x] 實作「即時同步 (Real-time)」與「確認後更新 (Commit)」兩種策略的 API 介面。
-- [ ] Task: 實作文字快速編輯 (Text Tweaker)
-    - [ ] 開發 `TextTweaker` 組件，支援 `contentEditable` 互動。
-    - [ ] 整合即時回寫邏輯，驗證輸入時編輯器同步更新。
-- [ ] Task: Conductor - User Manual Verification '第二階段：回寫引擎與文字編輯' (Protocol in workflow.md)
+- [x] Task: 實作文字快速編輯 (Text Tweaker) 310665a
+    - [x] 開發 `TextTweaker` 組件，支援 `contentEditable` 互動。
+    - [x] 整合即時回寫邏輯，驗證輸入時編輯器同步更新。
+- [x] Task: Conductor - User Manual Verification '第二階段：回寫引擎與文字編輯' (Protocol in workflow.md) 310665a
 
 ## 第三階段：進階元件互動 (Charts & Images)
 本階段目標是實作圖表與圖片的專屬調整介面。
