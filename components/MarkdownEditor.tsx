@@ -8,6 +8,7 @@ import React from 'react';
 import { useMarkdownEditor } from '../hooks/useMarkdownEditor';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { EditorProvider } from '../contexts/EditorContext';
+import { VisualTweakerProvider } from '../contexts/VisualTweakerContext';
 
 // Components
 import { EditorHeader } from './editor/EditorHeader';
@@ -19,6 +20,7 @@ import { ACTION_TEMPLATES } from '../constants/templates';
 import { fileToBase64 } from '../utils/imageUtils';
 import { updateSlideYaml } from '../services/markdownUpdater';
 import { ThemePanel } from './editor/ThemePanel';
+import { TweakerOverlay } from './tweaker/TweakerOverlay';
 
 const MarkdownEditor: React.FC = () => {
   const darkModeState = useDarkMode();
@@ -141,42 +143,45 @@ const MarkdownEditor: React.FC = () => {
 
   return (
     <EditorProvider editorState={extendedEditorState as any} darkModeState={darkModeState}>
-      <div className="flex flex-col h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden transition-colors relative font-sans">
-        <EditorHeader />
+      <VisualTweakerProvider>
+        <div className="flex flex-col h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden transition-colors relative font-sans">
+          <EditorHeader />
 
-        <main className="flex flex-1 overflow-hidden relative">
-          <QuickActionSidebar onAction={handleAction} />
-          
-          {isThemePanelOpen && (
-            <ThemePanel 
-              onClose={() => setIsThemePanelOpen(false)} 
-              onInsertColor={handleInsertColor}
-            />
-          )}
-          
-          <div className="flex flex-1 overflow-hidden">
-            <div 
-                className="w-1/2 flex flex-col"
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={handleEditorDrop}
-            >
-                <EditorPane 
-                  content={content}
-                  setContent={setContent}
-                  wordCount={wordCount}
-                  textareaRef={textareaRef}
-                  onScroll={handleScroll}
+          <main className="flex flex-1 overflow-hidden relative">
+            <QuickActionSidebar onAction={handleAction} />
+            <TweakerOverlay />
+            
+            {isThemePanelOpen && (
+              <ThemePanel 
+                onClose={() => setIsThemePanelOpen(false)} 
+                onInsertColor={handleInsertColor}
+              />
+            )}
+            
+            <div className="flex flex-1 overflow-hidden">
+              <div 
+                  className="w-1/2 flex flex-col"
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={handleEditorDrop}
+              >
+                  <EditorPane 
+                    content={content}
+                    setContent={setContent}
+                    wordCount={wordCount}
+                    textareaRef={textareaRef}
+                    onScroll={handleScroll}
+                  />
+              </div>
+
+              <PreviewPane 
+                parsedBlocks={parsedBlocks}
+                previewRef={previewRef}
+                onUpdateSlideConfig={handleUpdateSlideConfig}
                 />
             </div>
-
-            <PreviewPane 
-              parsedBlocks={parsedBlocks}
-              previewRef={previewRef}
-              onUpdateSlideConfig={handleUpdateSlideConfig}
-              />
-          </div>
-        </main>
-      </div>
+          </main>
+        </div>
+      </VisualTweakerProvider>
     </EditorProvider>
   );
 };

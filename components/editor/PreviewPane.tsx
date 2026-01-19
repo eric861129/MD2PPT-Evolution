@@ -10,6 +10,7 @@ import { ParsedBlock, BlockType, PptTheme } from '../../services/types';
 import { PreviewBlock, RenderRichText } from './PreviewRenderers';
 import { splitBlocksToSlides, SlideData } from '../../services/parser/slides';
 import { useEditor } from '../../contexts/EditorContext';
+import { useVisualTweaker } from '../../contexts/VisualTweakerContext';
 import { fileToBase64 } from '../../utils/imageUtils';
 
 interface PreviewPaneProps {
@@ -17,6 +18,11 @@ interface PreviewPaneProps {
   previewRef: React.RefObject<HTMLDivElement>;
   onUpdateSlideConfig?: (index: number, key: string, value: string) => void;
 }
+
+// ... existing SlideCard and SlideContent components ... (no change needed here, just imports)
+
+// I need to skip changing SlideCard and SlideContent code, targeting PreviewPane at the bottom.
+// But replace tool requires context. I will try to match the PreviewPane definition.
 
 const DESIGN_WIDTH = 1200;
 
@@ -210,8 +216,32 @@ const SlideContent: React.FC<{ slide: SlideData, isDark?: boolean, theme: PptThe
 
 export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewRef, onUpdateSlideConfig }) => {
   const { pageSizes, selectedSizeIndex, documentMeta, showNotes, activeTheme } = useEditor();
+  const { openTweaker } = useVisualTweaker();
+  
   const selectedLayout = pageSizes[selectedSizeIndex];
   const slides = splitBlocksToSlides(parsedBlocks);
+
+  const handlePreviewClick = (e: React.MouseEvent) => {
+    let target = e.target as HTMLElement;
+    // Limit traversal depth to avoid performance issues
+    let depth = 0;
+    const maxDepth = 5;
+
+    while (target && target !== e.currentTarget && depth < maxDepth) {
+      if (target.hasAttribute('data-source-line')) {
+        const sourceLine = parseInt(target.getAttribute('data-source-line') || '0', 10);
+        const blockType = target.getAttribute('data-block-type');
+        
+        if (sourceLine > 0 && blockType) {
+          e.stopPropagation();
+          openTweaker(target, blockType as any, sourceLine);
+          return;
+        }
+      }
+      target = target.parentElement as HTMLElement;
+      depth++;
+    }
+  };
 
   return (
     <div className="w-1/2 flex flex-col bg-[#F5F5F4] dark:bg-[#0C0A09] transition-colors duration-500 border-l border-[#E7E5E4] dark:border-[#44403C]">
@@ -221,7 +251,11 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewR
           <span className="w-2 h-2 rounded-full bg-[#EA580C] animate-pulse"></span> {activeTheme.label}
         </div>
       </div>
-      <div ref={previewRef} className="flex-1 overflow-y-auto p-4 lg:p-8 scroll-smooth bg-transparent">
+      <div 
+        ref={previewRef} 
+        onClick={handlePreviewClick}
+        className="flex-1 overflow-y-auto p-4 lg:p-8 scroll-smooth bg-transparent"
+      >
         <div className="w-full max-w-[1600px] mx-auto space-y-12 pb-60">
           {slides.length > 0 ? slides.map((slide, index) => (
             <SlideCard 

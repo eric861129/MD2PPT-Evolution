@@ -31,7 +31,8 @@ export const PreviewBlock: React.FC<{ block: ParsedBlock, isDark?: boolean, them
   const accentColor = `#${theme.colors.accent}`;
   
   const commonProps = {
-    'data-source-line': block.sourceLine
+    'data-source-line': block.sourceLine,
+    'data-block-type': block.type
   };
 
   switch (block.type) {

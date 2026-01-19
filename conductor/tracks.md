@@ -6,6 +6,9 @@ This file tracks all major development tracks for MD2PPT-Evolution. Completed tr
 
 ## 🚧 進行中 (Active)
 
+- [~] **Track: Visual Tweaker (視覺化即時調整)**
+    *Link: [./tracks/visual_tweaker_20260119/](./tracks/visual_tweaker_20260119/)*
+
 ## ✅ 已完成 (History)
 
 - [x] **Track: Slash Command (斜線指令)**
