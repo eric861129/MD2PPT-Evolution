@@ -18,7 +18,7 @@ import { QuickActionSidebar, ActionType } from './editor/QuickActionSidebar';
 import { EditorActionService } from '../services/editorActionService';
 import { ACTION_TEMPLATES } from '../constants/templates';
 import { fileToBase64 } from '../utils/imageUtils';
-import { updateSlideYaml } from '../services/markdownUpdater';
+import { updateSlideYaml, replaceContentByLine } from '../services/markdownUpdater';
 import { ThemePanel } from './editor/ThemePanel';
 import { TweakerOverlay } from './tweaker/TweakerOverlay';
 
@@ -141,9 +141,15 @@ const MarkdownEditor: React.FC = () => {
     service.insertText(hex, setContent);
   };
 
+  // ... (inside the component)
+  const handleTweakerUpdate = (line: number, newContent: string) => {
+    const updated = replaceContentByLine(content, line, newContent);
+    setContent(updated);
+  };
+
   return (
     <EditorProvider editorState={extendedEditorState as any} darkModeState={darkModeState}>
-      <VisualTweakerProvider>
+      <VisualTweakerProvider onUpdateContent={handleTweakerUpdate}>
         <div className="flex flex-col h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden transition-colors relative font-sans">
           <EditorHeader />
 

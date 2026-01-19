@@ -13,11 +13,12 @@ interface VisualTweakerContextType extends TweakerState {
   openTweaker: (element: HTMLElement, type: BlockType, sourceLine: number) => void;
   closeTweaker: () => void;
   updatePosition: () => void;
+  updateContent: (newContent: string) => void;
 }
 
 const VisualTweakerContext = createContext<VisualTweakerContextType | undefined>(undefined);
 
-export const VisualTweakerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const VisualTweakerProvider: React.FC<{ children: ReactNode; onUpdateContent: (line: number, content: string) => void }> = ({ children, onUpdateContent }) => {
   const [state, setState] = useState<TweakerState>({
     isVisible: false,
     selectedElement: null,
@@ -25,6 +26,12 @@ export const VisualTweakerProvider: React.FC<{ children: ReactNode }> = ({ child
     blockType: null,
     position: { top: 0, left: 0 }
   });
+
+  const updateContent = useCallback((newContent: string) => {
+    if (state.sourceLine !== null) {
+      onUpdateContent(state.sourceLine, newContent);
+    }
+  }, [state.sourceLine, onUpdateContent]);
 
   const updatePosition = useCallback(() => {
     if (!state.selectedElement) return;
@@ -86,7 +93,7 @@ export const VisualTweakerProvider: React.FC<{ children: ReactNode }> = ({ child
   }, []);
 
   return (
-    <VisualTweakerContext.Provider value={{ ...state, openTweaker, closeTweaker, updatePosition }}>
+    <VisualTweakerContext.Provider value={{ ...state, openTweaker, closeTweaker, updatePosition, updateContent }}>
       {children}
     </VisualTweakerContext.Provider>
   );

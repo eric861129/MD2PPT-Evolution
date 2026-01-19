@@ -13,7 +13,7 @@ vi.mock('lucide-react', () => ({
 describe('TweakerOverlay', () => {
   it('should not render when isVisible is false', () => {
     render(
-      <VisualTweakerProvider>
+      <VisualTweakerProvider onUpdateContent={() => {}}>
         <TweakerOverlay />
       </VisualTweakerProvider>
     );
@@ -33,12 +33,13 @@ describe('TweakerOverlay', () => {
     };
 
     render(
-      <VisualTweakerProvider>
+      <VisualTweakerProvider onUpdateContent={() => {}}>
         <TestWrapper />
       </VisualTweakerProvider>
     );
 
-    expect(screen.getByText(/HEADING_1 Tweaker/i)).toBeDefined();
-    expect(screen.getByText(/Source Line: 10/)).toBeDefined();
+    expect(screen.getByText(/HEADING 1/i)).toBeDefined();
+    expect(screen.getByText(/Tweaker/i)).toBeDefined();
+    expect(screen.getByLabelText(/Content Edit/i)).toBeDefined();
   });
 });

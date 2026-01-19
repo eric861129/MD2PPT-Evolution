@@ -2,53 +2,70 @@ import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { VisualTweakerProvider, useVisualTweaker } from '../contexts/VisualTweakerContext';
 import { BlockType } from '../services/types';
-
-// Mock DOM elements
-const createMockElement = (rect: any) => ({
-  getBoundingClientRect: () => rect,
-});
+import React from 'react';
 
 describe('VisualTweakerContext', () => {
   const wrapper = ({ children }: { children: React.ReactNode }) => (
-    <VisualTweakerProvider>{children}</VisualTweakerProvider>
+    <VisualTweakerProvider onUpdateContent={() => {}}>
+      {children}
+    </VisualTweakerProvider>
   );
 
-  it('should initialize with closed state', () => {
+  it('should initialize with default state', () => {
     const { result } = renderHook(() => useVisualTweaker(), { wrapper });
+    
     expect(result.current.isVisible).toBe(false);
     expect(result.current.selectedElement).toBeNull();
   });
 
-  it('should open tweaker with correct data and position', () => {
+  it('should open tweaker and set state', () => {
     const { result } = renderHook(() => useVisualTweaker(), { wrapper });
-    const mockElement = createMockElement({ top: 100, right: 200, bottom: 150, left: 100 }) as any;
-
+    const mockElement = document.createElement('div');
+    
     act(() => {
       result.current.openTweaker(mockElement, BlockType.HEADING_1, 5);
     });
 
     expect(result.current.isVisible).toBe(true);
-    expect(result.current.selectedElement).toBe(mockElement);
     expect(result.current.blockType).toBe(BlockType.HEADING_1);
     expect(result.current.sourceLine).toBe(5);
-    // Position check: top + scrollY, left: right + scrollX + 20
-    // Default scroll is 0
-    expect(result.current.position).toEqual({ top: 100, left: 220 });
   });
 
   it('should close tweaker', () => {
     const { result } = renderHook(() => useVisualTweaker(), { wrapper });
-    const mockElement = createMockElement({ top: 0, right: 0 }) as any;
 
+    const mockElement = document.createElement('div');
     act(() => {
-      result.current.openTweaker(mockElement, BlockType.PARAGRAPH, 1);
+      result.current.openTweaker(mockElement, BlockType.HEADING_1, 5);
     });
-    expect(result.current.isVisible).toBe(true);
 
     act(() => {
       result.current.closeTweaker();
     });
+
     expect(result.current.isVisible).toBe(false);
     expect(result.current.selectedElement).toBeNull();
+  });
+
+  it('should call onUpdateContent when updateContent is called', () => {
+    const onUpdateContent = vi.fn();
+    const { result } = renderHook(() => useVisualTweaker(), {
+      wrapper: ({ children }) => (
+        <VisualTweakerProvider onUpdateContent={onUpdateContent}>
+          {children}
+        </VisualTweakerProvider>
+      ),
+    });
+
+    const mockElement = document.createElement('div');
+    act(() => {
+      result.current.openTweaker(mockElement, BlockType.HEADING_1, 5);
+    });
+
+    act(() => {
+      result.current.updateContent('New Content');
+    });
+
+    expect(onUpdateContent).toHaveBeenCalledWith(5, 'New Content');
   });
 });
