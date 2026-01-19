@@ -25,9 +25,9 @@
 ## 第三階段：進階元件互動 (Charts & Images)
 本階段目標是實作圖表與圖片的專屬調整介面。
 
-- [ ] Task: 實作圖片屬性調整器 (Image Tweaker)
-    - [ ] 開發 `ImageTweaker` 工具列，包含 URL 輸入框與樣式選項。
-    - [ ] 串接「確認後更新」邏輯。
+- [x] Task: 實作圖片屬性調整器 (Image Tweaker) 0982fd8
+    - [x] 開發 `ImageTweaker` 工具列，包含 URL 輸入框與樣式選項。
+    - [x] 串接「確認後更新」邏輯。
 - [ ] Task: 實作圖表數據編輯器 (Chart Data Editor)
     - [ ] 開發微型表格介面，允許修改圖表的 JSON 設定與 CSV 數據。
     - [ ] 實作從 AST 提取圖表參數並反向組裝為 Markdown 語法的邏輯。
