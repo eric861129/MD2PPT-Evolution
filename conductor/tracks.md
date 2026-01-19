@@ -4,12 +4,10 @@ This file tracks all major development tracks for MD2PPT-Evolution. Completed tr
 
 ---
 
-## 🚧 進行中 (Active)
-
-- [~] **Track: 動態背景生成器 (Generative Backgrounds)**
-    *Link: [./tracks/generative_backgrounds_20260119/](./tracks/generative_backgrounds_20260119/)*
-
 ## ✅ 已完成 (History)
+
+- [x] **Track: 動態背景生成器 (Generative Backgrounds)**
+    *Link: [./tracks/generative_backgrounds_20260119/](./tracks/generative_backgrounds_20260119/)*
 
 - [x] **Track: Visual Tweaker (視覺化即時調整)**
     *Link: [./archive/visual_tweaker_20260119/](./archive/visual_tweaker_20260119/)*
