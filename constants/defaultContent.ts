@@ -154,6 +154,7 @@ columns: 2
 1. **拖放圖片**：直接把電腦裡的圖片拖進來。
 2. **快捷側欄**：點擊左側按鈕，一鍵插入內容。
 3. **更換背景**：把圖片拖到右邊的預覽卡片上！
+4. **斜線指令**：輸入 / 呼叫選單，快速插入圖表或佈局！
 
 ===
 ---
@@ -319,6 +320,7 @@ columns: 2
 1. **Drag & Drop**: Drag an image directly into the editor.
 2. **Sidebar**: Use the left sidebar to insert templates.
 3. **Set Background**: Drag an image onto a slide preview card!
+4. **Slash Command**: Type / to open the menu and insert charts instantly!
 
 ===
 ---
