@@ -12,6 +12,7 @@ import { splitBlocksToSlides, SlideData } from '../../services/parser/slides';
 import { useEditor } from '../../contexts/EditorContext';
 import { useVisualTweaker } from '../../contexts/VisualTweakerContext';
 import { fileToBase64 } from '../../utils/imageUtils';
+import { generateMeshGradient } from '../../services/ppt/GenerativeBgService';
 
 interface PreviewPaneProps {
   parsedBlocks: ParsedBlock[];
@@ -71,16 +72,34 @@ const SlideCard: React.FC<{
   const themeText = theme.colors.text.startsWith('#') ? theme.colors.text : `#${theme.colors.text}`;
   
   const rawBg = slide.config?.background || slide.config?.bg || slide.metadata?.bg || globalBg || themeBg;
-  const bgColor = rawBg.startsWith('#') ? rawBg : `#${rawBg}`;
+  
+  // Generative Background Logic
+  let finalBgStyle: React.CSSProperties = {};
+  let isMesh = false;
+
+  if (rawBg === 'mesh' || (typeof rawBg === 'string' && rawBg.startsWith('mesh'))) {
+    isMesh = true;
+    const meshConfig = slide.config?.mesh || {};
+    // Generate SVG data URI
+    const svgString = generateMeshGradient({
+      colors: meshConfig.colors,
+      seed: meshConfig.seed,
+      // Use design dimensions or slightly larger for better resolution
+      width: DESIGN_WIDTH,
+      height: DESIGN_WIDTH * (layout.height / layout.width)
+    });
+    const svgBase64 = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgString)))}`;
+    finalBgStyle = { backgroundImage: `url(${svgBase64})`, backgroundSize: 'cover' };
+  } else {
+    const bgColor = rawBg.startsWith('#') ? rawBg : `#${rawBg}`;
+    finalBgStyle = { backgroundColor: bgColor };
+  }
   
   // Calculate brightness for auto-text-color if not on theme default
-  const hex = bgColor.replace('#', '');
-  const r = parseInt(hex.substring(0, 2), 16) || 255;
-  const g = parseInt(hex.substring(2, 4), 16) || 255;
-  const b = parseInt(hex.substring(4, 6), 16) || 255;
-  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  // For mesh, assume dark or light based on first color? Or just default to white/themeText?
+  // Let's stick to themeText for mesh unless overridden.
+  const isDark = bgImage ? true : (isMesh ? false : (parseInt(rawBg.replace('#', '').substring(0, 2), 16) * 299 + parseInt(rawBg.replace('#', '').substring(2, 4), 16) * 587 + parseInt(rawBg.replace('#', '').substring(4, 6), 16) * 114) / 1000 < 128);
   
-  const isDark = bgImage ? true : brightness < 128;
   const textColor = bgImage ? '#FFFFFF' : (isDark ? '#FFFFFF' : themeText);
   
   const designHeight = DESIGN_WIDTH * (layout.height / layout.width);
@@ -107,7 +126,7 @@ const SlideCard: React.FC<{
           height: `${designHeight}px`, 
           transform: `scale(${scale})`, 
           transformOrigin: 'top left', 
-          backgroundColor: bgImage ? 'transparent' : bgColor, 
+          ...finalBgStyle,
           color: textColor, 
           fontFamily: theme.fonts.main,
           position: 'absolute', 
