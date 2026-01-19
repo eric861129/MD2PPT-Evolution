@@ -98,6 +98,12 @@ $cursor`,
   INSERT_CHART_BAR: `\n\n::: chart-bar { "title": "Quarterly Revenue", "showLegend": true }\n\n| Quarter | 2024 | 2025 |\n| :--- | :--- | :--- |\n| Q1 | 100 | 150 |\n| Q2 | 120 | 180 |\n| Q3 | 130 | 200 |\n\n:::\n\n`,
   INSERT_CHART_LINE: `\n\n::: chart-line { "title": "Growth Trend" }\n\n| Month | Users |\n| :--- | :--- |\n| Jan | 100 |\n| Feb | 150 |\n| Mar | 200 |\n\n:::\n\n`,
   INSERT_CHART_PIE: `\n\n::: chart-pie { "title": "Market Share", "showValues": true }\n\n| Category | Share |\n| :--- | :--- |\n| Mobile | 45 |\n| Desktop | 35 |\n| Tablet | 20 |\n\n:::\n\n`,
-  INSERT_CHART_AREA: `\n\n::: chart-area { "title": "Traffic" }\n\n| Time | Visitors |\n| :--- | :--- |\n| 08:00 | 100 |\n| 12:00 | 450 |\n| 16:00 | 890 |\n\n:::\n\n`
+  INSERT_CHART_AREA: `\n\n::: chart-area { "title": "Traffic" }\n\n| Time | Visitors |\n| :--- | :--- |\n| 08:00 | 100 |\n| 12:00 | 450 |\n| 16:00 | 890 |\n\n:::\n\n`,
+  INSERT_BG_MESH: `---
+bg: mesh
+mesh:
+  colors: ["#4158D0", "#C850C0", "#FFCC70"]
+  seed: $cursor
+---`
 };
 

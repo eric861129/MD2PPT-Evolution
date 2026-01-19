@@ -9,10 +9,11 @@ import PptxGenJS from "pptxgenjs";
 import { ParsedBlock, BlockType, PptTheme } from "./types";
 import { PPT_THEME } from "../constants/theme";
 import { splitBlocksToSlides } from "./parser/slides";
-import { imageUrlToBase64 } from "../utils/imageUtils";
+import { imageUrlToBase64, svgToPngBase64 } from "../utils/imageUtils";
 import { rendererRegistry } from "./ppt/builders/registry";
 import { RenderContext } from "./ppt/builders/types";
 import { highlighterService } from "./ppt/HighlighterService";
+import { generateMeshGradient } from "./ppt/GenerativeBgService";
 
 export interface PptConfig {
   layoutName?: string; 
@@ -134,11 +135,33 @@ export const generatePpt = async (blocks: ParsedBlock[], config: PptConfig = {})
     const themeBg = theme ? theme.colors.background : PPT_THEME.COLORS.BG_SLIDE;
     const rawBg = slideCfg.background || slideCfg.bg || slideData.metadata?.bg || config.bg || themeBg;
     const bgImage = slideCfg.bgImage || slideData.metadata?.bgImage;
-    const bgColor = rawBg.replace('#', '');
-    const isDark = bgImage ? true : parseInt(bgColor, 16) < 0x888888;
+    
+    let isMesh = false;
+    let meshDataUri = "";
+
+    if (rawBg === 'mesh' || (typeof rawBg === 'string' && rawBg.startsWith('mesh'))) {
+      isMesh = true;
+      const meshConfig = slideCfg.mesh || {};
+      const svg = generateMeshGradient({
+        colors: meshConfig.colors,
+        seed: meshConfig.seed,
+        width: 1920,
+        height: 1080
+      });
+      try {
+        meshDataUri = await svgToPngBase64(svg, 1920, 1080);
+      } catch (e) {
+        console.error("Mesh SVG to PNG failed", e);
+      }
+    }
+
+    const bgColor = typeof rawBg === 'string' ? rawBg.replace('#', '') : 'FFFFFF';
+    const isDark = bgImage || isMesh ? true : parseInt(bgColor, 16) < 0x888888;
 
     if (bgImage && typeof bgImage === 'string' && (bgImage.startsWith('http') || bgImage.startsWith('data:image'))) {
       slide.background = { data: bgImage };
+    } else if (isMesh && meshDataUri) {
+      slide.background = { data: meshDataUri };
     } else {
       slide.background = { fill: bgColor };
     }

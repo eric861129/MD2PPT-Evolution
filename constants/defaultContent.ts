@@ -194,6 +194,18 @@ background: "#1C1917"
 
 # 感謝您的使用
 ## MD2PPT-Evolution
+
+===
+---
+bg: mesh
+mesh:
+  colors: ["#4158D0", "#C850C0", "#FFCC70"]
+  seed: 12345
+---
+
+# 8. 動態背景展示
+## 這頁使用了 Mesh Gradient 生成背景。
+## 點擊背景空白處即可開啟 Tweaker 調整顏色！
 `;
 
 export const INITIAL_CONTENT_EN = `---
@@ -382,4 +394,16 @@ background: "#1C1917"
 
 # Thank You
 ## MD2PPT-Evolution
+
+===
+---
+bg: mesh
+mesh:
+  colors: ["#4158D0", "#C850C0", "#FFCC70"]
+  seed: 12345
+---
+
+# 8. Generative Backgrounds
+## This slide uses a Mesh Gradient background.
+## Click on any empty space to tweak the colors!
 `;

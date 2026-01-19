@@ -5,6 +5,16 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
 並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [0.10.0] - 2026-01-19
+
+### 新增 (Added)
+- **動態背景生成器 (Generative Backgrounds)**:
+    - **Mesh Gradient 引擎**: 引入輕量級生成藝術算法，自動產生平滑的多色漸層背景。
+    - **YAML 驅動**: 支援 `bg: mesh` 及其自定義顏色與隨機種子參數。
+    - **Visual Tweaker 整合**: 支援直接點擊背景進行即時顏色調整與「Re-roll」重新隨機生成。
+    - **PPTX 匯出支援**: 匯出時自動將生成的 SVG 背景轉換為高解析度圖片嵌入投影片。
+    - **斜線指令**: 新增 `/bg-mesh` 快速插入背景配置模板。
+
 ## [0.9.0] - 2026-01-19
 
 ### 新增 (Added)
