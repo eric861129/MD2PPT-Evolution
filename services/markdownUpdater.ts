@@ -5,6 +5,54 @@
  */
 
 /**
+ * Replaces content in Markdown starting at a specific line index.
+ * Handles single lines or whole blocks (like charts or callouts).
+ * 
+ * @param content Full markdown text
+ * @param lineIndex 0-based line index
+ * @param newContent The new string to put there
+ * @returns Updated markdown
+ */
+export const replaceContentByLine = (content: string, lineIndex: number, newContent: string): string => {
+  const lines = content.split(/\r?\n/);
+  if (lineIndex < 0 || lineIndex >= lines.length) return content;
+
+  const targetLine = lines[lineIndex].trim();
+  
+  // 1. Block Detection: Chart or Custom Containers
+  if (targetLine.startsWith(':::')) {
+    let endIndex = lineIndex + 1;
+    
+    // If it's a one-line ::: block (rare but possible), avoid infinite loop
+    if (targetLine === ':::' && lineIndex > 0) {
+       // This might be the END of a block. 
+       // For simplicity, we only trigger block replacement if it's a START (::: something)
+    }
+
+    if (targetLine !== ':::') {
+      while (endIndex < lines.length) {
+        if (lines[endIndex].trim() === ':::') {
+          break;
+        }
+        endIndex++;
+      }
+      
+      // If we found a closing :::, replace the whole range
+      if (endIndex < lines.length) {
+        const before = lines.slice(0, lineIndex);
+        const after = lines.slice(endIndex + 1);
+        return [...before, newContent, ...after].join('\n');
+      }
+    }
+  }
+
+  // 2. Default: Single line replacement
+  const before = lines.slice(0, lineIndex);
+  const after = lines.slice(lineIndex + 1);
+  return [...before, newContent, ...after].join('\n');
+};
+
+/**
  * Updates a specific key in the YAML frontmatter of a specific slide.
  * 
  * @param content The full Markdown content
