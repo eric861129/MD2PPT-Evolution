@@ -22,16 +22,16 @@
     - [x] 實作背景變更的即時回寫 (Real-time Sync) 到 Markdown YAML。
 - [x] Task: Conductor - User Manual Verification '第二階段：視覺化編輯整合' (Protocol in workflow.md) 71626e1
 
-## 第三階段：完整工作流與匯出支援 [checkpoint: pending]
+## 第三階段：完整工作流與匯出支援 [checkpoint: ab041f4]
 本階段目標是加入斜線指令模板，並確保 PPT 匯出時包含生成的背景。
 
-- [x] Task: 實作斜線指令與模板整合 13baaee
+- [x] Task: 實作斜線指令與模板整合 0db22ab
     - [x] 在 `SlashMenu` 加入 `/bg-mesh` 指令。
     - [x] 在 `constants/templates.ts` 加入對應的網格漸層 YAML 模板。
-- [x] Task: PPTX 匯出支援 13baaee
+- [x] Task: PPTX 匯出支援 0db22ab
     - [x] 實作 SVG 轉高解析度圖片 (Base64) 的工具函式。
     - [x] 修改 `pptGenerator.ts`，在產生投影片時，若偵測到 `bg: mesh` 則生成圖片並設定為背景。
-- [x] Task: 更新版本號與產品文件 (v0.10.0) 13baaee
+- [x] Task: 更新版本號與產品文件 (v0.10.0) 0db22ab
     - [x] 更新 `package.json`, `README.md` 版本徽章與 `CHANGELOG.md`。
     - [x] 更新 `constants/defaultContent.ts` 加入動態背景展示分頁。
-- [ ] Task: Conductor - User Manual Verification '第三階段：完整工作流與匯出' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification '第三階段：完整工作流與匯出' (Protocol in workflow.md) ab041f4
