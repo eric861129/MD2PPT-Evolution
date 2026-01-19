@@ -68,6 +68,34 @@ describe('useSlashCommand', () => {
     expect(result.current.isOpen).toBe(false);
   });
 
+  it('should position cursor correctly at $cursor marker', () => {
+    vi.useFakeTimers();
+    const { result } = renderHook(() => useSlashCommand({ current: textarea } as any, onInsert));
+    
+    // Select Heading 1 which has template '# $cursor'
+    const h1Command = { id: 'h1', label: 'H1', icon: vi.fn(), category: 'B', template: '# $cursor' };
+    
+    act(() => {
+      textarea.value = '/';
+      textarea.selectionStart = 1;
+      result.current.handleInputChange('/', 1);
+    });
+
+    act(() => {
+      result.current.selectCommand(h1Command as any);
+    });
+
+    // Mock the textarea behavior when onInsert is called by the parent
+    textarea.value = '# ';
+    
+    act(() => {
+      vi.advanceTimersByTime(10);
+    });
+
+    expect(textarea.selectionStart).toBe(2); // After '# '
+    vi.useRealTimers();
+  });
+
   it('should handle keyboard navigation', () => {
     const { result } = renderHook(() => useSlashCommand({ current: textarea } as any, onInsert));
     

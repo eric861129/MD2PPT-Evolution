@@ -11,13 +11,16 @@ import {
   LayoutGrid, Layout, Quote, AlertCircle,
   BarChart, LineChart, PieChart, Activity,
   Table, Image as ImageIcon, MessageSquare, StickyNote,
-  AlignCenter
+  AlignCenter, Plus
 } from 'lucide-react';
 import { Command } from '../components/editor/SlashMenu';
 import { ACTION_TEMPLATES } from '../constants/templates';
 import { getCaretCoordinates } from '../utils/caretPosition';
 
 const ALL_COMMANDS: Command[] = [
+  // Structure
+  { id: 'new-slide', label: 'New Slide', icon: Plus, category: 'Structure', template: ACTION_TEMPLATES.INSERT_SLIDE },
+
   // Basic
   { id: 'h1', label: 'Heading 1', icon: Heading1, category: 'Basic', template: '# $cursor' },
   { id: 'h2', label: 'Heading 2', icon: Heading2, category: 'Basic', template: '## $cursor' },
