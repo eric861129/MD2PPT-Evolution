@@ -3,28 +3,13 @@ import { useVisualTweaker } from '../../contexts/VisualTweakerContext';
 import { X } from 'lucide-react';
 import { TextTweaker } from './TextTweaker';
 import { ImageTweaker } from './ImageTweaker';
+import { ChartTweaker } from './ChartTweaker';
 import { BlockType } from '../../services/types';
 
 export const TweakerOverlay: React.FC = () => {
-  const { isVisible, position, blockType, sourceLine, closeTweaker, updatePosition } = useVisualTweaker();
-  const overlayRef = useRef<HTMLDivElement>(null);
-
-  // ... (useEffect remains same)
-
-  if (!isVisible) return null;
-
-  const isTextType = blockType && [
-    BlockType.HEADING_1, 
-    BlockType.HEADING_2, 
-    BlockType.HEADING_3, 
-    BlockType.PARAGRAPH,
-    BlockType.QUOTE_BLOCK,
-    BlockType.CALLOUT_NOTE,
-    BlockType.CALLOUT_TIP,
-    BlockType.CALLOUT_WARNING
-  ].includes(blockType);
-  
+  // ...
   const isImageType = blockType === BlockType.IMAGE;
+  const isChartType = blockType === BlockType.CHART;
 
   return (
     <div
@@ -42,7 +27,9 @@ export const TweakerOverlay: React.FC = () => {
       </div>
       
       <div className="text-sm text-stone-600 dark:text-stone-300">
-        {isTextType ? <TextTweaker /> : isImageType ? <ImageTweaker /> : (
+        {isTextType ? <TextTweaker /> : 
+         isImageType ? <ImageTweaker /> : 
+         isChartType ? <ChartTweaker /> : (
           <>
             <p>Source Line: {sourceLine}</p>
             <p className="mt-2 text-xs opacity-60">Specific controls for {blockType} will appear here.</p>
