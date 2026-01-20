@@ -97,4 +97,4 @@ export const PRESET_THEMES: Record<string, PptTheme> = {
   ...PALETTE_THEMES // We only expose Palette Themes now
 };
 
-export const DEFAULT_THEME_ID = 'tech-blue';
+export const DEFAULT_THEME_ID = 'classic-amber';

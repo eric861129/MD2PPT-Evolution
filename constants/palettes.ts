@@ -15,6 +15,17 @@ export interface DesignPalette {
 }
 
 export const CURATED_PALETTES: DesignPalette[] = [
+  // --- MD2PPT Official ---
+  {
+    id: 'classic-amber',
+    name: 'Classic Amber',
+    label: '經典琥珀',
+    description: 'MD2PPT 官方配色，專業且具備品牌識別度',
+    baseTheme: 'amber',
+    meshColors: ["#C2410C", "#EA580C", "#FDBA74"],
+    keywords: ['official', 'brand', 'classic', 'orange']
+  },
+
   // --- Tech & Trust ---
   {
     id: 'tech-blue',
