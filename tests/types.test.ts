@@ -1,10 +1,24 @@
 import { describe, it, expect } from 'vitest';
-import { BlockType } from '../services/types';
+import { BlockType, BrandConfig } from '../services/types';
 import { BlockRenderer, RenderContext } from '../services/ppt/builders/types';
 
 describe('Slide Types', () => {
   it('should have basic slide types defined', () => {
     expect(BlockType.PARAGRAPH).toBe('PARAGRAPH');
+  });
+});
+
+describe('BrandConfig Type', () => {
+  it('should allow creating a valid BrandConfig object', () => {
+    const config: BrandConfig = {
+      primaryColor: '#ff0000',
+      secondaryColor: '#00ff00',
+      accentColor: '#0000ff',
+      font: 'Arial',
+      logoPosition: 'top-right'
+    };
+    expect(config.primaryColor).toBe('#ff0000');
+    expect(config.logoPosition).toBe('top-right');
   });
 });
 

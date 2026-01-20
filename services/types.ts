@@ -90,3 +90,12 @@ export interface ParseResult {
   blocks: ParsedBlock[];
   meta: DocumentMeta;
 }
+
+export interface BrandConfig {
+  primaryColor: string;
+  secondaryColor: string;
+  accentColor: string;
+  font: string;
+  logo?: string; // Base64
+  logoPosition: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+}
