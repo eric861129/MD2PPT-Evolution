@@ -5,6 +5,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { saveAs } from 'file-saver';
 import { BrandConfig } from '../services/types';
 
 const DEFAULT_BRAND_CONFIG: BrandConfig = {
@@ -45,10 +46,31 @@ export const useBrandSettings = () => {
     }
   };
 
+  const saveConfigToFile = () => {
+    const json = exportConfig();
+    const blob = new Blob([json], { type: 'application/json' });
+    saveAs(blob, 'brand.json');
+  };
+
+  const loadConfigFromFile = (file: File): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target?.result as string;
+        importConfig(content);
+        resolve();
+      };
+      reader.onerror = reject;
+      reader.readAsText(file);
+    });
+  };
+
   return {
     brandConfig,
     updateBrandConfig,
     exportConfig,
-    importConfig
+    importConfig,
+    saveConfigToFile,
+    loadConfigFromFile
   };
 };

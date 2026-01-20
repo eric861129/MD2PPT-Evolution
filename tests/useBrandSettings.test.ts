@@ -72,4 +72,23 @@ describe('useBrandSettings', () => {
     expect(result.current.brandConfig.primaryColor).toBe('#999999');
     expect(result.current.brandConfig.font).toBe('新細明體');
   });
+
+  it('should load config from a File object', async () => {
+    const { result } = renderHook(() => useBrandSettings());
+    const newConfig = {
+      primaryColor: '#111111',
+      secondaryColor: '#222222',
+      accentColor: '#333333',
+      font: 'Arial',
+      logoPosition: 'bottom-left'
+    };
+    const blob = new Blob([JSON.stringify(newConfig)], { type: 'application/json' });
+    const file = new File([blob], 'brand.json', { type: 'application/json' });
+    
+    await act(async () => {
+      await result.current.loadConfigFromFile(file);
+    });
+    
+    expect(result.current.brandConfig.primaryColor).toBe('#111111');
+  });
 });
