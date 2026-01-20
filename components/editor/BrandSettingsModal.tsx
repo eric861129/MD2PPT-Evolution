@@ -5,9 +5,10 @@
  * Licensed under the MIT License.
  */
 
-import React from 'react';
-import { X, Palette, Type, Image, Database, Upload, Download } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Palette, Type, Image as ImageIcon, Upload, Download, Trash2, Layout } from 'lucide-react';
 import { BrandConfig } from '../../services/types';
+import { fileToBase64 } from '../../utils/imageUtils';
 
 interface BrandSettingsModalProps {
   isOpen: boolean;
@@ -26,11 +27,40 @@ export const BrandSettingsModal: React.FC<BrandSettingsModalProps> = ({
   onExport,
   onImport
 }) => {
+  const [isDragging, setIsDragging] = useState(false);
+
   if (!isOpen) return null;
+
+  const handleLogoUpload = async (file: File) => {
+    try {
+      const base64 = await fileToBase64(file);
+      onUpdate({ logo: base64 });
+    } catch (err) {
+      console.error("Failed to upload logo", err);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      if (file.name.endsWith('.json')) {
+        onImport(file);
+      } else if (file.type.startsWith('image/')) {
+        handleLogoUpload(file);
+      }
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200 p-4">
-      <div className="bg-white dark:bg-[#1C1917] w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden border border-[#E7E5E4] dark:border-[#44403C]">
+      <div 
+        className={`bg-white dark:bg-[#1C1917] w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden border transition-all ${isDragging ? 'border-orange-500 ring-4 ring-orange-500/20' : 'border-[#E7E5E4] dark:border-[#44403C]'}`}
+        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+        onDragLeave={() => setIsDragging(false)}
+        onDrop={handleDrop}
+      >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-[#E7E5E4] dark:border-[#44403C]">
           <div className="flex items-center gap-3">
@@ -52,9 +82,9 @@ export const BrandSettingsModal: React.FC<BrandSettingsModalProps> = ({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-8 space-y-8">
+        <div className="flex-1 overflow-y-auto p-8 space-y-10">
           <p className="text-sm text-stone-600 dark:text-stone-400">
-            這些設定將作為簡報的預設值，確保輸出的 PPT 具備一致的專業外觀。
+            這些設定將作為簡報的預設值，確保輸出的 PPT 具備一致的專業外觀。您可以直接在此處拖放 <strong>brand.json</strong> 或是 <strong>Logo 圖檔</strong>。
           </p>
           
           {/* Main Controls */}
@@ -130,6 +160,73 @@ export const BrandSettingsModal: React.FC<BrandSettingsModalProps> = ({
                   >
                     <span className="text-lg font-bold">字體預覽效果</span>
                     <span className="text-xs opacity-60">Professional Presentation Style</span>
+                  </div>
+                </div>
+             </div>
+          </div>
+
+          {/* Logo Section */}
+          <div className="pt-10 border-t border-stone-100 dark:border-white/5 space-y-6">
+             <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 flex items-center gap-2">
+               <ImageIcon size={12} /> 品牌 Logo 與位置
+             </label>
+
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="space-y-4">
+                  <label className="text-sm font-medium text-stone-700 dark:text-stone-300">
+                    企業 Logo (建議使用 PNG 透明底)
+                  </label>
+                  
+                  {config.logo ? (
+                    <div className="relative group aspect-video bg-stone-50 dark:bg-white/5 rounded-xl border border-stone-200 dark:border-white/10 p-4 flex items-center justify-center">
+                      <img src={config.logo} alt="Brand Logo" className="max-w-full max-h-full object-contain" />
+                      <button 
+                        onClick={() => onUpdate({ logo: undefined })}
+                        className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="aspect-video bg-stone-50 dark:bg-white/5 rounded-xl border-2 border-dashed border-stone-200 dark:border-white/10 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-stone-100 dark:hover:bg-white/10 transition-colors">
+                      <Upload size={24} className="text-stone-300" />
+                      <span className="text-xs text-stone-400">點擊或拖放圖片至此</span>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        className="hidden" 
+                        onChange={(e) => e.target.files && handleLogoUpload(e.target.files[0])}
+                      />
+                    </label>
+                  )}
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="logoPosition" className="text-sm font-medium text-stone-700 dark:text-stone-300">
+                      Logo 顯示位置
+                    </label>
+                    <select 
+                      id="logoPosition"
+                      aria-label="Logo 顯示位置"
+                      value={config.logoPosition}
+                      onChange={(e) => onUpdate({ logoPosition: e.target.value as any })}
+                      className="w-full bg-stone-50 dark:bg-white/5 border border-stone-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-orange-500/20 transition-all appearance-none"
+                    >
+                      <option value="top-left">左上角 (Top Left)</option>
+                      <option value="top-right">右上角 (Top Right)</option>
+                      <option value="bottom-left">左下角 (Bottom Left)</option>
+                      <option value="bottom-right">右下角 (Bottom Right)</option>
+                    </select>
+                  </div>
+
+                  <div className="p-4 bg-stone-50/50 dark:bg-white/5 rounded-xl border border-stone-100 dark:border-white/5 flex items-center gap-3">
+                    <div className="p-2 bg-blue-50 dark:bg-blue-900/20 text-blue-500 rounded-lg">
+                      <Layout size={16} />
+                    </div>
+                    <p className="text-[10px] text-stone-500 leading-relaxed">
+                      Logo 將自動套用至預覽區與 PPTX 母片。建議使用高解析度向量圖轉存之 PNG。
+                    </p>
                   </div>
                 </div>
              </div>

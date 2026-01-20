@@ -52,4 +52,11 @@ describe('BrandSettingsModal', () => {
     fireEvent.change(fontSelect, { target: { value: '標楷體' } });
     expect(mockProps.onUpdate).toHaveBeenCalledWith({ font: '標楷體' });
   });
+
+  it('should call onUpdate when logo position is changed', () => {
+    render(<BrandSettingsModal {...mockProps} />);
+    const posSelect = screen.getByLabelText(/Logo 顯示位置/i);
+    fireEvent.change(posSelect, { target: { value: 'bottom-left' } });
+    expect(mockProps.onUpdate).toHaveBeenCalledWith({ logoPosition: 'bottom-left' });
+  });
 });
