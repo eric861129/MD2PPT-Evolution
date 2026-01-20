@@ -37,4 +37,19 @@ describe('BrandSettingsModal', () => {
     fireEvent.click(closeBtn);
     expect(mockProps.onClose).toHaveBeenCalled();
   });
+
+  it('should call onUpdate when a color is changed', () => {
+    render(<BrandSettingsModal {...mockProps} />);
+    // Since we'll have color inputs, we search for them
+    const primaryInput = screen.getByLabelText(/主色/i);
+    fireEvent.change(primaryInput, { target: { value: '#ff0000' } });
+    expect(mockProps.onUpdate).toHaveBeenCalledWith({ primaryColor: '#ff0000' });
+  });
+
+  it('should call onUpdate when font is changed', () => {
+    render(<BrandSettingsModal {...mockProps} />);
+    const fontSelect = screen.getByLabelText(/標題字體/i);
+    fireEvent.change(fontSelect, { target: { value: '標楷體' } });
+    expect(mockProps.onUpdate).toHaveBeenCalledWith({ font: '標楷體' });
+  });
 });
