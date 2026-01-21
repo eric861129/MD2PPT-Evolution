@@ -13,6 +13,7 @@ import { ChevronLeft, ChevronRight, MonitorOff, Home, Smartphone } from 'lucide-
 import { PresentationSyncService, SyncAction } from '../../services/PresentationSyncService';
 import { RemoteControlService } from '../../services/RemoteControlService';
 import { RemoteQRCodeModal } from './RemoteQRCodeModal';
+import { ScaledSlideContainer } from '../common/ScaledSlideContainer';
 
 interface PresenterConsoleProps {
   slides: SlideData[];
@@ -150,13 +151,17 @@ export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, curr
         {/* Main View: Current Slide */}
         <div className="flex-1 flex flex-col p-6 border-r border-stone-700 relative group">
           <h2 className="text-xs font-black text-stone-500 mb-3 uppercase tracking-[0.2em]">Current Slide</h2>
-          <div className="flex-1 bg-black relative rounded-xl overflow-hidden flex items-center justify-center shadow-2xl ring-1 ring-white/10" data-testid="current-slide-view">
+          <div className="flex-1 bg-black relative rounded-xl overflow-hidden shadow-2xl ring-1 ring-white/10" data-testid="current-slide-view">
             {currentSlide ? (
-               <div className="scale-[0.8] origin-center">
-                 <SlideContent slide={currentSlide} theme={theme} />
-               </div>
+               <ScaledSlideContainer>
+                 <div className="w-full h-full bg-white relative">
+                    <SlideContent slide={currentSlide} theme={theme} />
+                 </div>
+               </ScaledSlideContainer>
             ) : (
-              <p className="text-stone-500">No content</p>
+              <div className="flex items-center justify-center h-full">
+                <p className="text-stone-500">No content</p>
+              </div>
             )}
           </div>
 
@@ -188,11 +193,13 @@ export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, curr
           {/* Next Slide Preview */}
           <div className="flex-none aspect-video flex flex-col">
             <h2 className="text-xs font-black text-stone-500 mb-3 uppercase tracking-[0.2em]">Next Slide</h2>
-            <div className="flex-1 bg-black relative rounded-xl overflow-hidden flex items-center justify-center border border-stone-700 shadow-lg" data-testid="next-slide-view">
+            <div className="flex-1 bg-black relative rounded-xl overflow-hidden border border-stone-700 shadow-lg" data-testid="next-slide-view">
               {nextSlide ? (
-                 <div className="scale-[0.35] origin-center">
-                   <SlideContent slide={nextSlide} theme={theme} />
-                 </div>
+                 <ScaledSlideContainer>
+                   <div className="w-full h-full bg-white relative">
+                     <SlideContent slide={nextSlide} theme={theme} />
+                   </div>
+                 </ScaledSlideContainer>
               ) : (
                 <div className="flex flex-col items-center justify-center text-stone-500 h-full w-full">
                   <span className="font-bold uppercase tracking-widest text-xs">End of Presentation</span>
