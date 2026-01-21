@@ -8,6 +8,7 @@ import React, { useState, useRef, useLayoutEffect } from 'react';
 import { Sparkles, StickyNote } from 'lucide-react';
 import { ParsedBlock, PptTheme } from '../../services/types';
 import { splitBlocksToSlides, SlideData } from '../../services/parser/slides';
+import { transformToSOM, SlideObject } from '../../services/parser/som';
 import { useEditor } from '../../contexts/EditorContext';
 import { useVisualTweaker } from '../../contexts/VisualTweakerContext';
 import { fileToBase64 } from '../../utils/imageUtils';
@@ -22,7 +23,7 @@ interface PreviewPaneProps {
 const DESIGN_WIDTH = 1200;
 
 const SlideCard: React.FC<{ 
-  slide: SlideData; 
+  slide: SlideObject; 
   index: number; 
   layout: { width: number; height: number }; 
   theme: PptTheme;
@@ -61,12 +62,12 @@ const SlideCard: React.FC<{
 
   const designHeight = DESIGN_WIDTH * (layout.height / layout.width);
   const transitionType = slide.config?.transition || 'none';
-  const note = slide.config?.note || slide.metadata?.note;
+  const note = slide.notes;
 
   return (
     <div 
       className="flex flex-col gap-4"
-      data-source-line={slide.startLine}
+      data-source-line={slide.sourceLine}
       data-block-type="BACKGROUND"
     >
       <div 
@@ -110,7 +111,7 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewR
   const { openTweaker } = useVisualTweaker();
   
   const selectedLayout = pageSizes[selectedSizeIndex];
-  const slides = splitBlocksToSlides(parsedBlocks);
+  const slides = transformToSOM(parsedBlocks);
 
   const handlePreviewClick = (e: React.MouseEvent) => {
     let target = e.target as HTMLElement;

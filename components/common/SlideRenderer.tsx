@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { SlideData } from '../../services/parser/slides';
+import { SlideObject } from '../../services/parser/som';
 import { PptTheme } from '../../services/types';
 import { generateMeshGradient } from '../../services/ppt/GenerativeBgService';
 import { SlideContent } from './SlideContent';
@@ -16,7 +17,7 @@ const DESIGN_WIDTH = 1200;
 const DESIGN_HEIGHT = 675;
 
 interface SlideRendererProps {
-  slide: SlideData;
+  slide: SlideObject;
   theme: PptTheme;
   globalBg?: string;
   width?: number; // Optional override
@@ -39,12 +40,12 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
   const context = React.useContext(EditorContext);
   const brandConfig = context?.brandConfig;
 
-  const bgImage = slide.config?.bgImage || slide.metadata?.bgImage;
+  const bgImage = slide.background.image;
   
   // Theme Overrides
   const themeBg = theme.colors.background.startsWith('#') ? theme.colors.background : `#${theme.colors.background}`;
   
-  const rawBg = slide.config?.background || slide.config?.bg || slide.metadata?.bg || globalBg || themeBg;
+  const rawBg = slide.background.color || globalBg || themeBg;
   
   // Generative Background Logic
   let finalBgStyle: React.CSSProperties = {};
@@ -54,9 +55,9 @@ export const SlideRenderer: React.FC<SlideRendererProps> = ({
   // Default height if not provided (assume 16:9)
   const finalHeight = height || (width * 9 / 16);
 
-  if (rawBg === 'mesh' || (typeof rawBg === 'string' && rawBg.startsWith('mesh'))) {
+  if (slide.background.type === 'mesh') {
     isMesh = true;
-    const meshConfig = slide.config?.mesh || {};
+    const meshConfig = slide.background.meshConfig || {};
     // Use the first color of the mesh to determine text contrast
     effectiveBgColor = meshConfig.colors?.[0] || '#000000';
     

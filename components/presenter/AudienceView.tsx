@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SlideData } from '../../services/parser/slides';
+import { SlideObject } from '../../services/parser/som';
 import { PptTheme } from '../../services/types';
 import { PRESET_THEMES, DEFAULT_THEME_ID } from '../../constants/themes';
 import { PresentationSyncService, SyncAction } from '../../services/PresentationSyncService';
@@ -7,7 +8,7 @@ import { ScaledSlideContainer } from '../common/ScaledSlideContainer';
 import { SlideRenderer } from '../common/SlideRenderer';
 
 interface AudienceViewProps {
-  slides: SlideData[];
+  slides: SlideObject[];
   currentIndex: number;
   theme?: PptTheme;
   globalBg?: string;

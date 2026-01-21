@@ -9,14 +9,14 @@ import { useMarkdownEditor } from '../../hooks/useMarkdownEditor';
 import { useDarkMode } from '../../hooks/useDarkMode';
 import { EditorProvider } from '../../contexts/EditorContext';
 import { PresenterConsole } from './PresenterConsole';
-import { splitBlocksToSlides } from '../../services/parser/slides';
+import { transformToSOM } from '../../services/parser/som';
 
 export const PresenterPage: React.FC = () => {
   const editorState = useMarkdownEditor();
   const darkModeState = useDarkMode();
   
   // Prepare slides from parsed blocks
-  const slides = splitBlocksToSlides(editorState.parsedBlocks);
+  const slides = transformToSOM(editorState.parsedBlocks);
 
   return (
     <EditorProvider editorState={editorState} darkModeState={darkModeState}>

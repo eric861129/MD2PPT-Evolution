@@ -8,12 +8,13 @@
 import PptxGenJS from "pptxgenjs";
 import { ParsedBlock, BlockType, PptTheme, BrandConfig } from "./types";
 import { PPT_THEME } from "../constants/theme";
-import { splitBlocksToSlides } from "./parser/slides";
+import { transformToSOM, SlideObject, SOMRegion } from "./parser/som";
 import { imageUrlToBase64, svgToPngBase64 } from "../utils/imageUtils";
 import { rendererRegistry } from "./ppt/builders/registry";
 import { RenderContext } from "./ppt/builders/types";
 import { highlighterService } from "./ppt/HighlighterService";
 import { generateMeshGradient } from "./ppt/GenerativeBgService";
+import { layoutEngine } from "./ppt/LayoutEngine";
 
 export interface PptConfig {
   layoutName?: string; 
@@ -98,51 +99,50 @@ const renderBlocksToArea = (slide: any, blocks: ParsedBlock[], x: number, y: num
 
 export const generatePpt = async (blocks: ParsedBlock[], config: PptConfig = {}): Promise<void> => {
   const theme = config.theme;
-  // Init Highlighter
-  try { await highlighterService.init(); } catch (e) { console.warn("Highlighter init failed", e); }
-  const highlighter = highlighterService.getHighlighter();
+  // Pre-init Highlighter
+  await highlighterService.init();
 
-  // Pre-process images: Convert all URLs to Base64 (including bgImage in metadata/config)
-  const processedBlocks = await Promise.all(blocks.map(async (block) => {
-    let updatedBlock = { ...block };
-    if (block.type === BlockType.IMAGE && block.content && !block.content.startsWith('data:image')) {
-      const base64 = await imageUrlToBase64(block.content);
-      if (base64) updatedBlock.content = base64;
+  // 1. Transform to SOM (Slide Object Model)
+  const slides = transformToSOM(blocks);
+
+  // 2. Pre-process images in SOM
+  await Promise.all(slides.map(async (slide) => {
+    // Process background image
+    if (slide.background.image && !slide.background.image.startsWith('data:image')) {
+      const base64 = await imageUrlToBase64(slide.background.image);
+      if (base64) slide.background.image = base64;
     }
-    
-    // Process bgImage in both metadata and new config
-    const bgImg = updatedBlock.config?.bgImage || updatedBlock.metadata?.bgImage;
-    if (block.type === BlockType.HORIZONTAL_RULE && bgImg && !bgImg.startsWith('data:image')) {
-      const base64 = await imageUrlToBase64(bgImg);
-      if (base64) {
-        if (updatedBlock.config) updatedBlock.config.bgImage = base64;
-        if (updatedBlock.metadata) updatedBlock.metadata.bgImage = base64;
-      }
+
+    // Process images in regions
+    for (const region of slide.regions) {
+      await Promise.all(region.blocks.map(async (block) => {
+        if (block.type === BlockType.IMAGE && block.content && !block.content.startsWith('data:image')) {
+          const base64 = await imageUrlToBase64(block.content);
+          if (base64) block.content = base64;
+        }
+      }));
     }
-    return updatedBlock;
   }));
 
   const pptx = new PptxGenJS();
   pptx.layout = "LAYOUT_16x9";
   if (config.title) pptx.title = config.title; if (config.author) pptx.author = config.author;
 
-  const slidesData = splitBlocksToSlides(processedBlocks);
-  for (const slideData of slidesData) {
+  for (const slideData of slides) {
     const slide = pptx.addSlide();
-    const slideCfg = slideData.config || {};
-    const layout = slideCfg.layout || slideData.metadata?.layout;
+    const layout = slideData.layout;
     
     // 1. Background Logic
     const themeBg = theme ? theme.colors.background : PPT_THEME.COLORS.BG_SLIDE;
-    const rawBg = slideCfg.background || slideCfg.bg || slideData.metadata?.bg || config.bg || themeBg;
-    const bgImage = slideCfg.bgImage || slideData.metadata?.bgImage;
+    const rawBg = slideData.background.color || config.bg || themeBg;
+    const bgImage = slideData.background.image;
     
     let isMesh = false;
     let meshDataUri = "";
 
-    if (rawBg === 'mesh' || (typeof rawBg === 'string' && rawBg.startsWith('mesh'))) {
+    if (slideData.background.type === 'mesh') {
       isMesh = true;
-      const meshConfig = slideCfg.mesh || {};
+      const meshConfig = slideData.background.meshConfig || {};
       const svg = generateMeshGradient({
         colors: meshConfig.colors,
         seed: meshConfig.seed,
@@ -159,7 +159,7 @@ export const generatePpt = async (blocks: ParsedBlock[], config: PptConfig = {})
     const bgColor = typeof rawBg === 'string' ? rawBg.replace('#', '') : 'FFFFFF';
     const isDark = bgImage || isMesh ? true : parseInt(bgColor, 16) < 0x888888;
 
-    if (bgImage && typeof bgImage === 'string' && (bgImage.startsWith('http') || bgImage.startsWith('data:image'))) {
+    if (bgImage && typeof bgImage === 'string') {
       slide.background = { data: bgImage };
     } else if (isMesh && meshDataUri) {
       slide.background = { data: meshDataUri };
@@ -167,8 +167,8 @@ export const generatePpt = async (blocks: ParsedBlock[], config: PptConfig = {})
       slide.background = { fill: bgColor };
     }
 
-    if (slideCfg.note || slideData.metadata?.note) {
-        slide.addNotes(slideCfg.note || slideData.metadata?.note);
+    if (slideData.notes) {
+        slide.addNotes(slideData.notes);
     }
 
     // 2. Add Brand Logo
@@ -194,73 +194,52 @@ export const generatePpt = async (blocks: ParsedBlock[], config: PptConfig = {})
     }
 
     // 3. Pre-highlight code blocks
-    if (highlighter) {
-        slideData.blocks.forEach(b => {
-            if (b.type === BlockType.CODE_BLOCK) {
-                const lang = b.metadata?.language || 'text';
-                const themeName = isDark ? 'github-dark' : 'github-light';
-                try {
-                    b.metadata = { ...b.metadata, tokens: highlighter.codeToTokens(b.content, { lang: lang as any, theme: themeName }).tokens };
-                } catch (e) {}
-            }
-        });
+    for (const region of slideData.regions) {
+      await Promise.all(region.blocks.map(async (b) => {
+        if (b.type === BlockType.CODE_BLOCK) {
+          const lang = b.metadata?.language || 'text';
+          const result = await highlighterService.codeToTokens(b.content, lang, isDark);
+          if (result) {
+            b.metadata = { ...b.metadata, tokens: result.tokens };
+          }
+        }
+      }));
     }
 
-    const margin = 0.6; const contentWidth = 10 - (margin * 2);
-    const titleBlocks = slideData.blocks.filter(b => b.type === BlockType.HEADING_1 || b.type === BlockType.HEADING_2);
-    const otherBlocks = slideData.blocks.filter(b => b.type !== BlockType.HEADING_1 && b.type !== BlockType.HEADING_2);
-
+    const dim = layoutEngine.getDimensions();
     const renderOpts = { isDark, theme, color: bgImage ? "FFFFFF" : undefined };
 
-    // 4. Enhanced Layout Engine
+    // 4. Render Regions based on Layout
     if (layout === 'impact' || layout === 'full-bg' || layout === 'center') {
       const isImpact = layout !== 'center';
-      renderBlocksToArea(slide, slideData.blocks, margin, isImpact ? 1.8 : 1.2, contentWidth, pptx, { ...renderOpts, align: 'center', big: isImpact });
+      const allBlocks = slideData.regions.flatMap(r => r.blocks);
+      renderBlocksToArea(slide, allBlocks, dim.margin, isImpact ? 1.8 : 1.2, dim.contentWidth, pptx, { ...renderOpts, align: 'center', big: isImpact });
     } else if (layout === 'quote') {
-      renderBlocksToArea(slide, slideData.blocks, margin + 1, 1.5, contentWidth - 2, pptx, { ...renderOpts, align: 'center', italic: true });
+      const allBlocks = slideData.regions.flatMap(r => r.blocks);
+      renderBlocksToArea(slide, allBlocks, dim.margin + 1, 1.5, dim.contentWidth - 2, pptx, { ...renderOpts, align: 'center', italic: true });
     } else if (layout === 'alert') {
-      // Alert Box Simulation
+      const allBlocks = slideData.regions.flatMap(r => r.blocks);
       const alertColor = theme ? theme.colors.primary : "FF5500";
       slide.addShape(pptx.ShapeType.rect, { x: 1, y: 1.5, w: 8, h: 3, fill: { color: alertColor, transparency: 90 }, line: { color: alertColor, width: 2 } });
-      renderBlocksToArea(slide, slideData.blocks, 1.5, 2, 7, pptx, { ...renderOpts, align: 'center', color: alertColor });
-    } else if (layout === 'two-column' || layout === 'grid') {
-      if (titleBlocks.length > 0) renderBlocksToArea(slide, titleBlocks, margin, 0.6, contentWidth, pptx, renderOpts);
-      
-      const cols = layout === 'two-column' ? 2 : (slideCfg.columns || 2);
-      const gap = 0.4;
-      const colWidth = (contentWidth - (gap * (cols - 1))) / cols;
-      
-      // Explicit column splitting logic
-      const columns: ParsedBlock[][] = [];
-      let currentColumn: ParsedBlock[] = [];
-      let hasColumnBreak = false;
-      
-      for (const block of otherBlocks) {
-        if (block.type === BlockType.COLUMN_BREAK) {
-          columns.push(currentColumn);
-          currentColumn = [];
-          hasColumnBreak = true;
-        } else {
-          currentColumn.push(block);
-        }
-      }
-      columns.push(currentColumn);
-
-      for (let c = 0; c < cols; c++) {
-        let colBlocks: ParsedBlock[] = [];
-        
-        if (hasColumnBreak) {
-          colBlocks = columns[c] || [];
-        } else {
-          const itemsPerCol = Math.ceil(otherBlocks.length / cols);
-          colBlocks = otherBlocks.slice(c * itemsPerCol, (c + 1) * itemsPerCol);
-        }
-        
-        renderBlocksToArea(slide, colBlocks, margin + (c * (colWidth + gap)), 1.6, colWidth, pptx, renderOpts);
-      }
+      renderBlocksToArea(slide, allBlocks, 1.5, 2, 7, pptx, { ...renderOpts, align: 'center', color: alertColor });
     } else {
-      if (titleBlocks.length > 0) renderBlocksToArea(slide, titleBlocks, margin, 0.6, contentWidth, pptx, renderOpts);
-      renderBlocksToArea(slide, otherBlocks, margin, 1.6, contentWidth, pptx, renderOpts);
+      // Default, grid, two-column
+      const headerRegion = slideData.regions.find(r => r.type === 'header');
+      const columnRegions = slideData.regions.filter(r => r.type === 'column');
+      const mainRegion = slideData.regions.find(r => r.type === 'main');
+
+      if (headerRegion) {
+        renderBlocksToArea(slide, headerRegion.blocks, dim.margin, dim.titleY, dim.contentWidth, pptx, renderOpts);
+      }
+
+      if (columnRegions.length > 0) {
+        const colLayout = layoutEngine.getColumnLayout(columnRegions.length);
+        columnRegions.forEach((col, idx) => {
+          renderBlocksToArea(slide, col.blocks, dim.margin + (idx * (colLayout.colWidth + colLayout.gap)), dim.bodyY, colLayout.colWidth, pptx, renderOpts);
+        });
+      } else if (mainRegion) {
+        renderBlocksToArea(slide, mainRegion.blocks, dim.margin, dim.bodyY, dim.contentWidth, pptx, renderOpts);
+      }
     }
   }
   await pptx.writeFile({ fileName: config.title ? `${config.title}.pptx` : "Presentation.pptx" });

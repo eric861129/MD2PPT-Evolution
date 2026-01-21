@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { SlideData } from '../../services/parser/slides';
+import { SlideObject } from '../../services/parser/som';
 import { PRESET_THEMES, DEFAULT_THEME_ID } from '../../constants/themes';
 import { PresenterTimer } from './PresenterTimer';
 import { ChevronLeft, ChevronRight, MonitorOff, Home, Smartphone, ExternalLink, LogOut } from 'lucide-react';
@@ -17,7 +18,7 @@ import { SlideRenderer } from '../common/SlideRenderer';
 import { PptTheme } from '../../services/types';
 
 interface PresenterConsoleProps {
-  slides: SlideData[];
+  slides: SlideObject[];
   currentIndex: number;
   theme?: PptTheme;
 }
@@ -70,7 +71,7 @@ export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, curr
     const currentSlides = stateRef.current.slides;
     if (currentSlides.length === 0) return;
 
-    const currentNote = currentSlides[index]?.config?.note || currentSlides[index]?.metadata?.note || '';
+    const currentNote = currentSlides[index]?.notes || '';
     
     const statePayload = { index, blackout, slides: currentSlides, total: currentSlides.length, theme: propTheme };
 

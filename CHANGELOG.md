@@ -7,16 +7,27 @@
 
 ## [0.13.0] - 2026-01-21
 
-### 核心重構 (Core)
-- **測試基礎設施升級**:
-    - **全域 Mock 系統**: 建立 `tests/setup.ts` 統一管理 `localStorage`、`i18next` 及 `BroadcastChannel` 的模擬，解決環境不一致導致的測試失敗。
-    - **穩定性提升**: 重構所有類別型 Mock（如 `pptxgenjs` 與 `PresentationSyncService`），修正 ES 模組環境下的建構子錯誤。
-    - **100% 測試通過**: 修復所有遺留的測試案例，確保 116 個單元與集成測試全部通過。
+### 核心重構與架構優化 (Architecture & Refactoring)
+- **引入 SOM (Slide Object Model)**: 實作了中間層數據模型，將 Markdown 解析與多端渲染（PPTX/HTML）解耦，提升了系統的可擴展性與維護性。
+- **Controller 模式實作**: 建立了 `useEditorController` Hook，將編輯器的複雜業務邏輯從 UI 組件中抽離，實現了清晰的職責分離。
+- **佈局引擎抽象化**: 建立全域 `LayoutEngine`，統一管理投影片邊距、分欄比例與座標計算，確保預覽與匯出效果 100% 一致。
+- **Registry 模式統一**: 預覽渲染器現在與 PPT 生成器一致，採用註冊表模式管理，消除冗長的 Switch-Case 代碼。
 
-### 新增 (Added)
-- **整合與邊界案例測試**:
-    - **Visual Tweaker 整合測試**: 實作模擬用戶修改預覽內容並同步回寫 Markdown 的端到端測試。
-    - **解析器壓力測試**: 新增針對超長文本、多重分欄（`:: right ::`）及非法 JSON 配置的邊界案例驗證。
+### 效能與代碼優化 (Optimization)
+- **解析效能提升**: 重構 `markdownParser`，將分頁解析從 $O(N^2)$ 優化至 $O(N)$，顯著提升處理大型文件的速度。
+- **語法高亮單例化**: 統一 `shiki` 高亮引擎的管理與預載入機制，減少了預覽時的閃爍並節省記憶體開銷。
+
+### 測試與穩定性 (Stability)
+- **全域 Mock 系統**: 建立 `tests/setup.ts` 統一管理環境模擬，解決 JSDOM 環境下的相容性問題。
+- **100% 測試覆蓋率**: 達成全案 116 個測試案例全部通過，並新增了邊界案例與整合測試。
+
+### 文檔完善 (Documentation)
+- **API 參考手冊**: 新增 `docs/API_REFERENCE.md`，詳列所有支援的 YAML 配置與自定義語法。
+- **開發者貢獻指南**: 新增 `CONTRIBUTING.md`，提供架構導覽與新增功能的逐步教學。
+
+### 依賴更新 (Dependencies)
+- **核心套件升級**: 升級 Vite 7, TypeScript 5.9, Vitest 4 及 i18next 至最新版本，獲取更佳的編譯效能與開發體驗。
+- **安全掃描**: 通過 `npm audit` 深度檢查，確保 0 漏洞。
 
 ## [0.12.5] - 2026-01-21
 

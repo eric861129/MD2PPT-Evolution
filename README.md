@@ -207,6 +207,12 @@ npm install
 npm run dev
 ```
 
+### 開發注意事項 (For Developers)
+
+- **環境變數**: 本專案使用 Vite 的 `define` 功能注入全域常數。`__APP_VERSION__` 會在構建時從 `package.json` 自動提取並注入到 `constants/meta.ts` 中。
+- **測試**: 執行 `npm run test` 來跑所有的單元與整合測試。我們要求測試通過率維持在 100%。
+- **架構**: 專案採用 **SOM (Slide Object Model)** 架構，將內容解析與多端渲染分離。
+
 ### 部署 (Deployment)
 
 您可以將此專案部署至任何靜態網站託管服務 (GitHub Pages, Vercel, Netlify)。
