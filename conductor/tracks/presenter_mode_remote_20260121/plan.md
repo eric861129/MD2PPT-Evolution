@@ -23,9 +23,9 @@
 - [x] Task: 實作備忘錄與進度顯示系統 6c95726
     - [x] 撰寫測試：驗證備忘錄解析器能從 Markdown AST 中提取註解內容。
     - [x] 實作：將備忘錄、計時器 (Timer) 與頁碼進度條整合至主控台介面。
-- [ ] Task: 整合主控台至主應用程式
-    - [ ] 撰寫測試：驗證主控台與觀眾視圖間的雙向翻頁同步。
-    - [ ] 實作：確保主控台翻頁時，透過 `PresentationSyncService` 通知所有視窗。
+- [x] Task: 整合主控台至主應用程式 467d258
+    - [x] 撰寫測試：驗證主控台與觀眾視圖間的雙向翻頁同步。
+    - [x] 實作：確保主控台翻頁時，透過 `PresentationSyncService` 通知所有視窗。
 - [ ] Task: Conductor - User Manual Verification '階段二' (Protocol in workflow.md)
 
 ## 階段三：WebRTC P2P 手機遙控基礎建設
