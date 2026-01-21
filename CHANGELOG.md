@@ -5,6 +5,17 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
 並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [0.12.0] - 2026-01-21
+
+### 新增 (Added)
+- **Web 演講模式與遙控 (Presenter Mode & Remote)**:
+    - **雙螢幕演講者視圖**: 點擊「Present」按鈕開啟獨立的觀眾視窗，主視窗即刻切換為專業的演講者主控台。
+    - **演講者儀表板**: 主控台整合了「當前投影片 (大圖)」、「下一頁預覽 (Next Slide)」、「演講備忘錄 (Speaker Notes)」以及「即時演講計時器 (Timer)」。
+    - **P2P 手機遙控器**: 內建 WebRTC 點對點連線功能，完全無需後端伺服器。
+    - **QR Code 快速配對**: 演講者只需用手機掃描主控台上的 QR Code，即可將手機變身為無線簡報筆。
+    - **遙控功能**: 支援手機端「上一頁/下一頁」翻頁及「黑屏 (Blackout)」模式切換。
+    - **全即時同步**: 利用 `BroadcastChannel` 與 P2P 技術，確保主控台、觀眾視窗與手機遙控器三端狀態毫秒級同步。
+
 ## [0.11.0] - 2026-01-20
 
 ### 新增 (Added)

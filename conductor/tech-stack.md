@@ -17,6 +17,7 @@
     - `lucide-react`: UI 圖標系統。
     - `file-saver`: 瀏覽器端檔案下載管理。
     - `qrcode`: 支援 QR Code 生成。
+    - `peerjs`: 實現 P2P WebRTC 通訊，支援手機遙控功能。
 
 ## 測試與品質保證
 - **測試框架**: Vitest
