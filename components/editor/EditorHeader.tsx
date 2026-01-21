@@ -7,7 +7,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   Settings2, Download, Sun, Moon, RotateCcw, Languages, 
-  FileText, StickyNote, Palette, Check, ChevronDown, Maximize, Presentation 
+  FileText, StickyNote, Palette, Check, ChevronDown, Maximize, Presentation, Bot 
 } from 'lucide-react';
 import { useEditor } from '../../contexts/EditorContext';
 import { usePresenterMode } from '../../hooks/usePresenterMode';
@@ -41,7 +41,8 @@ export const EditorHeader: React.FC = () => {
     resetCustomTheme,
     toggleThemePanel, 
     isThemePanelOpen,
-    openBrandModal
+    openBrandModal,
+    openAiModal
   } = useEditor() as any;
 
   const { startPresentation } = usePresenterMode();
@@ -120,6 +121,16 @@ export const EditorHeader: React.FC = () => {
       {/* Right: Actions */}
       <div className="flex items-center gap-1.5 lg:gap-2.5 overflow-visible shrink-0">
         
+        {/* AI Assistant Toggle */}
+        <IconButton 
+          onClick={openAiModal} 
+          title="AI Assistant Prompt"
+          onBrand
+          className="bg-[#EA580C]/10 text-[#EA580C] hover:bg-[#EA580C] hover:text-white w-9 h-9 lg:w-10 lg:h-10 border border-[#EA580C]/20"
+        >
+          <Bot size={18} />
+        </IconButton>
+
         {/* Brand Settings Toggle */}
         <IconButton 
           onClick={openBrandModal} 

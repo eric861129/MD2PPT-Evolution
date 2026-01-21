@@ -5,6 +5,20 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
 並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [0.12.3] - 2026-01-21
+
+### 新增 (Added)
+- **AI 輔助生成 (AI Assistant)**:
+    - **整合提示視窗**: 在 Header 新增 AI Assistant 按鈕，點擊即可喚起專為本專案設計的 AI Prompt。
+    - **一鍵轉換流**: 提供針對 ChatGPT 與 Gemini 優化的指令，協助使用者將原始筆記精準轉化為符合規範的 Markdown。
+    - **快速導覽**: 視窗內建 ChatGPT 與 Gemini 的快捷連結，並支援一鍵複製 Prompt 到剪貼簿。
+
+### 修正 (Fixed)
+- **Visual Tweaker 邏輯優化**:
+    - **背景調整修正**: 修正了 Background Tweaker 在修改背景色或重捲 (Re-roll) 時會重複產生 YAML 或累積空白行的問題。
+    - **區塊偵測強化**: 提升了 `replaceContentByLine` 對 YAML 區塊與自定義容器 (:::) 的識別精度，確保原地替換而不破壞文件結構。
+    - **內容同步優化**: 修正了 Tweaker 更新內容時可能導致 Markdown 區域不斷增長的空白行累積問題。
+
 ## [0.12.2] - 2026-01-21
 
 ### 修正 (Fixed)

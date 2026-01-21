@@ -10,8 +10,16 @@ export const BackgroundTweaker: React.FC = () => {
 
   useEffect(() => {
     if (sourceLine !== null) {
-      const raw = getLineContent(sourceLine);
-      // Attempt to find YAML block
+      let raw = getLineContent(sourceLine);
+      
+      // If the line is a separator, try to look at the next line for YAML
+      if (raw.trim().match(/^(?:---+|===+)$/)) {
+        const nextLine = getLineContent(sourceLine + 1);
+        if (nextLine.trim() === '---') {
+          raw = getLineContent(sourceLine + 1);
+        }
+      }
+
       const fmMatch = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
       if (fmMatch) {
         try {
@@ -29,7 +37,22 @@ export const BackgroundTweaker: React.FC = () => {
 
   const updateMarkdown = (newColors: string[], newSeed: number) => {
     if (sourceLine === null) return;
-    const raw = getLineContent(sourceLine);
+    
+    let targetLine = sourceLine;
+    let raw = getLineContent(sourceLine);
+    let isSeparator = false;
+
+    // If the line is a separator, check if next line is a YAML block
+    if (raw.trim().match(/^(?:---+|===+)$/)) {
+      isSeparator = true;
+      const nextLine = getLineContent(sourceLine + 1);
+      if (nextLine.trim() === '---') {
+        targetLine = sourceLine + 1;
+        raw = getLineContent(targetLine);
+        isSeparator = false;
+      }
+    }
+
     const fmMatch = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
     
     let meta: any = {};
@@ -49,8 +72,21 @@ export const BackgroundTweaker: React.FC = () => {
       seed: newSeed
     };
 
-    const newFm = `---\n${yaml.dump(meta)}---\n`;
-    updateContent(newFm + (contentAfterFm.startsWith('\n') ? contentAfterFm.slice(1) : contentAfterFm));
+    const newFm = `---\n${yaml.dump(meta).trim()}\n---`;
+    
+    if (isSeparator) {
+      // If we are at a separator and no YAML exists after it, insert one after the separator
+      updateContent(raw.trim() + '\n' + newFm);
+    } else {
+      // Otherwise replace the existing YAML block (or the current line)
+      // Ensure we don't double the newlines between YAML and following content
+      const cleanContentAfter = contentAfterFm.trim();
+      const finalContent = cleanContentAfter 
+        ? newFm + '\n\n' + cleanContentAfter 
+        : newFm;
+        
+      updateContent(finalContent, targetLine);
+    }
   };
 
   const handleReroll = () => {

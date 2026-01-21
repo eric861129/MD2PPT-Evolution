@@ -13,7 +13,7 @@ interface VisualTweakerContextType extends TweakerState {
   openTweaker: (element: HTMLElement, type: BlockType, sourceLine: number) => void;
   closeTweaker: () => void;
   updatePosition: () => void;
-  updateContent: (newContent: string) => void;
+  updateContent: (newContent: string, lineOverride?: number) => void;
   getLineContent: (line: number) => string;
 }
 
@@ -32,9 +32,10 @@ export const VisualTweakerProvider: React.FC<{
     position: { top: 0, left: 0 }
   });
 
-  const updateContent = useCallback((newContent: string) => {
-    if (state.sourceLine !== null) {
-      onUpdateContent(state.sourceLine, newContent);
+  const updateContent = useCallback((newContent: string, lineOverride?: number) => {
+    const line = lineOverride !== undefined ? lineOverride : state.sourceLine;
+    if (line !== null) {
+      onUpdateContent(line, newContent);
     }
   }, [state.sourceLine, onUpdateContent]);
   

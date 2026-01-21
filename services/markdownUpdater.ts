@@ -19,16 +19,10 @@ export const replaceContentByLine = (content: string, lineIndex: number, newCont
 
   const targetLine = lines[lineIndex].trim();
   
-  // 1. Block Detection: Chart or Custom Containers
+  // 1. Block Detection: Chart or Custom Containers (:::)
   if (targetLine.startsWith(':::')) {
     let endIndex = lineIndex + 1;
     
-    // If it's a one-line ::: block (rare but possible), avoid infinite loop
-    if (targetLine === ':::' && lineIndex > 0) {
-       // This might be the END of a block. 
-       // For simplicity, we only trigger block replacement if it's a START (::: something)
-    }
-
     if (targetLine !== ':::') {
       while (endIndex < lines.length) {
         if (lines[endIndex].trim() === ':::') {
@@ -37,7 +31,6 @@ export const replaceContentByLine = (content: string, lineIndex: number, newCont
         endIndex++;
       }
       
-      // If we found a closing :::, replace the whole range
       if (endIndex < lines.length) {
         const before = lines.slice(0, lineIndex);
         const after = lines.slice(endIndex + 1);
@@ -46,10 +39,32 @@ export const replaceContentByLine = (content: string, lineIndex: number, newCont
     }
   }
 
-  // 2. Default: Single line replacement
+  // 2. Block Detection: YAML Frontmatter (---)
+  // If the target line is exactly '---', it might be the start of a YAML block
+  if (targetLine === '---') {
+    let endIndex = lineIndex + 1;
+    while (endIndex < lines.length) {
+      if (lines[endIndex].trim() === '---') {
+        break;
+      }
+      endIndex++;
+    }
+
+    if (endIndex < lines.length) {
+      const before = lines.slice(0, lineIndex);
+      const after = lines.slice(endIndex + 1);
+      return [...before, newContent, ...after].join('\n');
+    }
+  }
+
+  // 3. Default: Single line replacement
   const before = lines.slice(0, lineIndex);
   const after = lines.slice(lineIndex + 1);
-  return [...before, newContent, ...after].join('\n');
+  
+  // Trim newContent to ensure we don't have multiple trailing newlines
+  const cleanNewContent = newContent.trim();
+  
+  return [...before, cleanNewContent, ...after].join('\n');
 };
 
 /**

@@ -21,6 +21,7 @@ import { fileToBase64 } from '../utils/imageUtils';
 import { updateSlideYaml, replaceContentByLine, updateGlobalTheme } from '../services/markdownUpdater';
 import { ThemePanel } from './editor/ThemePanel';
 import { BrandSettingsModal } from './editor/BrandSettingsModal';
+import { AiPromptModal } from './editor/AiPromptModal';
 import { TweakerOverlay } from './tweaker/TweakerOverlay';
 import { DesignPalette } from '../constants/palettes';
 import Footer from './Footer';
@@ -30,6 +31,7 @@ const MarkdownEditor: React.FC = () => {
   const editorState = useMarkdownEditor();
   const [isThemePanelOpen, setIsThemePanelOpen] = React.useState(false);
   const [isBrandModalOpen, setIsBrandModalOpen] = React.useState(false);
+  const [isAiModalOpen, setIsAiModalOpen] = React.useState(false);
   
   const {
     content,
@@ -52,7 +54,10 @@ const MarkdownEditor: React.FC = () => {
     toggleThemePanel: () => setIsThemePanelOpen(!isThemePanelOpen),
     isBrandModalOpen,
     openBrandModal: () => setIsBrandModalOpen(true),
-    closeBrandModal: () => setIsBrandModalOpen(false)
+    closeBrandModal: () => setIsBrandModalOpen(false),
+    isAiModalOpen,
+    openAiModal: () => setIsAiModalOpen(true),
+    closeAiModal: () => setIsAiModalOpen(false)
   };
 
   const handleAction = (action: { type: ActionType }) => {
@@ -165,6 +170,32 @@ const MarkdownEditor: React.FC = () => {
 
   const handleGetLineContent = (line: number) => {
     const lines = content.split(/\r?\n/);
+    if (line < 0 || line >= lines.length) return "";
+
+    const targetLine = lines[line].trim();
+
+    // 1. Block Detection: ::: (Charts, etc.)
+    if (targetLine.startsWith(':::') && targetLine !== ':::') {
+      let endIndex = line + 1;
+      while (endIndex < lines.length) {
+        if (lines[endIndex].trim() === ':::') {
+          return lines.slice(line, endIndex + 1).join('\n');
+        }
+        endIndex++;
+      }
+    }
+
+    // 2. Block Detection: --- (YAML)
+    if (targetLine === '---') {
+      let endIndex = line + 1;
+      while (endIndex < lines.length) {
+        if (lines[endIndex].trim() === '---') {
+          return lines.slice(line, endIndex + 1).join('\n');
+        }
+        endIndex++;
+      }
+    }
+
     return lines[line] || "";
   };
 
@@ -196,6 +227,11 @@ const MarkdownEditor: React.FC = () => {
               onUpdate={updateBrandConfig}
               onExport={saveBrandConfigToFile}
               onImport={loadBrandConfigFromFile}
+            />
+
+            <AiPromptModal 
+              isOpen={isAiModalOpen}
+              onClose={() => setIsAiModalOpen(false)}
             />
             
             <div className="flex flex-1 overflow-hidden">

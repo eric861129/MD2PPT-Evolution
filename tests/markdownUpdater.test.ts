@@ -45,9 +45,22 @@ More content.`;
 |------|-------|
 | 2021 | 500   |
 :::`;
-    const updated = replaceContentByLine(markdown, 10, newChart);
-    expect(updated).toContain("2021 | 500");
-    expect(updated).not.toContain("2021 | 100");
-    expect(updated).toContain("# Slide 2");
-  });
-});
+        const updated = replaceContentByLine(markdown, 10, newChart);
+        expect(updated).toContain("2021 | 500");
+        expect(updated).not.toContain("2021 | 100");
+        expect(updated).toContain("# Slide 2");
+      });
+    
+      it('should replace a YAML block', () => {
+        const newYaml = `---
+    title: Updated Global
+    theme: academic
+    ---`;
+        // YAML starts on line 0
+        const updated = replaceContentByLine(markdown, 0, newYaml);
+        expect(updated).toContain("title: Updated Global");
+        expect(updated).not.toContain("title: Global");
+        expect(updated).toContain("# Slide 1");
+      });
+    });
+    
