@@ -39,5 +39,5 @@ This file tracks all major development tracks for MD2PPT-Evolution. Completed tr
 
 ---
 
-- [~] **Track: Web 演講模式與遙控 (Presenter Mode & Remote)**
+- [x] **Track: Web 演講模式與遙控 (Presenter Mode & Remote)**
     *Link: [./tracks/presenter_mode_remote_20260121/](./tracks/presenter_mode_remote_20260121/)*
