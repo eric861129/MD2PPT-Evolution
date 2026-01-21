@@ -1,9 +1,9 @@
 # MD2PPT-EVOLUTION 🚀
 
-![Version](https://img.shields.io/badge/version-0.13.0-orange.svg)
+![Version](https://img.shields.io/badge/version-0.14.0-orange.svg)
 ...
 ### 🎨 專業排版系統
-- **視覺對比感知系統 (v0.13.0)**: 自動檢測投影片背景亮度，即時切換文字與標題顏色，確保在任何主題或自定義背景下都具備極高可讀性。
+- **視覺對比感知系統 (v0.14.0)**: 自動檢測投影片背景亮度，即時切換文字與標題顏色，確保在任何主題或自定義背景下都具備極高可讀性。
 - **動態背景生成器 (Generative Backgrounds) (v0.10+)**: 引入輕量級生成藝術算法（如 Mesh Gradients），讓每頁背景都是獨一無二的，擺脫死板的 PPT 背景圖。
 - **視覺化即時調整 (Visual Tweaker)**: 點擊預覽區元素即可喚起調整視窗，即時修改文字、圖片與圖表數據，並同步回寫至 Markdown。
 - **斜線指令 (Slash Commands)**: 輸入 `/` 喚起懸浮選單，快速插入圖表、佈局與元件，支援鍵盤導航與智慧游標定位。
@@ -235,6 +235,7 @@ npm run build
 - [x] **v0.9.0**: 斜線指令系統 (Slash Commands)。
 - [x] **v0.10.0**: 生成式背景 (Generative Backgrounds)。
 - [x] **v0.11.0**: 企業級品牌系統 (Enterprise Brand System)。
+- [x] **v0.14.0**: 支援圖片包匯出 (ZIP) 功能。
 - [x] **v0.13.0**: 全域測試架構重構與 100% 測試覆蓋率。
 - [x] **v0.12.5**: 演講者主控台導覽側欄優化。
 

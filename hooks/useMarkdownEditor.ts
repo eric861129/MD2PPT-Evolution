@@ -12,6 +12,7 @@ import { useWordCount } from './useWordCount';
 import { useSyncScroll } from './useSyncScroll';
 import { usePptExport } from './usePptExport';
 import { useBrandSettings } from './useBrandSettings';
+import { ImageExportService } from '../services/imageExportService';
 
 export const useMarkdownEditor = () => {
   // 1. Core State (Content, Parsing, Language)
@@ -52,6 +53,8 @@ export const useMarkdownEditor = () => {
     error: exportError 
   } = usePptExport();
 
+  const [isExportingImages, setIsExportingImages] = useState(false);
+
   // Actions
   const handleDownload = () => {
     const layout = SLIDE_LAYOUTS[selectedSizeIndex];
@@ -63,6 +66,32 @@ export const useMarkdownEditor = () => {
       theme: activeTheme,
       brandConfig
     });
+  };
+
+  const handleExportImages = async () => {
+    if (!previewRef.current) return;
+    
+    setIsExportingImages(true);
+    try {
+      // Find all slide elements with the capture attribute
+      const slideElements = Array.from(
+        previewRef.current.querySelectorAll('[data-slide-capture]')
+      ) as HTMLElement[];
+
+      if (slideElements.length === 0) {
+        alert("No slides found to export.");
+        return;
+      }
+
+      await ImageExportService.exportSlidesToZip(slideElements, {
+        fileName: documentMeta.title ? `${documentMeta.title}_Images` : 'Presentation_Images'
+      });
+    } catch (err) {
+      console.error("Failed to export images:", err);
+      alert("Failed to export images. Please check the console for details.");
+    } finally {
+      setIsExportingImages(false);
+    }
   };
 
   const handleExportMarkdown = () => {
@@ -86,7 +115,8 @@ export const useMarkdownEditor = () => {
     updateBrandConfig,
     saveBrandConfigToFile,
     loadBrandConfigFromFile,
-    isGenerating: isExporting,
+    isGenerating: isExporting || isExportingImages,
+    isExportingImages,
     
     // UI Config
     selectedSizeIndex,
@@ -104,6 +134,7 @@ export const useMarkdownEditor = () => {
     // Actions
     handleScroll,
     handleDownload,
+    handleExportImages,
     handleExportMarkdown,
     resetToDefault,
     toggleLanguage,

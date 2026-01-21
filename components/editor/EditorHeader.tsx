@@ -7,7 +7,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   Settings2, Download, Sun, Moon, RotateCcw, Languages, 
-  FileText, StickyNote, Palette, Check, ChevronDown, Maximize, Presentation, Bot 
+  FileText, StickyNote, Palette, Check, ChevronDown, Maximize, Presentation, Bot, Image as ImageIcon
 } from 'lucide-react';
 import { useEditor } from '../../contexts/EditorContext';
 import { usePresenterMode } from '../../hooks/usePresenterMode';
@@ -25,6 +25,7 @@ export const EditorHeader: React.FC = () => {
     selectedSizeIndex,
     setSelectedSizeIndex,
     handleDownload,
+    handleExportImages,
     handleExportMarkdown,
     resetToDefault,
     language,
@@ -33,6 +34,7 @@ export const EditorHeader: React.FC = () => {
     showNotes,
     toggleNotes,
     isGenerating,
+    isExportingImages,
     parsedBlocks,
     isDark,
     toggleDarkMode,
@@ -280,6 +282,18 @@ export const EditorHeader: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-1 lg:gap-2">
+          <Button
+            onClick={handleExportImages}
+            disabled={!hasContent}
+            isLoading={isExportingImages}
+            variant="outline-white"
+            className="h-9 lg:h-10 px-2.5 lg:px-4 font-bold border-white/10 shrink-0 flex hover:text-[#EA580C] hover:border-[#EA580C]/50"
+            title="Export as Images (ZIP)"
+          >
+            <ImageIcon className="w-4 h-4" />
+            <span className="hidden xl:block ml-2 text-xs uppercase tracking-widest font-black">Images</span>
+          </Button>
+
           <Button
             onClick={handleExportMarkdown}
             disabled={!hasContent}

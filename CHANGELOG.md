@@ -5,6 +5,18 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
 並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [0.14.0] - 2026-01-21
+
+### 新增 (Added)
+- **圖片包匯出功能 (Export as Images ZIP)**:
+    - **高品質擷取**: 實作 `ImageExportService`，利用 `html2canvas` 產生 2x 縮放的高解析度 PNG 圖片。
+    - **批次打包**: 整合 `jszip` 將所有投影片圖片自動打包為 ZIP 壓縮檔，方便用於 LinkedIn 等社交平台分享。
+    - **Header 整合**: 在頂部工具列新增「Images」按鈕，並具備即時載入狀態顯示。
+- **單元測試**: 新增 `tests/imageExport.test.ts` 驗證圖片產生與壓縮流程。
+
+### 修正 (Fixed)
+- **核心 Hook 穩定性**: 修復了 `useMarkdownEditor` 在更新過程中因代碼丟失導致的 `ReferenceError` 執行期錯誤。
+
 ## [0.13.0] - 2026-01-21
 
 ### 核心重構與架構優化 (Architecture & Refactoring)

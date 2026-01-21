@@ -75,6 +75,7 @@ const SlideCard: React.FC<{
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
+        data-slide-capture
         className={`w-full shadow-[0_30px_60px_rgba(0,0,0,0.12)] relative overflow-hidden bg-[#E7E5E4] dark:bg-[#44403C] rounded-lg transition-all duration-500 ${
           transitionType === 'fade' ? 'animate-in fade-in' : 
           transitionType === 'slide' ? 'animate-in slide-in-from-right' : 
