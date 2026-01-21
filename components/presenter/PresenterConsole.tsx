@@ -53,6 +53,18 @@ export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, curr
     stateRef.current = { currentIndex, isBlackout, slides };
   }, [currentIndex, isBlackout, slides]);
 
+  const activeThumbnailRef = useRef<HTMLButtonElement>(null);
+
+  // Auto-scroll to active thumbnail
+  useEffect(() => {
+    if (activeThumbnailRef.current) {
+      activeThumbnailRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
+    }
+  }, [currentIndex]);
+
   // Helper to send sync state to all windows
   const broadcastState = (index: number, blackout: boolean) => {
     const currentSlides = stateRef.current.slides;
@@ -114,6 +126,14 @@ export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, curr
   useEffect(() => {
     broadcastState(currentIndex, isBlackout);
   }, [slides]);
+
+  const handleGotoSlide = (index: number) => {
+    const { isBlackout } = stateRef.current;
+    if (index >= 0 && index < slides.length) {
+      setCurrentIndex(index);
+      broadcastState(index, isBlackout);
+    }
+  };
 
   // Internal Logic using latest state
   const handleNextInternal = () => {
@@ -203,6 +223,44 @@ export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, curr
       />
 
       <div className="flex flex-1 overflow-hidden">
+        {/* Left Sidebar: All Slides Navigator */}
+        <div className="w-48 lg:w-56 flex flex-col bg-stone-950 border-r border-stone-700 shrink-0">
+          <div className="px-4 py-3 border-b border-white/5 bg-stone-900/50">
+            <span className="text-[10px] font-black text-stone-500 uppercase tracking-[0.2em]">All Slides</span>
+          </div>
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-4">
+            {slides.map((s, idx) => (
+              <button
+                key={idx}
+                ref={currentIndex === idx ? activeThumbnailRef : null}
+                onClick={() => handleGotoSlide(idx)}
+                title={`Jump to Slide ${idx + 1}`}
+                className={`w-full group relative transition-all ${currentIndex === idx ? 'scale-[1.02]' : 'hover:scale-[1.01]'}`}
+              >
+                {/* Index Label */}
+                <div className={`absolute -left-1 top-1/2 -translate-y-1/2 z-20 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black border transition-colors ${
+                  currentIndex === idx 
+                    ? 'bg-[#EA580C] border-[#EA580C] text-white shadow-[0_0_10px_rgba(234,88,12,0.5)]' 
+                    : 'bg-stone-800 border-stone-600 text-stone-400 group-hover:border-[#EA580C]/50'
+                }`}>
+                  {idx + 1}
+                </div>
+
+                {/* Thumbnail Container */}
+                <div className={`w-full aspect-video bg-black rounded-lg overflow-hidden border-2 transition-all ${
+                  currentIndex === idx 
+                    ? 'border-[#EA580C] shadow-[0_0_20px_rgba(234,88,12,0.2)]' 
+                    : 'border-white/5 group-hover:border-white/20'
+                }`}>
+                  <div className="pointer-events-none scale-[0.15] origin-top-left" style={{ width: '1200px', height: '675px' }}>
+                    <SlideRenderer slide={s} theme={activeTheme} />
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Main View: Current Slide */}
         <div className="flex-1 flex flex-col p-6 border-r border-stone-700 relative group">
           <h2 className="text-xs font-black text-stone-500 mb-3 uppercase tracking-[0.2em]">Current Slide</h2>

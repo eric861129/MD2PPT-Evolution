@@ -1,9 +1,27 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { PresenterConsole } from '../components/presenter/PresenterConsole';
 import { BlockType } from '../services/types';
 import { PresentationSyncService, SyncAction } from '../services/PresentationSyncService';
+
+// Mock localStorage
+const localStorageMock = (function() {
+  let store: Record<string, string> = {};
+  return {
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value.toString();
+    }),
+    clear: vi.fn(() => {
+      store = {};
+    })
+  };
+})();
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock
+});
 
 // Mock SlideRenderer to avoid complex rendering and context dependency
 vi.mock('../components/common/SlideRenderer', () => ({
@@ -24,7 +42,9 @@ vi.mock('../services/PresentationSyncService', () => ({
   SyncAction: {
     GOTO_SLIDE: 'GOTO_SLIDE',
     NEXT_SLIDE: 'NEXT_SLIDE',
-    PREV_SLIDE: 'PREV_SLIDE'
+    PREV_SLIDE: 'PREV_SLIDE',
+    SYNC_STATE: 'SYNC_STATE',
+    REQUEST_SYNC: 'REQUEST_SYNC'
   }
 }));
 
@@ -107,6 +127,24 @@ describe('PresenterConsole', () => {
     expect(mockSendMessage).toHaveBeenCalledWith(expect.objectContaining({ 
       type: SyncAction.SYNC_STATE, 
       payload: expect.objectContaining({ index: 1 }) 
+    }));
+  });
+
+  it('renders all slide thumbnails in the navigator and allows jumping', () => {
+    render(<PresenterConsole slides={mockSlides} currentIndex={0} />);
+    
+    // Check if thumbnails are rendered by looking for the slide index text
+    expect(screen.getByTitle('Jump to Slide 1')).toBeInTheDocument();
+    expect(screen.getByTitle('Jump to Slide 2')).toBeInTheDocument();
+    expect(screen.getByTitle('Jump to Slide 3')).toBeInTheDocument();
+    
+    // Jump to slide 3 (index 2)
+    const slide3Btn = screen.getByTitle('Jump to Slide 3');
+    fireEvent.click(slide3Btn);
+    
+    expect(mockSendMessage).toHaveBeenCalledWith(expect.objectContaining({ 
+      type: SyncAction.SYNC_STATE, 
+      payload: expect.objectContaining({ index: 2 }) 
     }));
   });
 });
