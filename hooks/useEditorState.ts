@@ -63,7 +63,7 @@ export const useEditorState = () => {
       ...customThemeSettings,
       colors: { 
         ...preset.colors, 
-        ...brandColors, // Brand always overrides
+        // ...brandColors, // Remove forced Brand override to let Preset Themes work
         ...customThemeSettings.colors 
       },
       fonts: { 

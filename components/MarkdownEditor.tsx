@@ -23,6 +23,7 @@ import { ThemePanel } from './editor/ThemePanel';
 import { BrandSettingsModal } from './editor/BrandSettingsModal';
 import { TweakerOverlay } from './tweaker/TweakerOverlay';
 import { DesignPalette } from '../constants/palettes';
+import Footer from './Footer';
 
 const MarkdownEditor: React.FC = () => {
   const darkModeState = useDarkMode();
@@ -219,6 +220,8 @@ const MarkdownEditor: React.FC = () => {
                 />
             </div>
           </main>
+          
+          <Footer />
         </div>
       </VisualTweakerProvider>
     </EditorProvider>

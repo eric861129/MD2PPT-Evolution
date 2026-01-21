@@ -147,8 +147,8 @@ export const EditorHeader: React.FC = () => {
             className="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 bg-white/5 border border-white/10 rounded-xl hover:border-[#EA580C]/50 transition-all text-white min-w-[120px] lg:min-w-[180px]"
           >
             <div className="flex gap-1 shrink-0">
-              <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: `#${activeTheme.colors.primary}` }} />
-              <div className="w-2.5 h-2.5 rounded-full hidden sm:block" style={{ backgroundColor: `#${activeTheme.colors.background}` }} />
+              <div className="w-2.5 h-2.5 rounded-full transition-colors duration-500" style={{ backgroundColor: activeTheme.colors.primary.startsWith('#') ? activeTheme.colors.primary : `#${activeTheme.colors.primary}` }} />
+              <div className="w-2.5 h-2.5 rounded-full hidden sm:block opacity-50" style={{ backgroundColor: activeTheme.colors.background.startsWith('#') ? activeTheme.colors.background : `#${activeTheme.colors.background}` }} />
             </div>
             <span className="text-[10px] lg:text-xs font-black uppercase tracking-wider flex-1 text-left truncate">
               {activeTheme.label}
@@ -157,16 +157,16 @@ export const EditorHeader: React.FC = () => {
           </button>
 
           {isThemeDropdownOpen && (
-            <div className="absolute top-full mt-2 right-0 w-72 lg:w-80 bg-[#1C1917] border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] py-2 z-[60] animate-in zoom-in-95 fade-in duration-200 origin-top-right max-h-[80vh] overflow-y-auto custom-scrollbar">
+            <div className="absolute top-full mt-2 right-0 w-72 lg:w-80 bg-[#1C1917] border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] pb-2 z-[60] animate-in zoom-in-95 fade-in duration-200 origin-top-right max-h-[80vh] overflow-y-auto custom-scrollbar">
               
-              <div className="px-5 py-3 mb-1 border-b border-white/5 sticky top-0 bg-[#1C1917] z-10 flex items-center justify-between">
+              <div className="px-5 py-4 mb-1 border-b border-white/5 sticky top-0 bg-[#1C1917] z-50 flex items-center justify-between">
                 <span className="text-[11px] font-black text-[#EA580C] uppercase tracking-[0.2em] flex items-center gap-2">
                   <Palette size={14} /> Design Systems
                 </span>
                 <span className="text-[9px] text-stone-500 font-bold">12 Styles</span>
               </div>
               
-              <div className="grid grid-cols-1 gap-1 p-2">
+              <div className="grid grid-cols-1 gap-1 p-2 relative z-0">
                 {CURATED_PALETTES.map((palette) => (
                   <button
                     key={palette.id}
