@@ -285,7 +285,7 @@ export const EditorHeader: React.FC = () => {
           onClick={startPresentation}
           disabled={!hasContent}
           variant="outline-white"
-          className="h-10 px-3 lg:px-4 font-bold border-white/10 shrink-0 hidden sm:flex hover:text-[#EA580C] hover:border-[#EA580C]/50"
+          className="h-10 px-3 lg:px-4 font-bold border-white/10 shrink-0 flex hover:text-[#EA580C] hover:border-[#EA580C]/50"
           title="Start Presentation Mode"
         >
           <Presentation className="w-4 h-4" />

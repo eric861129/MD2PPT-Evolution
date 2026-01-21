@@ -34,5 +34,10 @@ This file tracks all major development tracks for MD2PPT-Evolution. Completed tr
 
 ---
 
-- [~] **Track: 企業級品牌系統 (Enterprise Brand System) 讓產出的簡報符合公司 CI，無需手動調整。**
+- [x] **Track: 企業級品牌系統 (Enterprise Brand System) 讓產出的簡報符合公司 CI，無需手動調整。**
     *Link: [./tracks/enterprise_brand_system_20260120/](./tracks/enterprise_brand_system_20260120/)*
+
+---
+
+- [~] **Track: Web 演講模式與遙控 (Presenter Mode & Remote)**
+    *Link: [./tracks/presenter_mode_remote_20260121/](./tracks/presenter_mode_remote_20260121/)*
