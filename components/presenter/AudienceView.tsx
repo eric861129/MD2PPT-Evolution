@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { SlideContent } from '../editor/PreviewPane';
+import React, { useState, useEffect, useRef } from 'react';
 import { SlideData } from '../../services/parser/slides';
 import { PptTheme } from '../../services/types';
 import { PRESET_THEMES, DEFAULT_THEME_ID } from '../../constants/themes';

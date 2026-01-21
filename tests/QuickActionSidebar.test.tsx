@@ -26,8 +26,8 @@ describe('QuickActionSidebar', () => {
     const handleAction = vi.fn();
     render(<QuickActionSidebar onAction={handleAction} />);
     
-    // Find a specific action button, e.g., "Add Slide"
-    const addSlideBtn = screen.getByLabelText(/new slide/i);
+    // The i18n mock returns the key itself
+    const addSlideBtn = screen.getByLabelText(/sidebar.newSlide/i);
     fireEvent.click(addSlideBtn);
 
     expect(handleAction).toHaveBeenCalledWith(expect.objectContaining({

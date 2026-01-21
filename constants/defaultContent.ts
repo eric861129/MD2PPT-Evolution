@@ -25,7 +25,7 @@ bg: "#EA580C"
 transition: slide
 ---
 
-# 歡迎體驗 v0.12.5
+# 歡迎體驗 v0.13.0
 ## 演講模式．手機遙控．品牌系統
 
 <!-- note:
@@ -259,7 +259,7 @@ bg: "#EA580C"
 transition: slide
 ---
 
-# Welcome to v0.12.5
+# Welcome to v0.13.0
 ## Presenter Mode . Mobile Remote . Branding
 
 <!-- note:

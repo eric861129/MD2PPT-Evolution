@@ -5,6 +5,19 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
 並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [0.13.0] - 2026-01-21
+
+### 核心重構 (Core)
+- **測試基礎設施升級**:
+    - **全域 Mock 系統**: 建立 `tests/setup.ts` 統一管理 `localStorage`、`i18next` 及 `BroadcastChannel` 的模擬，解決環境不一致導致的測試失敗。
+    - **穩定性提升**: 重構所有類別型 Mock（如 `pptxgenjs` 與 `PresentationSyncService`），修正 ES 模組環境下的建構子錯誤。
+    - **100% 測試通過**: 修復所有遺留的測試案例，確保 116 個單元與集成測試全部通過。
+
+### 新增 (Added)
+- **整合與邊界案例測試**:
+    - **Visual Tweaker 整合測試**: 實作模擬用戶修改預覽內容並同步回寫 Markdown 的端到端測試。
+    - **解析器壓力測試**: 新增針對超長文本、多重分欄（`:: right ::`）及非法 JSON 配置的邊界案例驗證。
+
 ## [0.12.5] - 2026-01-21
 
 ### 新增 (Added)

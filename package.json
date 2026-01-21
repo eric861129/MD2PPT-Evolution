@@ -1,7 +1,7 @@
 {
   "name": "md2ppt-evolution",
   "private": true,
-  "version": "0.12.5",
+  "version": "0.13.0",
   "description": "Markdown to PowerPoint Converter",
   "type": "module",
   "scripts": {

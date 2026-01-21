@@ -4,20 +4,22 @@ import { BlockType, ParsedBlock } from '../services/types';
 
 // Mock pptxgenjs
 vi.mock('pptxgenjs', () => {
-  const MockSlide = vi.fn().mockImplementation(() => ({
-    addText: vi.fn(),
-    addImage: vi.fn(),
-    addTable: vi.fn(),
-    addShape: vi.fn(),
-    addNotes: vi.fn(),
-    background: {}
-  }));
+  const MockSlide = function(this: any) {
+    this.addText = vi.fn();
+    this.addImage = vi.fn();
+    this.addTable = vi.fn();
+    this.addShape = vi.fn();
+    this.addNotes = vi.fn();
+    this.background = {};
+  };
 
-  const MockPptx = vi.fn().mockImplementation(() => ({
-    addSlide: vi.fn().mockReturnValue(new MockSlide()),
-    layout: '',
-    writeFile: vi.fn().mockResolvedValue(undefined)
-  }));
+  const MockPptx = function(this: any) {
+    this.addSlide = vi.fn().mockImplementation(() => new (MockSlide as any)());
+    this.layout = '';
+    this.writeFile = vi.fn().mockResolvedValue(undefined);
+    this.ChartType = { bar: 'bar', line: 'line', pie: 'pie', area: 'area' };
+    this.ShapeType = { rect: 'rect' };
+  };
   
   return {
     default: MockPptx

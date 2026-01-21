@@ -2,27 +2,17 @@ import React from 'react';
 import { render, screen, act } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { AudienceView } from '../components/presenter/AudienceView';
-import { ParsedBlock, BlockType } from '../services/types';
+import { BlockType } from '../services/types';
+import { EditorContext } from '../contexts/EditorContext';
 
 // Mock dependencies
-vi.mock('../components/editor/PreviewPane', () => ({
-  SlideContent: ({ slide }: any) => <div data-testid="slide-content">Slide {slide.index} Content</div>
-}));
-
-// Mock useEditor
-vi.mock('../contexts/EditorContext', () => ({
-  useEditor: vi.fn().mockReturnValue({
-    brandConfig: { logo: null, logoPosition: 'top-right' }
-  })
+vi.mock('../components/common/SlideRenderer', () => ({
+  SlideRenderer: ({ slide }: any) => <div data-testid="slide-content">Slide {slide.index + 1} Content</div>
 }));
 
 // Mock PresentationSyncService to avoid side effects during render
-const vi_mockData = {
-  handler: null as any
-};
-
 vi.mock('../services/PresentationSyncService', () => ({
-  PresentationSyncService: vi.fn(function() {
+  PresentationSyncService: vi.fn().mockImplementation(function() {
     return {
       onMessage: vi.fn((handler) => { 
         (global as any).lastMessageHandler = handler; 
@@ -45,25 +35,42 @@ const mockSlides: any[] = [
   { index: 1, blocks: [{ type: BlockType.HEADING_1, content: 'Slide 2' }] }
 ];
 
+const mockContextValue = {
+  brandConfig: { logo: null, logoPosition: 'top-right' },
+  activeTheme: { colors: { primary: 'EA580C', background: 'FFFFFF', text: '1C1917' }, fonts: { main: 'Arial' } }
+};
+
 describe('AudienceView', () => {
   it('renders "Waiting for presenter..." when no content is available', () => {
-    render(<AudienceView slides={[]} currentIndex={0} />);
+    render(
+      <EditorContext.Provider value={mockContextValue as any}>
+        <AudienceView slides={[]} currentIndex={0} />
+      </EditorContext.Provider>
+    );
     expect(screen.getByText(/Waiting for presenter/i)).toBeInTheDocument();
   });
 
   it('updates slide index when receiving GOTO_SLIDE message', async () => {
-    render(<AudienceView slides={mockSlides} currentIndex={0} />);
+    render(
+      <EditorContext.Provider value={mockContextValue as any}>
+        <AudienceView slides={mockSlides} currentIndex={0} />
+      </EditorContext.Provider>
+    );
     
     // Simulate sync message
     act(() => {
       (global as any).lastMessageHandler({ type: 'GOTO_SLIDE', payload: { index: 1 } });
     });
 
-    expect(screen.getByText('Slide 1 Content')).toBeInTheDocument();
+    expect(screen.getByText(/Slide 2 Content/i)).toBeInTheDocument();
   });
 
   it('toggles blackout mode when receiving BLACK_SCREEN message', () => {
-    render(<AudienceView slides={mockSlides} currentIndex={0} />);
+    render(
+      <EditorContext.Provider value={mockContextValue as any}>
+        <AudienceView slides={mockSlides} currentIndex={0} />
+      </EditorContext.Provider>
+    );
     
     // Default: visible
     expect(screen.queryByTestId('blackout-overlay')).not.toBeInTheDocument();
