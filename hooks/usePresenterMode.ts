@@ -25,9 +25,8 @@ export const usePresenterMode = () => {
     // 3. Open the new window
     window.open(audienceUrl, 'AudienceWindow', 'width=1280,height=720,menubar=no,toolbar=no');
     
-    // 4. Ideally, we would navigate the CURRENT window to /presenter
-    // window.location.hash = '#/presenter';
-    // But for this task, we just want to verify the logic of opening the window.
+    // 4. Navigate the CURRENT window to /presenter
+    window.location.hash = '#/presenter';
   }, []);
 
   return {

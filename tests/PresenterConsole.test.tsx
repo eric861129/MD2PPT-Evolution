@@ -1,8 +1,9 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { PresenterConsole } from '../components/presenter/PresenterConsole';
 import { BlockType } from '../services/types';
+import { PresentationSyncService, SyncAction } from '../services/PresentationSyncService';
 
 // Mock SlideContent to avoid complex rendering
 vi.mock('../components/editor/PreviewPane', () => ({
@@ -10,13 +11,20 @@ vi.mock('../components/editor/PreviewPane', () => ({
 }));
 
 // Mock PresentationSyncService
+const mockSendMessage = vi.fn();
 vi.mock('../services/PresentationSyncService', () => ({
-  PresentationSyncService: vi.fn().mockImplementation(() => ({
-    sendMessage: vi.fn(),
-    onMessage: vi.fn(),
-    offMessage: vi.fn(),
-    close: vi.fn()
-  }))
+  PresentationSyncService: vi.fn(function() {
+    return {
+      sendMessage: mockSendMessage,
+      onMessage: vi.fn(),
+      offMessage: vi.fn(),
+      close: vi.fn()
+    };
+  }),
+  SyncAction: {
+    NEXT_SLIDE: 'NEXT_SLIDE',
+    PREV_SLIDE: 'PREV_SLIDE'
+  }
 }));
 
 const mockSlides: any[] = [
@@ -66,14 +74,28 @@ describe('PresenterConsole', () => {
     render(<PresenterConsole slides={mockSlides} currentIndex={1} />);
     
     // Check Progress
-    // We expect "Slide 2 / 3" (since index 1 is 2nd slide, and length is 3)
-    // Using a flexible matcher because text is split across spans
     const progressElement = screen.getByText((_, element) => {
         return element?.textContent === 'Slide 2 / 3' || element?.textContent?.replace(/\s+/g, ' ').trim() === 'Slide 2 / 3';
     });
     expect(progressElement).toBeInTheDocument();
 
-    // Check Timer (Just check if the element exists for now)
+    // Check Timer
     expect(screen.getByTestId('presenter-timer')).toBeInTheDocument();
+  });
+
+  it('sends navigation commands when controls are clicked', () => {
+    render(<PresenterConsole slides={mockSlides} currentIndex={0} />);
+    
+    // Check Prev Button (should be disabled or present)
+    const prevBtn = screen.getByLabelText('Previous Slide');
+    const nextBtn = screen.getByLabelText('Next Slide');
+
+    fireEvent.click(nextBtn);
+    expect(mockSendMessage).toHaveBeenCalledWith({ type: SyncAction.NEXT_SLIDE, payload: { index: 1 } });
+
+    fireEvent.click(prevBtn);
+    // Note: click doesn't update prop currentIndex in test (unless rerendered), but internal state updates.
+    // Initial index was 0. Next clicked -> index becomes 1. Prev clicked -> index becomes 0.
+    expect(mockSendMessage).toHaveBeenCalledWith({ type: SyncAction.PREV_SLIDE, payload: { index: 0 } });
   });
 });

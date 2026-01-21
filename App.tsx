@@ -8,6 +8,7 @@
 import React, { useState, useEffect } from 'react';
 import MarkdownEditor from './components/MarkdownEditor';
 import { AudienceView } from './components/presenter/AudienceView';
+import { PresenterPage } from './components/presenter/PresenterPage';
 
 const App: React.FC = () => {
   const [route, setRoute] = useState(window.location.hash);
@@ -22,6 +23,10 @@ const App: React.FC = () => {
     // In a real scenario, AudienceView needs to receive data via BroadcastChannel or similar.
     // For now, it will render the "Waiting" state.
     return <AudienceView slides={[]} currentIndex={0} />;
+  }
+
+  if (route === '#/presenter') {
+    return <PresenterPage />;
   }
 
   return (
