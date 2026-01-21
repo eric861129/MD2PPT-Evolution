@@ -203,7 +203,7 @@ const SlideCard: React.FC<{
   );
 };
 
-const SlideContent: React.FC<{ slide: SlideData, isDark?: boolean, theme: PptTheme }> = ({ slide, isDark, theme }) => {
+export const SlideContent: React.FC<{ slide: SlideData, isDark?: boolean, theme: PptTheme }> = ({ slide, isDark, theme }) => {
   const { blocks, config } = slide;
   const layout = config?.layout;
 
