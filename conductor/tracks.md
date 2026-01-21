@@ -32,12 +32,10 @@ This file tracks all major development tracks for MD2PPT-Evolution. Completed tr
 - [x] **Track: 核心引擎優化與架構重構 (v0.3.1)**
     *Link: [./archive/core_engine_sync_architecture_20260114/](./archive/core_engine_sync_architecture_20260114/)*
 
+- [x] **Track: Web 演講模式與遙控 (Presenter Mode & Remote)**
+    *Link: [./archive/presenter_mode_remote_20260121/](./archive/presenter_mode_remote_20260121/)*
+
 ---
 
 - [x] **Track: 企業級品牌系統 (Enterprise Brand System) 讓產出的簡報符合公司 CI，無需手動調整。**
     *Link: [./tracks/enterprise_brand_system_20260120/](./tracks/enterprise_brand_system_20260120/)*
-
----
-
-- [x] **Track: Web 演講模式與遙控 (Presenter Mode & Remote)**
-    *Link: [./tracks/presenter_mode_remote_20260121/](./tracks/presenter_mode_remote_20260121/)*
