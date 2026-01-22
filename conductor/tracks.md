@@ -44,7 +44,7 @@ This file tracks all major development tracks for MD2PPT-Evolution. Completed tr
 - [x] **Track: 遷移至 Remark/Unified 解析管線**
     *Link: [./archive/remark_pipeline_20260122/](./archive/remark_pipeline_20260122/)*
 
----
-
 - [x] **Track: 全域快捷鍵與命令面板 (Command Palette)**
-    *Link: [./tracks/command_palette_20260122/](./tracks/command_palette_20260122/)*
+    *Link: [./archive/command_palette_20260122/](./archive/command_palette_20260122/)*
+
+---
