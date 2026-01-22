@@ -85,23 +85,27 @@ export const PreviewBlock: React.FC<{ block: ParsedBlock, isDark?: boolean, them
     'data-end-index': block.endIndex
   };
 
+  const customStyle: React.CSSProperties = {
+    fontSize: block.metadata?.size ? `${block.metadata.size}pt` : undefined,
+  };
+
   const renderers: Record<string, () => React.ReactNode> = {
     [BlockType.CHART]: () => <div {...commonProps}><ChartPreview block={block} isDark={isDark} theme={theme} /></div>,
     
     [BlockType.HEADING_1]: () => (
-      <h1 {...commonProps} className="text-5xl font-black mb-6 border-l-[10px] pl-6 leading-tight uppercase tracking-tighter" style={{ borderColor: primaryColor, color: 'inherit' }}>
+      <h1 {...commonProps} className="text-5xl font-black mb-6 border-l-[10px] pl-6 leading-tight uppercase tracking-tighter" style={{ ...customStyle, borderColor: primaryColor, color: 'inherit' }}>
         <RenderRichText text={block.content} theme={theme} />
       </h1>
     ),
     
     [BlockType.HEADING_2]: () => (
-      <h2 {...commonProps} className="text-3xl font-bold mb-4 tracking-tight" style={{ color: isDark ? '#E2E8F0' : safeAccentColor }}>
+      <h2 {...commonProps} className="text-3xl font-bold mb-4 tracking-tight" style={{ ...customStyle, color: isDark ? '#E2E8F0' : safeAccentColor }}>
         <RenderRichText text={block.content} theme={theme} />
       </h2>
     ),
     
     [BlockType.HEADING_3]: () => (
-      <h3 {...commonProps} className="text-2xl font-semibold mb-3 opacity-80 underline underline-offset-4" style={{ textDecorationColor: `${primaryColor}40`, color: 'inherit' }}>
+      <h3 {...commonProps} className="text-2xl font-semibold mb-3 opacity-80 underline underline-offset-4" style={{ ...customStyle, textDecorationColor: `${primaryColor}40`, color: 'inherit' }}>
         <RenderRichText text={block.content} theme={theme} />
       </h3>
     ),
@@ -123,7 +127,7 @@ export const PreviewBlock: React.FC<{ block: ParsedBlock, isDark?: boolean, them
             }}>
               {block.role}
             </div>
-            <div className="text-lg leading-relaxed text-slate-800"><RenderRichText text={block.content} theme={theme} /></div>
+            <div className="text-lg leading-relaxed text-slate-800" style={customStyle}><RenderRichText text={block.content} theme={theme} /></div>
           </div>
         </div>
       );
@@ -151,14 +155,14 @@ export const PreviewBlock: React.FC<{ block: ParsedBlock, isDark?: boolean, them
           </div>
         )}
         {block.metadata?.alt && (
-          <p className="mt-3 text-base text-slate-400 italic font-medium">{block.metadata.alt}</p>
+          <p className="mt-3 text-base text-slate-400 italic font-medium" style={customStyle}>{block.metadata.alt}</p>
         )}
       </div>
     ),
     
     [BlockType.TABLE]: () => (
       <div {...commonProps} className="my-4 overflow-hidden rounded-xl border border-slate-300 dark:border-slate-700 shadow-2xl">
-        <table className="w-full border-collapse text-lg">
+        <table className="w-full border-collapse text-lg" style={customStyle}>
           <thead>
             <tr className="text-white" style={{ backgroundColor: primaryColor }}>
               {block.tableRows?.[0].map((cell, idx) => (
@@ -185,7 +189,7 @@ export const PreviewBlock: React.FC<{ block: ParsedBlock, isDark?: boolean, them
     
     [BlockType.QUOTE_BLOCK]: () => {
       const cleanQuote = block.content.replace(/^>\s*/gm, '').trim();
-      return <p {...commonProps} className="text-3xl leading-relaxed mb-8 text-center italic opacity-90" style={{ fontFamily: 'Georgia, serif' }}><RenderRichText text={cleanQuote} theme={theme} /></p>;
+      return <p {...commonProps} className="text-3xl leading-relaxed mb-8 text-center italic opacity-90" style={{ ...customStyle, fontFamily: 'Georgia, serif' }}><RenderRichText text={cleanQuote} theme={theme} /></p>;
     }
   };
 
@@ -194,7 +198,7 @@ export const PreviewBlock: React.FC<{ block: ParsedBlock, isDark?: boolean, them
     return (
       <div {...commonProps} className={`my-8 p-8 border-l-[12px] rounded-r-2xl shadow-xl ${isWarn ? 'bg-red-50 border-red-500' : 'bg-blue-50 border-blue-500'}`}>
         <div className={`text-lg font-black uppercase mb-3 tracking-tighter ${isWarn ? 'text-red-600' : 'text-blue-600'}`}>{b.type.split('_')[1]}</div>
-        <div className="text-2xl italic leading-relaxed text-slate-800"><RenderRichText text={b.content} theme={theme} /></div>
+        <div className="text-2xl italic leading-relaxed text-slate-800" style={customStyle}><RenderRichText text={b.content} theme={theme} /></div>
       </div>
     );
   };
@@ -203,5 +207,5 @@ export const PreviewBlock: React.FC<{ block: ParsedBlock, isDark?: boolean, them
   if (renderer) return <>{renderer()}</>;
 
   // Default fallback
-  return <p {...commonProps} className="text-2xl leading-relaxed mb-8 text-justify tracking-tight opacity-90"><RenderRichText text={block.content} theme={theme} /></p>;
+  return <p {...commonProps} className="text-2xl leading-relaxed mb-8 text-justify tracking-tight opacity-90" style={customStyle}><RenderRichText text={block.content} theme={theme} /></p>;
 };
