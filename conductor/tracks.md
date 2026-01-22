@@ -49,5 +49,5 @@ This file tracks all major development tracks for MD2PPT-Evolution. Completed tr
 
 ---
 
-- [ ] **Track: 字體大小客製化設定 (Custom Font Sizing)**
+- [~] **Track: 字體大小客製化設定 (Custom Font Sizing)**
     *Link: [./tracks/custom_font_sizing_20260122/](./tracks/custom_font_sizing_20260122/)*

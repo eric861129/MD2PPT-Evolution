@@ -24,6 +24,44 @@ const nodeToString = (node: any): string => {
 };
 
 /**
+ * Helper: Extract attributes like {size=48} from the end of a string.
+ * Returns the cleaned string and the extracted attributes object.
+ */
+const extractAttributes = (text: string): { content: string, metadata: any } => {
+  const metadata: any = {};
+  let cleanedContent = text;
+
+  // Match {key=value} at the end of the string
+  // Support multiple attributes in the future if needed, e.g., {size=48 color=red}
+  const attrRegex = /\s*\{([^}]+)\}\s*$/;
+  const match = text.match(attrRegex);
+
+  if (match) {
+    const attrString = match[1];
+    cleanedContent = text.replace(attrRegex, '');
+
+    // Parse individual attributes within the braces
+    const pairs = attrString.split(/\s+/);
+    for (const pair of pairs) {
+      const [key, value] = pair.split('=');
+      if (key && value) {
+        // Convert numeric values
+        if (key === 'size') {
+          const num = parseInt(value, 10);
+          if (!isNaN(num)) {
+            metadata[key] = num;
+          }
+        } else {
+          metadata[key] = value;
+        }
+      }
+    }
+  }
+
+  return { content: cleanedContent, metadata };
+};
+
+/**
  * Mapper: Converts Remark AST nodes to MD2PPT ParsedBlocks
  */
 const mapNodeToBlock = (node: any): ParsedBlock[] => {
@@ -34,13 +72,15 @@ const mapNodeToBlock = (node: any): ParsedBlock[] => {
   const base = { sourceLine, startIndex, endIndex };
 
   switch (node.type) {
-    case 'heading':
+    case 'heading': {
       const headingType = node.depth === 1 ? BlockType.HEADING_1 : node.depth === 2 ? BlockType.HEADING_2 : BlockType.HEADING_3;
-      blocks.push({ ...base, type: headingType, content: nodeToString(node) });
+      const { content, metadata } = extractAttributes(nodeToString(node));
+      blocks.push({ ...base, type: headingType, content, metadata });
       break;
+    }
 
-    case 'paragraph':
-      const text = nodeToString(node).trim();
+    case 'paragraph': {
+      const rawText = nodeToString(node).trim();
 
       // 1. Image Detection
       if (node.children?.length === 1 && node.children[0].type === 'image') {
@@ -50,30 +90,32 @@ const mapNodeToBlock = (node: any): ParsedBlock[] => {
       }
 
       // 2. Chat Dialogues (Restore legacy regex support)
-      const centerMatch = text.match(/^(.+?)\s*:\":\s*([\s\S]*)$/);
+      const centerMatch = rawText.match(/^(.+?)\s*:\":\s*([\s\S]*)$/);
       if (centerMatch) {
           blocks.push({ ...base, type: BlockType.CHAT_CUSTOM, role: centerMatch[1].trim(), content: centerMatch[2].trim(), alignment: 'center' });
           break;
       }
-      const rightMatch = text.match(/^(.+?)\s*::"\s*([\s\S]*)$/);
+      const rightMatch = rawText.match(/^(.+?)\s*::"\s*([\s\S]*)$/);
       if (rightMatch) {
           blocks.push({ ...base, type: BlockType.CHAT_CUSTOM, role: rightMatch[1].trim(), content: rightMatch[2].trim(), alignment: 'right' });
           break;
       }
-      const leftMatch = text.match(/^(.+?)\s*"(?:::|::)\s*([\s\S]*)$/);
+      const leftMatch = rawText.match(/^(.+?)\s*"(?:::|::)\s*([\s\S]*)$/);
       if (leftMatch) {
           blocks.push({ ...base, type: BlockType.CHAT_CUSTOM, role: leftMatch[1].trim(), content: leftMatch[2].trim(), alignment: 'left' });
           break;
       }
 
       // 3. Column Break
-      if (text === ':: right ::') {
+      if (rawText === ':: right ::') {
           blocks.push({ ...base, type: BlockType.COLUMN_BREAK, content: '' });
           break;
       }
 
-      blocks.push({ ...base, type: BlockType.PARAGRAPH, content: text });
+      const { content, metadata } = extractAttributes(rawText);
+      blocks.push({ ...base, type: BlockType.PARAGRAPH, content, metadata });
       break;
+    }
 
     case 'code':
       if (node.lang === 'mermaid') blocks.push({ ...base, type: BlockType.MERMAID, content: node.value });
@@ -86,10 +128,12 @@ const mapNodeToBlock = (node: any): ParsedBlock[] => {
 
     case 'list':
       node.children.forEach((item: any) => {
+        const { content, metadata } = extractAttributes(nodeToString(item).trim());
         blocks.push({
           ...base,
           type: node.ordered ? BlockType.NUMBERED_LIST : BlockType.BULLET_LIST,
-          content: nodeToString(item).trim()
+          content,
+          metadata
         });
       });
       break;
