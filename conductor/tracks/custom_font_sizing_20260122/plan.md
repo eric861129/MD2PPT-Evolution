@@ -21,16 +21,16 @@
     - [x] 驗證不同元素（標題 vs 列表）插入標籤時的字串處理正確性。 870c03c
 - [x] **Task: Conductor - User Manual Verification '第二階段：回寫邏輯' (Protocol in workflow.md)** 5e0f011
 
-## 第三階段：Tweaker UI 與即時預覽 (UI & Interaction)
+## 第三階段：Tweaker UI 與即時預覽 (UI & Interaction) [checkpoint: fa27dc7]
 在視覺調整介面中加入控制器，並實現 Web 端的即時渲染。
 
-- [~] **Task: 擴充 Visual Tweaker UI**
-    - [ ] 在 `components/tweaker/TextTweaker.tsx` 加入字體大小輸入框。
-    - [ ] 實作上下增減按鈕（每點擊一次 +/- 2pt）。
-- [ ] **Task: 實作 Web 預覽渲染**
-    - [ ] 修改 `components/editor/PreviewRenderers.tsx`。
-    - [ ] 根據 `block.metadata.size` 動態設定 HTML 元素的 `style.fontSize`。
-- [ ] **Task: Conductor - User Manual Verification '第三階段：UI 互動' (Protocol in workflow.md)**
+- [x] **Task: 擴充 Visual Tweaker UI** fa27dc7
+    - [x] 在 `components/tweaker/TextTweaker.tsx` 加入字體大小輸入框。 fa27dc7
+    - [x] 實作上下增減按鈕（每點擊一次 +/- 2pt）。 fa27dc7
+- [x] **Task: 實作 Web 預覽渲染** fa27dc7
+    - [x] 修改 `components/editor/PreviewRenderers.tsx`。 fa27dc7
+    - [x] 根據 `block.metadata.size` 動態設定 HTML 元素的 `style.fontSize`。 fa27dc7
+- [x] **Task: Conductor - User Manual Verification '第三階段：UI 互動' (Protocol in workflow.md)** fa27dc7
 
 ## 第四階段：PPTX 導出支援與最終驗證 (Export & Release)
 確保樣式設定能完美轉移至 PowerPoint 檔案中。
