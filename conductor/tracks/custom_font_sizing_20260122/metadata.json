@@ -1,0 +1,8 @@
+{
+  "track_id": "custom_font_sizing_20260122",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-22T14:17:00Z",
+  "updated_at": "2026-01-22T14:17:00Z",
+  "description": "字體大小客製化設定 (Custom Font Sizing) — 讓使用者透過 Visual Tweaker 調整個別元素的字體大小，並自動回寫 {size=N} 標籤至 Markdown。"
+}
