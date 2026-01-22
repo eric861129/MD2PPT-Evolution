@@ -13,7 +13,7 @@
 ## 第二階段：UI 組件與拖拽基礎 (UI Infrastructure)
 將拖拽功能整合進 React 元件中，並實作基礎的互動。
 
-- [ ] **Task: 安裝並設定 `@dnd-kit`**
+- [~] **Task: 安裝並設定 `@dnd-kit`**
     - [ ] 安裝 `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities`。
 - [ ] **Task: 實作可拖拽的投影片容器**
     - [ ] 在側欄 (Sidebar) 與主頁面預覽 (Preview) 整合 `SortableContext`。
