@@ -4,14 +4,13 @@
  * Licensed under the MIT License.
  */
 
-import React from 'react';
+import React, { memo } from 'react';
 import { Sparkles } from 'lucide-react';
 import { ParsedBlock, BlockType, PptTheme } from '../../services/types';
 import { PreviewBlock, RenderRichText } from '../editor/PreviewRenderers';
-import { SlideObject, SOMRegion } from '../../services/parser/som';
-import { layoutEngine } from '../../services/ppt/LayoutEngine';
+import { SlideObject } from '../../services/parser/som';
 
-export const SlideContent: React.FC<{ slide: SlideObject, isDark?: boolean, theme: PptTheme }> = ({ slide, isDark, theme }) => {
+export const SlideContent: React.FC<{ slide: SlideObject, isDark?: boolean, theme: PptTheme }> = memo(({ slide, isDark, theme }) => {
   const { regions, layout } = slide;
 
   const renderBlocks = (contentBlocks: ParsedBlock[]) => {
@@ -65,7 +64,6 @@ export const SlideContent: React.FC<{ slide: SlideObject, isDark?: boolean, them
     );
   }
 
-  // Handle Header + Body/Columns
   const headerRegion = regions.find(r => r.type === 'header');
   const columnRegions = regions.filter(r => r.type === 'column');
   const mainRegion = regions.find(r => r.type === 'main');
@@ -88,4 +86,6 @@ export const SlideContent: React.FC<{ slide: SlideObject, isDark?: boolean, them
       ) : null}
     </div>
   );
-};
+}, (prev, next) => {
+  return prev.slide === next.slide && prev.isDark === next.isDark && prev.theme.id === next.theme.id;
+});

@@ -40,6 +40,8 @@ import {
   useSensors,
   PointerSensor,
   DragEndEvent,
+  DragStartEvent,
+  DragOverlay,
 } from '@dnd-kit/core';
 import {
   SortableContext,
@@ -93,7 +95,7 @@ const SortableOutlineItem: React.FC<{
     transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? 50 : 'auto',
-    opacity: isDragging ? 0.5 : 1,
+    opacity: isDragging ? 0.3 : 1,
   };
 
   return (
@@ -133,6 +135,7 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
   const { parsedBlocks, activeTheme, previewRef } = useEditor();
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState<'tools' | 'outline'>('tools');
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const slides = transformToSOM(parsedBlocks);
 
@@ -140,8 +143,13 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as string);
+  };
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    setActiveId(null);
     if (over && active.id !== over.id && onReorderSlides) {
       onReorderSlides(parseInt((active.id as string).split('-')[1], 10), parseInt((over.id as string).split('-')[1], 10));
     }
@@ -155,6 +163,9 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
       }
     }
   };
+
+  const activeSlideIndex = activeId ? parseInt(activeId.split('-')[1], 10) : -1;
+  const activeSlide = activeSlideIndex >= 0 ? slides[activeSlideIndex] : null;
 
   const ACTION_GROUPS = [
     {
@@ -272,7 +283,14 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
           ))
         ) : (
           /* Outline View */
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
+          <DndContext 
+            sensors={sensors} 
+            collisionDetection={closestCenter} 
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd} 
+            onDragCancel={() => setActiveId(null)}
+            modifiers={[restrictToVerticalAxis]}
+          >
             <SortableContext items={slides.map((_, i) => `outline-${i}`)} strategy={verticalListSortingStrategy}>
               <div className="flex flex-col gap-1">
                 {slides.map((slide, index) => (
@@ -286,6 +304,18 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
                 ))}
               </div>
             </SortableContext>
+
+            <DragOverlay>
+              {activeSlide ? (
+                <div className="w-48 aspect-video bg-black rounded-lg overflow-hidden border-2 border-orange-500 shadow-2xl opacity-90 rotate-2 cursor-grabbing">
+                  <div className="pointer-events-none w-full h-full overflow-hidden relative">
+                    <div className="scale-[0.16] origin-top-left" style={{ width: '1200px', height: '675px' }}>
+                      <SlideRenderer slide={activeSlide} theme={activeTheme} />
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </DragOverlay>
           </DndContext>
         )}
       </div>

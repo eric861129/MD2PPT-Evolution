@@ -133,7 +133,7 @@ export const useEditorController = () => {
   const handleReorderSlides = useCallback((fromIndex: number, toIndex: number) => {
     const newContent = reorderSlides(content, fromIndex, toIndex);
     setContent(newContent);
-  }, [content, setContent, content]);
+  }, [content, setContent]);
 
   const handleTweakerUpdate = useCallback((line: number, newContent: string) => {
     const updated = replaceContentByLine(content, line, newContent);

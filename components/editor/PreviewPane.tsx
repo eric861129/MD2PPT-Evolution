@@ -72,6 +72,9 @@ const SortableSlideCard: React.FC<{
     transition,
     zIndex: isDragging ? 50 : 'auto',
     opacity: isDragging ? 0.3 : 1,
+    contentVisibility: 'auto' as any, // Modern CSS for skipping off-screen rendering
+    containIntrinsicSize: `1200px ${1200 * (layout.height / layout.width)}px`,
+    willChange: 'transform',
   };
 
   useLayoutEffect(() => {
@@ -274,15 +277,23 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewR
                 }),
               }}>
                 {activeSlide ? (
-                  <div className="w-full opacity-80 scale-95 shadow-2xl rounded-lg overflow-hidden border-2 border-orange-500 ring-4 ring-orange-500/20">
-                    <div className="pointer-events-none" style={{ aspectRatio: `${selectedLayout.width} / ${selectedLayout.height}` }}>
+                  <div className="w-[300px] opacity-90 shadow-2xl rounded-xl overflow-hidden border-2 border-orange-500 ring-4 ring-orange-500/20 rotate-3 transition-transform duration-200 cursor-grabbing">
+                    {/* Explicitly height-constrained container to clip transform whitespace */}
+                    <div 
+                      className="pointer-events-none overflow-hidden" 
+                      style={{ 
+                        width: '300px',
+                        height: `${300 * (selectedLayout.height / selectedLayout.width)}px`,
+                        position: 'relative'
+                      }}
+                    >
                       <SlideRenderer 
                         slide={activeSlide} 
                         theme={activeTheme} 
                         globalBg={documentMeta.bg}
                         width={DESIGN_WIDTH}
                         height={DESIGN_WIDTH * (selectedLayout.height / selectedLayout.width)}
-                        scale={0.3} // Placeholder scale for overlay
+                        scale={300 / DESIGN_WIDTH} 
                       />
                     </div>
                   </div>

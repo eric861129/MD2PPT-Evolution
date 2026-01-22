@@ -269,8 +269,12 @@ export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, curr
               </SortableContext>
               <DragOverlay>
                 {activeSlide ? (
-                  <div className="w-full aspect-video bg-black rounded-lg overflow-hidden border-2 border-[#EA580C] shadow-2xl opacity-80 scale-95">
-                    <div className="pointer-events-none scale-[0.15] origin-top-left" style={{ width: '1200px', height: '675px' }}><SlideRenderer slide={activeSlide} theme={activeTheme} /></div>
+                  <div className="w-64 aspect-video bg-black rounded-xl overflow-hidden border-2 border-[#EA580C] shadow-2xl opacity-90 rotate-2 cursor-grabbing">
+                    <div className="pointer-events-none w-full h-full overflow-hidden relative">
+                      <div className="scale-[0.213] origin-top-left" style={{ width: '1200px', height: '675px' }}>
+                        <SlideRenderer slide={activeSlide} theme={activeTheme} />
+                      </div>
+                    </div>
                   </div>
                 ) : null}
               </DragOverlay>
