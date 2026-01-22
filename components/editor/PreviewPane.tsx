@@ -14,9 +14,11 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
+  DragStartEvent,
+  DragOverlay,
+  defaultDropAnimationSideEffects,
 } from '@dnd-kit/core';
 import {
-  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
@@ -26,7 +28,9 @@ import { CSS } from '@dnd-kit/utilities';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 import { ParsedBlock, PptTheme } from '../../services/types';
-...
+import { transformToSOM, SlideObject } from '../../services/parser/som';
+import { useEditor } from '../../contexts/EditorContext';
+import { useVisualTweaker } from '../../contexts/VisualTweakerContext';
 import { fileToBase64 } from '../../utils/imageUtils';
 import { SlideRenderer } from '../common/SlideRenderer';
 import { DragHandle } from './DragHandle';
@@ -53,7 +57,6 @@ const SortableSlideCard: React.FC<{
   const [scale, setScale] = useState(1);
   const [isDropTarget, setIsDropTarget] = useState(false);
 
-  // dnd-kit sortable hook
   const {
     attributes,
     listeners,
@@ -67,7 +70,7 @@ const SortableSlideCard: React.FC<{
     transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? 50 : 'auto',
-    opacity: isDragging ? 0.4 : 1,
+    opacity: isDragging ? 0.3 : 1,
   };
 
   useLayoutEffect(() => {
@@ -107,9 +110,8 @@ const SortableSlideCard: React.FC<{
       data-source-line={slide.sourceLine}
       data-block-type="BACKGROUND"
     >
-      {/* Index Badge & Drag Handle Container */}
       <div className="absolute -left-12 top-0 flex flex-col items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-        <div className="w-8 h-8 rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center text-xs font-black text-stone-500 border border-stone-300 dark:border-stone-700">
+        <div className="w-8 h-8 rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center text-xs font-black text-stone-500 border border-stone-300 dark:border-stone-700 shadow-sm">
           {index + 1}
         </div>
         <DragHandle id={`slide-${index}`} />
@@ -125,7 +127,7 @@ const SortableSlideCard: React.FC<{
           transitionType === 'fade' ? 'animate-in fade-in' : 
           transitionType === 'slide' ? 'animate-in slide-in-from-right' : 
           transitionType === 'zoom' ? 'animate-in zoom-in' : ''
-        } ${isDropTarget ? 'ring-4 ring-orange-500 scale-[1.02]' : ''}`} 
+        } ${isDropTarget ? 'ring-4 ring-orange-500 scale-[1.01]' : ''}`} 
         style={{ aspectRatio: `${layout.width} / ${layout.height}` }}
       >
         <SlideRenderer 
@@ -155,15 +157,15 @@ const SortableSlideCard: React.FC<{
 export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewRef, onUpdateSlideConfig, onReorderSlides }) => {
   const { pageSizes, selectedSizeIndex, documentMeta, showNotes, activeTheme } = useEditor();
   const { openTweaker } = useVisualTweaker();
+  const [activeId, setActiveId] = useState<string | null>(null);
   
   const selectedLayout = pageSizes[selectedSizeIndex];
   const slides = transformToSOM(parsedBlocks);
 
-  // dnd-kit sensors
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 5, // Avoid accidental drags when clicking handles
+        distance: 5,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -171,8 +173,13 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewR
     })
   );
 
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as string);
+  };
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    setActiveId(null);
 
     if (over && active.id !== over.id) {
       const oldIndex = parseInt((active.id as string).split('-')[1], 10);
@@ -185,54 +192,6 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewR
   };
 
   const handlePreviewClick = (e: React.MouseEvent) => {
-...
-  return (
-    <div className="w-1/2 flex flex-col bg-[#F5F5F4] dark:bg-[#0C0A09] transition-colors duration-500 border-l border-[#E7E5E4] dark:border-[#44403C]">
-      <div className="bg-white dark:bg-[#1C1917] px-6 py-2.5 border-b border-[#E7E5E4] dark:border-[#44403C] flex justify-between items-center shrink-0">
-        <span className="text-[10px] font-black text-stone-400 uppercase tracking-[0.3em]">Canvas Preview</span>
-        <div className="flex items-center gap-2 font-black text-[10px] uppercase tracking-tighter" style={{ color: `#${activeTheme.colors.primary}` }}>
-          <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: `#${activeTheme.colors.primary}` }}></span> {activeTheme.label}
-        </div>
-      </div>
-      <div 
-        ref={previewRef} 
-        onClick={handlePreviewClick}
-        className="flex-1 overflow-y-auto p-4 lg:p-8 scroll-smooth bg-transparent"
-      >
-        <div className="w-full max-w-[1600px] mx-auto space-y-12 pb-60">
-          {slides.length > 0 ? (
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
-              modifiers={[restrictToVerticalAxis]}
-            >
-              <SortableContext
-                items={slides.map((_, i) => `slide-${i}`)}
-                strategy={verticalListSortingStrategy}
-              >
-                {slides.map((slide, index) => (
-                  <SortableSlideCard 
-                    key={index} 
-                    slide={slide} 
-                    index={index} 
-                    layout={selectedLayout} 
-                    theme={activeTheme}
-                    globalBg={documentMeta.bg}
-                    onUpdateConfig={onUpdateSlideConfig} 
-                    showNotes={showNotes}
-                  />
-                ))}
-              </SortableContext>
-            </DndContext>
-          ) : (
-            <div className="h-full flex flex-col items-center justify-center text-stone-300 dark:text-stone-700 mt-20 opacity-30"><Sparkles className="w-16 h-16 mb-6" /><p className="font-bold tracking-[0.5em] uppercase">Composition Canvas</p></div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
     let target = e.target as HTMLElement;
     let depth = 0;
     const maxDepth = 5;
@@ -253,6 +212,9 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewR
     }
   };
 
+  const activeSlideIndex = activeId ? parseInt(activeId.split('-')[1], 10) : -1;
+  const activeSlide = activeSlideIndex >= 0 ? slides[activeSlideIndex] : null;
+
   return (
     <div className="w-1/2 flex flex-col bg-[#F5F5F4] dark:bg-[#0C0A09] transition-colors duration-500 border-l border-[#E7E5E4] dark:border-[#44403C]">
       <div className="bg-white dark:bg-[#1C1917] px-6 py-2.5 border-b border-[#E7E5E4] dark:border-[#44403C] flex justify-between items-center shrink-0">
@@ -267,18 +229,59 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewR
         className="flex-1 overflow-y-auto p-4 lg:p-8 scroll-smooth bg-transparent"
       >
         <div className="w-full max-w-[1600px] mx-auto space-y-12 pb-60">
-          {slides.length > 0 ? slides.map((slide, index) => (
-            <SlideCard 
-              key={index} 
-              slide={slide} 
-              index={index} 
-              layout={selectedLayout} 
-              theme={activeTheme}
-              globalBg={documentMeta.bg}
-              onUpdateConfig={onUpdateSlideConfig} 
-              showNotes={showNotes}
-            />
-          )) : (
+          {slides.length > 0 ? (
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+              onDragCancel={() => setActiveId(null)}
+              modifiers={[restrictToVerticalAxis]}
+            >
+              <SortableContext
+                items={slides.map((_, i) => `slide-${i}`)}
+                strategy={verticalListSortingStrategy}
+              >
+                {slides.map((slide, index) => (
+                  <SortableSlideCard 
+                    key={index} 
+                    slide={slide} 
+                    index={index} 
+                    layout={selectedLayout} 
+                    theme={activeTheme}
+                    globalBg={documentMeta.bg}
+                    onUpdateConfig={onUpdateSlideConfig} 
+                    showNotes={showNotes}
+                  />
+                ))}
+              </SortableContext>
+
+              <DragOverlay dropAnimation={{
+                sideEffects: defaultDropAnimationSideEffects({
+                  styles: {
+                    active: {
+                      opacity: '0.5',
+                    },
+                  },
+                }),
+              }}>
+                {activeSlide ? (
+                  <div className="w-full opacity-80 scale-95 shadow-2xl rounded-lg overflow-hidden border-2 border-orange-500 ring-4 ring-orange-500/20">
+                    <div className="pointer-events-none" style={{ aspectRatio: `${selectedLayout.width} / ${selectedLayout.height}` }}>
+                      <SlideRenderer 
+                        slide={activeSlide} 
+                        theme={activeTheme} 
+                        globalBg={documentMeta.bg}
+                        width={DESIGN_WIDTH}
+                        height={DESIGN_WIDTH * (selectedLayout.height / selectedLayout.width)}
+                        scale={0.3} // Placeholder scale for overlay
+                      />
+                    </div>
+                  </div>
+                ) : null}
+              </DragOverlay>
+            </DndContext>
+          ) : (
             <div className="h-full flex flex-col items-center justify-center text-stone-300 dark:text-stone-700 mt-20 opacity-30"><Sparkles className="w-16 h-16 mb-6" /><p className="font-bold tracking-[0.5em] uppercase">Composition Canvas</p></div>
           )}
         </div>

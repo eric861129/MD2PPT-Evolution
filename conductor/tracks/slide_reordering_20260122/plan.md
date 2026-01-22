@@ -15,10 +15,10 @@
 
 - [x] **Task: 安裝並設定 `@dnd-kit`** f891fbf
     - [x] 安裝 `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities`。 f891fbf
-- [~] **Task: 實作可拖拽的投影片容器**
-    - [ ] 在側欄 (Sidebar) 與主頁面預覽 (Preview) 整合 `SortableContext`。
-    - [ ] 新增 `DragHandle` 組件並套用至所有投影片左上角。
-- [ ] **Task: 實作視覺反饋**
+- [x] **Task: 實作可拖拽的投影片容器** bd06dbc
+    - [x] 在側欄 (Sidebar) 與主頁面預覽 (Preview) 整合 `SortableContext`。 bd06dbc
+    - [x] 新增 `DragHandle` 組件並套用至所有投影片左上角。 bd06dbc
+- [~] **Task: 實作視覺反饋**
     - [ ] 實作 `Ghost Image` (拖動時的半透明縮圖)。
     - [ ] 實作 `Placeholder` (目標位置的佔位視覺)。
 - [ ] **Task: Conductor - User Manual Verification '第二階段：UI 基礎' (Protocol in workflow.md)**
