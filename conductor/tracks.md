@@ -50,7 +50,7 @@ This file tracks all major development tracks for MD2PPT-Evolution. Completed tr
 - [x] **Track: 字體大小客製化設定 (Custom Font Sizing)**
     *Link: [./archive/custom_font_sizing_20260122/](./archive/custom_font_sizing_20260122/)*
 
----
+- [x] **Track: 技術債清理：移除舊解析器與修復測試 (Technical Debt Cleanup)**
+    *Link: [./archive/tech_debt_cleanup_20260122/](./archive/tech_debt_cleanup_20260122/)*
 
-- [ ] **Track: 技術債清理：移除舊解析器與修復測試 (Technical Debt Cleanup)**
-    *Link: [./tracks/tech_debt_cleanup_20260122/](./tracks/tech_debt_cleanup_20260122/)*
+---

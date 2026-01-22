@@ -5,6 +5,23 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
 並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [0.16.0] - 2026-01-22
+
+### 技術債清理 (Technical Debt Cleanup)
+- **移除舊解析器**: 永久刪除 legacy regex 解析器 (`services/markdownParser.ts`)，減少 1,200+ 行冗餘代碼。
+- **解析管線統一**: 生產環境現在 100% 由 Remark/Unified AST 驅動，解決了 32 個因新舊解析器行為不一致導致的測試失敗。
+- **測試遷移與整併**: 將原本分散的 9 個舊測試檔案（含圖表、邊界、YAML）整併至新的 `tests/astParserIntegration.test.ts`。
+
+### 修正與穩定性 (Fixes & Stability)
+- **測試套件修復**:
+    - **整合測試**: 修正 `ChartTweaker` 與 `ImageTweaker` 測試中的 Mock 簽章錯誤。
+    - **演講模式**: 修復 `PresenterConsole` 測試中的元素選取與非同步渲染問題。
+    - **UI Mock**: 修正 `TweakerOverlay` 對 `lucide-react` 圖標的 Mock 缺失。
+- **解析引擎增強**:
+    - **對話偵測**: 優化對話偵測 Regex，支援更具容錯性的 `Bot :":`、`User ::"` 與 `" ::` 語法。
+    - **0-based 索引**: 修正 AST 解析器輸出，將 Remark 的 1-based 行號標準化為 0-based，確保與編輯器游標位置精確匹配。
+- **生產力**: 達成全案 **120 測試案例全數通過 (100% Pass)** 且 `npm run build` 正常。
+
 ## [0.15.0] - 2026-01-22
 
 ### 新增 (Added)

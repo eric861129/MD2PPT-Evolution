@@ -38,9 +38,34 @@ describe('ChartTweaker', () => {
     fireEvent.change(typeSelect, { target: { value: 'line' } });
     fireEvent.change(tableArea, { target: { value: '| Year | Value |\n| 2021 | 500 |' } });
     
-    fireEvent.click(screen.getByText(/Apply Data Changes/i));
-
-    expect(onUpdateContent).toHaveBeenCalledWith(1, expect.stringContaining('::: chart-line {"title": "Test"}'));
-    expect(onUpdateContent).toHaveBeenCalledWith(1, expect.stringContaining('| 2021 | 500 |'));
-  });
-});
+        fireEvent.click(screen.getByText(/Apply Data Changes/i));
+    
+    
+    
+        // The signature changed to include a 3rd parameter (range), which is undefined here
+    
+        expect(onUpdateContent).toHaveBeenCalledWith(
+    
+          1, 
+    
+          expect.stringContaining('::: chart-line {"title": "Test"}'),
+    
+          undefined
+    
+        );
+    
+        expect(onUpdateContent).toHaveBeenCalledWith(
+    
+          1, 
+    
+          expect.stringContaining('| 2021 | 500 |'),
+    
+          undefined
+    
+        );
+    
+      });
+    
+    });
+    
+    

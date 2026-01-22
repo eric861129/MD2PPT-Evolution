@@ -57,7 +57,6 @@ const extractAttributes = (text: string): { content: string, metadata: any } => 
  */
 const mapNodeToBlock = (node: any, lineOffset: number, charOffset: number): ParsedBlock[] => {
   const blocks: ParsedBlock[] = [];
-  // Remark is 1-based, MD2PPT is 0-based. Apply lineOffset for slide position.
   const sourceLine = (node.position?.start?.line || 1) - 1 + lineOffset;
   const startIndex = (node.position?.start?.offset || 0) + charOffset;
   const endIndex = (node.position?.end?.offset || 0) + charOffset;
@@ -80,18 +79,18 @@ const mapNodeToBlock = (node: any, lineOffset: number, charOffset: number): Pars
         break;
       }
 
-      // Chat Dialogues
-      const centerMatch = rawText.match(/^(.+?)\s*:\"\s*([\s\S]*)$/);
+      // Chat Dialogues (Supported patterns: :":, ::", "::)
+      const centerMatch = rawText.match(/^(.+?)\s*:\s*"\s*:\s*([\s\S]*)$/);
       if (centerMatch) {
           blocks.push({ ...base, type: BlockType.CHAT_CUSTOM, role: centerMatch[1].trim(), content: centerMatch[2].trim(), alignment: 'center' });
           break;
       }
-      const rightMatch = rawText.match(/^(.+?)\s*::"\s*([\s\S]*)$/);
+      const rightMatch = rawText.match(/^(.+?)\s*:\s*:\s*"\s*([\s\S]*)$/);
       if (rightMatch) {
           blocks.push({ ...base, type: BlockType.CHAT_CUSTOM, role: rightMatch[1].trim(), content: rightMatch[2].trim(), alignment: 'right' });
           break;
       }
-      const leftMatch = rawText.match(/^(.+?)\s*"(?:::|::)\s*([\s\S]*)$/);
+      const leftMatch = rawText.match(/^(.+?)\s*"\s*:\s*:\s*([\s\S]*)$/);
       if (leftMatch) {
           blocks.push({ ...base, type: BlockType.CHAT_CUSTOM, role: leftMatch[1].trim(), content: leftMatch[2].trim(), alignment: 'left' });
           break;
@@ -140,22 +139,14 @@ const mapNodeToBlock = (node: any, lineOffset: number, charOffset: number): Pars
   return blocks;
 };
 
-/**
- * Parses a single slide's content using Remark.
- */
 const parseSingleSlide = async (markdown: string, lineOffset: number, charOffset: number): Promise<ParsedBlock[]> => {
-  // IMPORTANT: remark-frontmatter requires the YAML to be at the ABSOLUTE start.
   const leadingWhitespaceMatch = markdown.match(/^\s*/);
   const leadingWhitespace = leadingWhitespaceMatch ? leadingWhitespaceMatch[0] : '';
   const trimmedMarkdown = markdown.trimStart();
   const internalCharOffset = leadingWhitespace.length;
   const internalLineOffset = (leadingWhitespace.match(/\n/g) || []).length;
 
-  const processor = unified()
-    .use(remarkParse)
-    .use(remarkGfm)
-    .use(remarkFrontmatter, ['yaml']);
-
+  const processor = unified().use(remarkParse).use(remarkGfm).use(remarkFrontmatter, ['yaml']);
   const ast: any = processor.parse(trimmedMarkdown);
   const transformedAst: any = await processor.run(ast);
 
@@ -167,12 +158,9 @@ const parseSingleSlide = async (markdown: string, lineOffset: number, charOffset
       try { slideMeta = yaml.load(node.value) as any; } catch (e) { console.error(e); }
       continue;
     }
-    
-    const mapped = mapNodeToBlock(node, lineOffset + internalLineOffset, charOffset + internalCharOffset);
-    rawBlocks.push(...mapped);
+    rawBlocks.push(...mapNodeToBlock(node, lineOffset + internalLineOffset, charOffset + internalCharOffset));
   }
 
-  // --- CHART MERGE LOGIC ---
   const finalBlocks: ParsedBlock[] = [];
   for (let i = 0; i < rawBlocks.length; i++) {
     const block = rawBlocks[i];
@@ -240,11 +228,9 @@ export const parseMarkdownWithAST = async (markdown: string): Promise<ParsedBloc
     const segment = segments[i];
     const blocks = await parseSingleSlide(segment, currentLineOffset, currentCharOffset);
     allParsedBlocks.push(...blocks);
-    
     const linesInSegment = (segment.match(/\n/g) || []).length;
     currentLineOffset += linesInSegment;
     currentCharOffset += segment.length;
-
     if (i < separatorPositions.length) {
       const fullSepText = markdown.substring(separatorPositions[i]).match(/^===+/)?.[0] || '===';
       currentCharOffset += fullSepText.length;

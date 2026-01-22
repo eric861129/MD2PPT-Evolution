@@ -42,9 +42,10 @@ describe('Visual Tweaker Integration', () => {
     
     // 3. Find input and change it
     const textarea = screen.getByDisplayValue('Original Line Content');
-    fireEvent.change(textarea, { target: { value: 'Updated Line Content' } });
+        fireEvent.change(textarea, { target: { value: 'Updated Line Content' } });
     
-    // 4. Verify callback was called (Real-time sync)
-    expect(handleUpdateContent).toHaveBeenCalledWith(5, 'Updated Line Content');
-  });
-});
+        // 4. Verify callback was called (Real-time sync)
+        expect(handleUpdateContent).toHaveBeenCalledWith(5, 'Updated Line Content', undefined);
+      });
+    });
+    

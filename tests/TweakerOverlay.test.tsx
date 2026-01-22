@@ -7,8 +7,14 @@ import React from 'react';
 
 // Mock Lucide icons
 vi.mock('lucide-react', () => ({
-  X: ({ size }: { size: number }) => <div data-testid="x-icon" style={{ width: size }} />,
+  X: () => 'X',
+  ChevronUp: () => 'ChevronUp',
+  ChevronDown: () => 'ChevronDown',
+  Type: () => 'Type',
+  Image: () => 'Image',
+  AlertCircle: () => 'AlertCircle'
 }));
+
 
 describe('TweakerOverlay', () => {
   it('should not render when isVisible is false', () => {

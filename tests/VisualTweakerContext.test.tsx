@@ -72,6 +72,8 @@ describe('VisualTweakerContext', () => {
       result.current.updateContent('New Content');
     });
 
-    expect(onUpdateContent).toHaveBeenCalledWith(5, 'New Content');
+    expect(onUpdateContent).toHaveBeenCalledWith(5, 'New Content', undefined);
   });
 });
+
+    

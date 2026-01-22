@@ -37,6 +37,6 @@ describe('ImageTweaker', () => {
     
     fireEvent.click(screen.getByText(/Apply Changes/i));
 
-    expect(onUpdateContent).toHaveBeenCalledWith(1, '![New Alt](https://new.url)');
+    expect(onUpdateContent).toHaveBeenCalledWith(1, '![New Alt](https://new.url)', undefined);
   });
 });
