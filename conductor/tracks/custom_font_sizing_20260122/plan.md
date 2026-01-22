@@ -3,12 +3,12 @@
 ## 第一階段：解析器與數據模型升級 (Parser & Model)
 本階段專注於讓系統「認識」`{size=N}` 語法，並將其轉化為內部的樣式屬性。
 
-- [~] **Task: 建立字體標籤解析測試**
-    - [ ] 撰寫測試案例：驗證標題、段落及列表末尾的 `{size=N}` 能被正確識別。
-    - [ ] 撰寫測試案例：驗證標籤被提取後，原始內容文字不應包含該標籤。
-- [ ] **Task: 實作 AST 屬性提取邏輯**
-    - [ ] 修改 `services/parser/ast.ts` 中的 `mapNodeToBlock`。
-    - [ ] 使用 Regex 掃描內容末尾，將 `size` 數值存入 `ParsedBlock.metadata`。
+- [x] **Task: 建立字體標籤解析測試** 1b65f58
+    - [x] 撰寫測試案例：驗證標題、段落及列表末尾的 `{size=N}` 能被正確識別。 1b65f58
+    - [x] 撰寫測試案例：驗證標籤被提取後，原始內容文字不應包含該標籤。 1b65f58
+- [x] **Task: 實作 AST 屬性提取邏輯** 1b65f58
+    - [x] 修改 `services/parser/ast.ts` 中的 `mapNodeToBlock`。 1b65f58
+    - [x] 使用 Regex 掃描內容末尾，將 `size` 數值存入 `ParsedBlock.metadata`。 1b65f58
 - [ ] **Task: Conductor - User Manual Verification '第一階段：解析邏輯' (Protocol in workflow.md)**
 
 ## 第二階段：Markdown 更新器強化 (Persistence Logic)
