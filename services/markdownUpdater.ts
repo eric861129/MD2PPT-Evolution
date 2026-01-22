@@ -1,4 +1,38 @@
 /**
+ * Updates or adds an attribute tag like {size=N} to a string.
+ * This is used for element-level style persistence.
+ */
+export const updateElementAttribute = (text: string, key: string, value: string | number): string => {
+  const attrRegex = /\{([^}]+)\}\s*$/;
+  const match = text.match(attrRegex);
+
+  if (match) {
+    const attrString = match[1];
+    const pairs = attrString.split(/\s+/);
+    let found = false;
+    
+    const newPairs = pairs.map(pair => {
+      const [k, v] = pair.split('=');
+      if (k === key) {
+        found = true;
+        return `${key}=${value}`;
+      }
+      return pair;
+    });
+
+    if (!found) {
+      newPairs.push(`${key}=${value}`);
+    }
+
+    return text.replace(attrRegex, `{${newPairs.join(' ')}}`);
+  }
+
+  // No existing attribute tag, append one
+  const trimmed = text.trimEnd();
+  return `${trimmed} {${key}=${value}}`;
+};
+
+/**
  * Replaces content in Markdown using a specific character range.
  */
 export const replaceContentByRange = (content: string, start: number, end: number, newText: string): string => {
