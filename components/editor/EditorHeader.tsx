@@ -13,7 +13,6 @@ import { useEditor } from '../../contexts/EditorContext';
 import { usePresenterMode } from '../../hooks/usePresenterMode';
 import { Button } from '../ui/Button';
 import { IconButton } from '../ui/IconButton';
-import { PRESET_THEMES } from '../../constants/themes';
 import { CURATED_PALETTES } from '../../constants/palettes';
 import { updateGlobalTheme } from '../../services/markdownUpdater';
 
@@ -59,17 +58,11 @@ export const EditorHeader: React.FC = () => {
   const handleThemeChange = (id: string) => {
     const palette = CURATED_PALETTES.find(p => p.id === id);
     if (palette) {
-      // 1. Clear any manual color overrides to let the palette take full effect
       resetCustomTheme();
-
-      // 2. Update Markdown Content (for YAML persistence)
       const newContent = updateGlobalTheme(content, palette.id, palette.meshColors);
       setContent(newContent);
-      
-      // 3. Set the active theme ID
       setActiveThemeId(palette.id);
     }
-    
     setShowThemeSaved(true);
     setIsThemeDropdownOpen(false);
     setTimeout(() => setShowThemeSaved(false), 2000);
@@ -99,20 +92,20 @@ export const EditorHeader: React.FC = () => {
   const selectedSize = pageSizes[selectedSizeIndex];
 
   return (
-    <header className={`${headerBg} backdrop-blur-xl px-4 lg:px-8 py-3 flex justify-between items-center z-40 shadow-2xl relative transition-all duration-500 border-b border-white/5`}>
+    <header className={`${headerBg} backdrop-blur-xl px-3 md:px-4 lg:px-8 py-2 md:py-3 flex justify-between items-center z-40 shadow-2xl relative transition-all duration-500 border-b border-white/5 h-14 md:h-16`}>
       {/* Left: Brand */}
-      <div className="flex items-center gap-3 lg:gap-5 shrink-0">
-        <div className="bg-stone-900 p-1.5 rounded-lg shadow-inner ring-1 ring-white/10 hidden sm:block">
+      <div className="flex items-center gap-2 md:gap-3 lg:gap-5 shrink-0">
+        <div className="bg-stone-900 p-1.5 rounded-lg shadow-inner ring-1 ring-white/10 hidden md:block">
           <img 
             src={logoPath} 
             alt="Logo" 
-            className="w-6 h-6 lg:w-7 lg:h-7" 
+            className="w-5 h-5 lg:w-7 lg:h-7" 
             style={{ filter: 'invert(48%) sepia(91%) saturate(1841%) hue-rotate(345deg) brightness(95%) contrast(92%)' }} 
           />
         </div>
         <div className="flex flex-col">
-          <h1 className="text-lg lg:text-xl font-black text-white leading-none tracking-tight">
-            MD2PPT <span className="text-[#FB923C] font-light ml-1">EVO</span>
+          <h1 className="text-base md:text-lg lg:text-xl font-black text-white leading-none tracking-tight">
+            MD2PPT <span className="text-[#FB923C] font-light ml-0.5 md:ml-1">EVO</span>
           </h1>
           <p className="text-[9px] text-white/40 font-bold uppercase tracking-[0.3em] mt-1.5 hidden xl:block">
             Warm Business Pro
@@ -121,16 +114,16 @@ export const EditorHeader: React.FC = () => {
       </div>
       
       {/* Right: Actions */}
-      <div className="flex items-center gap-1.5 lg:gap-2.5 overflow-visible shrink-0">
+      <div className="flex items-center gap-1 md:gap-1.5 lg:gap-2.5 overflow-visible shrink-0">
         
         {/* AI Assistant Toggle */}
         <IconButton 
           onClick={openAiModal} 
           title="AI Assistant Prompt"
           onBrand
-          className="bg-[#EA580C]/10 text-[#EA580C] hover:bg-[#EA580C] hover:text-white w-9 h-9 lg:w-10 lg:h-10 border border-[#EA580C]/20"
+          className="bg-[#EA580C]/10 text-[#EA580C] hover:bg-[#EA580C] hover:text-white w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 border border-[#EA580C]/20"
         >
-          <Bot size={18} />
+          <Bot size={16} className="md:size-[18px]" />
         </IconButton>
 
         {/* Brand Settings Toggle */}
@@ -138,9 +131,9 @@ export const EditorHeader: React.FC = () => {
           onClick={openBrandModal} 
           title="Brand Settings"
           onBrand
-          className="bg-white/5 text-stone-400 hover:text-[#EA580C] w-9 h-9 lg:w-10 lg:h-10"
+          className="bg-white/5 text-stone-400 hover:text-[#EA580C] w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10"
         >
-          <Settings2 size={18} />
+          <Settings2 size={16} className="md:size-[18px]" />
         </IconButton>
 
         {/* Color Tool Toggle */}
@@ -148,39 +141,37 @@ export const EditorHeader: React.FC = () => {
           onClick={toggleThemePanel} 
           title="Color Picker Tool"
           onBrand
-          className={`relative shrink-0 w-9 h-9 lg:w-10 lg:h-10 ${isThemePanelOpen ? 'bg-[#EA580C] text-white shadow-[0_0_15px_rgba(234,88,12,0.4)]' : 'bg-white/5 text-stone-400 hover:text-[#EA580C]'}`}
+          className={`relative shrink-0 w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 ${isThemePanelOpen ? 'bg-[#EA580C] text-white shadow-[0_0_15px_rgba(234,88,12,0.4)]' : 'bg-white/5 text-stone-400 hover:text-[#EA580C]'}`}
         >
-          <Palette size={18} />
+          <Palette size={16} className="md:size-[18px]" />
           {isThemePanelOpen && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full" />}
         </IconButton>
 
-        <div className="w-[1px] h-6 bg-white/10 mx-0.5 shrink-0" />
+        <div className="w-[1px] h-6 bg-white/10 mx-0.5 shrink-0 hidden sm:block" />
 
         {/* Custom Theme Dropdown */}
-        <div className="relative shrink-0" ref={themeDropdownRef}>
+        <div className="relative shrink-0 hidden sm:block" ref={themeDropdownRef}>
           <button
             onClick={() => { setIsThemeDropdownOpen(!isThemeDropdownOpen); setIsSizeDropdownOpen(false); }}
-            className="flex items-center gap-2 px-2.5 lg:px-4 py-2 bg-white/5 border border-white/10 rounded-xl hover:border-[#EA580C]/50 transition-all text-white min-w-[100px] lg:min-w-[160px]"
+            className="flex items-center gap-1.5 md:gap-2 px-2 md:px-2.5 lg:px-4 py-2 bg-white/5 border border-white/10 rounded-xl hover:border-[#EA580C]/50 transition-all text-white min-w-[80px] md:min-w-[100px] lg:min-w-[160px]"
           >
             <div className="flex gap-1 shrink-0">
-              <div className="w-2.5 h-2.5 rounded-full transition-colors duration-500" style={{ backgroundColor: activeTheme.colors.primary.startsWith('#') ? activeTheme.colors.primary : `#${activeTheme.colors.primary}` }} />
+              <div className="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full transition-colors duration-500" style={{ backgroundColor: activeTheme.colors.primary.startsWith('#') ? activeTheme.colors.primary : `#${activeTheme.colors.primary}` }} />
             </div>
-            <span className="text-[10px] lg:text-xs font-black uppercase tracking-wider flex-1 text-left truncate">
+            <span className="text-[9px] md:text-[10px] lg:text-xs font-black uppercase tracking-wider flex-1 text-left truncate">
               {activeTheme.label}
             </span>
-            <ChevronDown size={14} className={`transition-transform duration-300 shrink-0 ${isThemeDropdownOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown size={12} className={`transition-transform duration-300 shrink-0 ${isThemeDropdownOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {isThemeDropdownOpen && (
             <div className="absolute top-full mt-2 right-0 w-72 lg:w-80 bg-[#1C1917] border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] pb-2 z-[60] animate-in zoom-in-95 fade-in duration-200 origin-top-right max-h-[80vh] overflow-y-auto custom-scrollbar">
-              
               <div className="px-5 py-4 mb-1 border-b border-white/5 sticky top-0 bg-[#1C1917] z-50 flex items-center justify-between">
                 <span className="text-[11px] font-black text-[#EA580C] uppercase tracking-[0.2em] flex items-center gap-2">
                   <Palette size={14} /> Design Systems
                 </span>
                 <span className="text-[9px] text-stone-500 font-bold">12 Styles</span>
               </div>
-              
               <div className="grid grid-cols-1 gap-1 p-2 relative z-0">
                 {CURATED_PALETTES.map((palette) => (
                   <button
@@ -212,25 +203,19 @@ export const EditorHeader: React.FC = () => {
               </div>
             </div>
           )}
-
-          {showThemeSaved && (
-            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1 text-[10px] text-green-400 font-bold animate-in fade-in slide-in-from-top-1">
-              <Check size={10} />
-            </div>
-          )}
         </div>
 
         {/* Custom Paper Size Dropdown */}
-        <div className="relative shrink-0" ref={sizeDropdownRef}>
+        <div className="relative shrink-0 hidden md:block" ref={sizeDropdownRef}>
           <button
             onClick={() => { setIsSizeDropdownOpen(!isSizeDropdownOpen); setIsThemeDropdownOpen(false); }}
-            className="flex items-center gap-2 px-2.5 lg:px-4 py-2 bg-white/5 border border-white/10 rounded-xl hover:border-[#EA580C]/50 transition-all text-white min-w-[90px] lg:min-w-[140px]"
+            className="flex items-center gap-1.5 md:gap-2 px-2 md:px-2.5 lg:px-4 py-2 bg-white/5 border border-white/10 rounded-xl hover:border-[#EA580C]/50 transition-all text-white min-w-[70px] md:min-w-[90px] lg:min-w-[140px]"
           >
-            <Settings2 size={14} className="text-[#FB923C] shrink-0" />
-            <span className="text-[10px] lg:text-xs font-black uppercase tracking-wider flex-1 text-left truncate">
+            <Settings2 size={12} className="text-[#FB923C] shrink-0" />
+            <span className="text-[9px] md:text-[10px] lg:text-xs font-black uppercase tracking-wider flex-1 text-left truncate">
               {t(`sizes.${selectedSize.name}`)}
             </span>
-            <ChevronDown size={14} className={`transition-transform duration-300 shrink-0 ${isSizeDropdownOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown size={12} className={`transition-transform duration-300 shrink-0 ${isSizeDropdownOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {isSizeDropdownOpen && (
@@ -258,17 +243,17 @@ export const EditorHeader: React.FC = () => {
         <div className="w-[1px] h-6 bg-white/10 mx-0.5 shrink-0 hidden lg:block" />
 
         {/* Controls Group */}
-        <div className="flex items-center bg-white/5 p-0.5 lg:p-1 rounded-xl border border-white/10 backdrop-blur-md shrink-0 scale-90 lg:scale-100 origin-right">
+        <div className="flex items-center bg-white/5 p-0.5 lg:p-1 rounded-xl border border-white/10 backdrop-blur-md shrink-0 scale-[0.8] md:scale-90 lg:scale-100 origin-right">
           <IconButton onClick={resetToDefault} title={t('reset')} onBrand className="flex">
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-3.5 h-3.5 md:w-4 md:h-4" />
           </IconButton>
           <div className="w-[1px] h-4 bg-white/10 mx-0.5" />
-          <IconButton onClick={toggleLanguage} className="gap-1.5 px-1.5 lg:px-3 w-auto" onBrand>
-            <Languages className="w-4 h-4" />
-            <span className="text-[10px] font-black uppercase">{language === 'zh' ? 'EN' : 'ZH'}</span>
+          <IconButton onClick={toggleLanguage} className="gap-1 px-1 lg:px-3 w-auto" onBrand>
+            <Languages className="w-3.5 h-3.5 md:w-4 md:h-4" />
+            <span className="text-[9px] md:text-[10px] font-black uppercase">{language === 'zh' ? 'EN' : 'ZH'}</span>
           </IconButton>
           <IconButton onClick={toggleDarkMode} title={isDark ? t('theme.light') : t('theme.dark')} onBrand>
-            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            {isDark ? <Sun className="w-3.5 h-3.5 md:w-4 md:h-4" /> : <Moon className="w-3.5 h-3.5 md:w-4 md:h-4" />}
           </IconButton>
           <div className="w-[1px] h-4 bg-white/10 mx-0.5" />
           <IconButton 
@@ -277,20 +262,20 @@ export const EditorHeader: React.FC = () => {
             onBrand
             className={showNotes ? 'bg-orange-500/20 text-[#FB923C]' : ''}
           >
-            <StickyNote className="w-4 h-4" />
+            <StickyNote className="w-3.5 h-3.5 md:w-4 md:h-4" />
           </IconButton>
         </div>
 
-        <div className="flex items-center gap-1 lg:gap-2">
+        <div className="flex items-center gap-1 md:gap-1.5 lg:gap-2">
           <Button
             onClick={handleExportImages}
             disabled={!hasContent}
             isLoading={isExportingImages}
             variant="outline-white"
-            className="h-9 lg:h-10 px-2.5 lg:px-4 font-bold border-white/10 shrink-0 flex hover:text-[#EA580C] hover:border-[#EA580C]/50"
+            className="h-8 md:h-9 lg:h-10 px-2 lg:px-4 font-bold border-white/10 shrink-0 flex hover:text-[#EA580C] hover:border-[#EA580C]/50"
             title="Export as Images (ZIP)"
           >
-            <ImageIcon className="w-4 h-4" />
+            <ImageIcon className="w-3.5 h-3.5 md:w-4 md:h-4" />
             <span className="hidden xl:block ml-2 text-xs uppercase tracking-widest font-black">Images</span>
           </Button>
 
@@ -298,22 +283,22 @@ export const EditorHeader: React.FC = () => {
             onClick={handleExportMarkdown}
             disabled={!hasContent}
             variant="outline-white"
-            className="h-9 lg:h-10 px-2.5 lg:px-4 font-bold border-white/10 shrink-0 flex"
+            className="h-8 md:h-9 lg:h-10 px-2 lg:px-4 font-bold border-white/10 shrink-0 flex"
             title="Export Markdown"
           >
-            <FileText className="w-4 h-4" />
-            <span className="hidden xl:block ml-2">MD</span>
+            <FileText className="w-3.5 h-3.5 md:w-4 md:h-4" />
+            <span className="hidden xl:block ml-2 text-[10px] md:text-xs">MD</span>
           </Button>
 
           <Button
             onClick={startPresentation}
             disabled={!hasContent}
             variant="outline-white"
-            className="h-9 lg:h-10 px-2.5 lg:px-4 font-bold border-white/10 shrink-0 flex hover:text-[#EA580C] hover:border-[#EA580C]/50"
+            className="h-8 md:h-9 lg:h-10 px-2 lg:px-4 font-bold border-white/10 shrink-0 flex hover:text-[#EA580C] hover:border-[#EA580C]/50"
             title="Start Presentation Mode"
           >
-            <Presentation className="w-4 h-4" />
-            <span className="hidden xl:block ml-2">Present</span>
+            <Presentation className="w-3.5 h-3.5 md:w-4 md:h-4" />
+            <span className="hidden lg:block xl:block ml-2 text-[10px] md:text-xs">Present</span>
           </Button>
 
           <Button
@@ -321,10 +306,10 @@ export const EditorHeader: React.FC = () => {
             disabled={!hasContent}
             isLoading={isGenerating}
             variant="brand"
-            className="h-9 lg:h-10 px-3 lg:px-8 shadow-[0_10px_30px_rgba(234,88,12,0.3)] border-none ring-1 ring-white/10 active:translate-y-0.5 transition-all shrink-0"
+            className="h-8 md:h-9 lg:h-10 px-2 md:px-4 lg:px-8 shadow-[0_10px_30px_rgba(234,88,12,0.3)] border-none ring-1 ring-white/10 active:translate-y-0.5 transition-all shrink-0"
           >
-            <Download className="w-4 h-4 lg:w-5 lg:h-5 stroke-[2.5px]" />
-            <span className="font-black text-xs lg:text-sm uppercase tracking-widest hidden md:block lg:ml-2">
+            <Download className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-5 lg:h-5 stroke-[2.5px]" />
+            <span className="font-black text-[10px] md:text-xs lg:text-sm uppercase tracking-widest hidden sm:block md:block lg:ml-2">
               {isGenerating ? t('exporting') : t('export')}
             </span>
           </Button>

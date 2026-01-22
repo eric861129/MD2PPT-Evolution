@@ -1,0 +1,8 @@
+{
+  "track_id": "pwa_offline_20260122",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-22T10:37:00Z",
+  "updated_at": "2026-01-22T10:37:00Z",
+  "description": "PWA (Progressive Web App) 離線化 — 將應用程式轉換為 PWA，支援離線編輯、預覽與全螢幕演示。"
+}
