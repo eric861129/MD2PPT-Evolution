@@ -1,13 +1,13 @@
 # 執行計畫 (plan.md) - 遷移至 Remark/Unified 解析管線
 
-## 第零階段：分支建立與環境準備 (Branching & Setup)
+## 第零階段：分支建立與環境準備 (Branching & Setup) [checkpoint: 72b7b1e]
 確保開發環境獨立，並安裝必要的 Unified 生態系套件。
 
 - [x] **Task: 建立開發分支** 06cb5cc
     - [x] 執行 `git checkout -b feature/remark-pipeline`。 06cb5cc
 - [x] **Task: 安裝 Remark 相關依賴** c612a21
     - [x] 安裝 `unified`, `remark-parse`, `remark-frontmatter`, `remark-gfm`, `remark-directive`。 c612a21
-- [ ] **Task: Conductor - User Manual Verification '第零階段：分支準備' (Protocol in workflow.md)**
+- [x] **Task: Conductor - User Manual Verification '第零階段：分支準備' (Protocol in workflow.md)** 72b7b1e
 
 ## 第一階段：核心 AST 解析管線實作 (Core Pipeline)
 建立基礎的 Remark 解析鏈，並實作自定義插件。
