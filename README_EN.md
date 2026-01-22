@@ -4,7 +4,7 @@
 
 **The ultimate tool for converting Markdown notes into professional PowerPoint presentations.**
 
-![Version](https://img.shields.io/badge/version-0.16.1-orange.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Build](https://img.shields.io/github/actions/workflow/status/eric861129/MD2PPT-Evolution/deploy.yml)
 

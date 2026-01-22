@@ -5,6 +5,14 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
 並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [1.0.0] - 2026-01-22
+
+### 🎉 正式發布 (Official Release)
+- **MD2PPT-Evolution V1.0.0**: 經過多次迭代與架構重構，我們很榮幸宣布第一個正式版本！
+    - **全功能就緒**: 包含演講者模式、手機遙控、全域命令面板、PWA 離線支援與視覺化微調工具。
+    - **穩定性承諾**: 通過 100% 測試覆蓋率驗證，確保核心解析與渲染引擎的可靠性。
+    - **文件完備**: 提供完整的中英文使用者手冊與客製化指南。
+
 ## [0.16.1] - 2026-01-22
 
 ### 優化 (Optimization)
