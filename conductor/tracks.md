@@ -45,3 +45,6 @@ This file tracks all major development tracks for MD2PPT-Evolution. Completed tr
     *Link: [./archive/remark_pipeline_20260122/](./archive/remark_pipeline_20260122/)*
 
 ---
+
+- [ ] **Track: 全域快捷鍵與命令面板 (Command Palette)**
+    *Link: [./tracks/command_palette_20260122/](./tracks/command_palette_20260122/)*

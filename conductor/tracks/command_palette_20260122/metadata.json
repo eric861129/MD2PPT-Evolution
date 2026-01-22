@@ -1,0 +1,8 @@
+{
+  "track_id": "command_palette_20260122",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-22T13:40:00Z",
+  "updated_at": "2026-01-22T13:40:00Z",
+  "description": "全域快捷鍵與命令面板 (Command Palette) — 透過 Ctrl+K 喚起指令面板，快速執行更換主題、開啟演講、插入圖表等操作。"
+}
