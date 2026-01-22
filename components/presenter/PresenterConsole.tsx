@@ -215,7 +215,19 @@ export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, curr
     const { active, over } = event;
     setActiveId(null);
     if (over && active.id !== over.id && onReorderSlides) {
-      onReorderSlides(parseInt((active.id as string).split('-')[1], 10), parseInt((over.id as string).split('-')[1], 10));
+      const from = parseInt((active.id as string).split('-')[1], 10);
+      const to = parseInt((over.id as string).split('-')[1], 10);
+      
+      // If we're moving the current slide, we should update our local index to follow it
+      if (from === currentIndex) {
+        setCurrentIndex(to);
+      } else if (from < currentIndex && to >= currentIndex) {
+        setCurrentIndex(currentIndex - 1);
+      } else if (from > currentIndex && to <= currentIndex) {
+        setCurrentIndex(currentIndex + 1);
+      }
+
+      onReorderSlides(from, to);
     }
   };
 

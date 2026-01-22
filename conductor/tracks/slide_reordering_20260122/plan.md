@@ -21,13 +21,13 @@
 - [x] **Task: 實作視覺反饋** c56555f
     - [x] 實作 `Ghost Image` (拖動時的半透明縮圖)。 c56555f
     - [x] 實作 `Placeholder` (目標位置的佔位視覺)。 c56555f
-- [~] **Task: 連結編輯器狀態更新**
-    - [ ] 在 `onDragEnd` 事件中呼叫 `reorderMarkdown` 並更新 `editorContent`。
-- [ ] **Task: 演講者主控台同步**
-    - [ ] 確保主控台調整順序後，能透過 `BroadcastChannel` 同步至觀眾視窗。
-- [ ] **Task: 實作自動捲動 (Auto-scroll)**
-    - [ ] 設定 `dnd-kit` 的捲動監測，確保長清單操作順暢。
-- [ ] **Task: Conductor - User Manual Verification '第三階段：同步整合' (Protocol in workflow.md)**
+- [x] **Task: 連結編輯器狀態更新** 930ecdb
+    - [x] 在 `onDragEnd` 事件中呼叫 `reorderMarkdown` 並更新 `editorContent`。 930ecdb
+- [x] **Task: 演講者主控台同步** 930ecdb
+    - [x] 確保主控台調整順序後，能透過 `BroadcastChannel` 同步至觀眾視窗。 930ecdb
+- [x] **Task: 實作自動捲動 (Auto-scroll)** 930ecdb
+    - [x] 設定 `dnd-kit` 的捲動監測，確保長清單操作順暢。 930ecdb
+- [x] **Task: Conductor - User Manual Verification '第三階段：同步整合' (Protocol in workflow.md)** 930ecdb
 
 ## 第四階段：優化與行動端相容 (Polish & Mobile)
 完善使用者體驗並確保跨裝置穩定。
