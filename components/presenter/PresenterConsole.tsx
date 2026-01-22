@@ -5,23 +5,99 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+
 import { SlideData } from '../../services/parser/slides';
-import { SlideObject } from '../../services/parser/som';
-import { PRESET_THEMES, DEFAULT_THEME_ID } from '../../constants/themes';
-import { PresenterTimer } from './PresenterTimer';
-import { ChevronLeft, ChevronRight, MonitorOff, Home, Smartphone, ExternalLink, LogOut } from 'lucide-react';
-import { PresentationSyncService, SyncAction } from '../../services/PresentationSyncService';
-import { RemoteControlService } from '../../services/RemoteControlService';
-import { RemoteQRCodeModal } from './RemoteQRCodeModal';
-import { ScaledSlideContainer } from '../common/ScaledSlideContainer';
-import { SlideRenderer } from '../common/SlideRenderer';
+...
 import { PptTheme } from '../../services/types';
+import { DragHandle } from '../editor/DragHandle';
 
 interface PresenterConsoleProps {
   slides: SlideObject[];
   currentIndex: number;
   theme?: PptTheme;
+  onReorderSlides?: (fromIndex: number, toIndex: number) => void;
 }
+
+const SortableThumbnail: React.FC<{
+  idx: number;
+  currentIndex: number;
+  slide: SlideObject;
+  theme: PptTheme;
+  onClick: (idx: number) => void;
+  innerRef?: React.Ref<HTMLButtonElement>;
+}> = ({ idx, currentIndex, slide, theme, onClick, innerRef }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: `thumb-${idx}` });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : 'auto',
+    opacity: isDragging ? 0.3 : 1,
+  };
+
+  return (
+    <div 
+      ref={setNodeRef}
+      style={style}
+      className="group relative"
+    >
+      <DragHandle 
+        id={`thumb-${idx}`} 
+        className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity p-1 bg-black/50 border-stone-600" 
+      />
+
+      <button
+        ref={innerRef}
+        onClick={() => onClick(idx)}
+        title={`Jump to Slide ${idx + 1}`}
+        className={`w-full group relative transition-all ${currentIndex === idx ? 'scale-[1.02]' : 'hover:scale-[1.01]'}`}
+      >
+        <div className={`absolute -left-1 top-1/2 -translate-y-1/2 z-20 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black border transition-colors ${
+          currentIndex === idx 
+            ? 'bg-[#EA580C] border-[#EA580C] text-white shadow-[0_0_10px_rgba(234,88,12,0.5)]' 
+            : 'bg-stone-800 border-stone-600 text-stone-400 group-hover:border-[#EA580C]/50'
+        }`}>
+          {idx + 1}
+        </div>
+
+        <div className={`w-full aspect-video bg-black rounded-lg overflow-hidden border-2 transition-all ${
+          currentIndex === idx 
+            ? 'border-[#EA580C] shadow-[0_0_20px_rgba(234,88,12,0.2)]' 
+            : 'border-white/5 group-hover:border-white/20'
+        }`}>
+          <div className="pointer-events-none scale-[0.15] origin-top-left" style={{ width: '1200px', height: '675px' }}>
+            <SlideRenderer slide={slide} theme={theme} />
+          </div>
+        </div>
+      </button>
+    </div>
+  );
+};
 
 export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, currentIndex: initialIndex, theme: propTheme }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
@@ -136,36 +212,34 @@ export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, curr
     }
   };
 
-  // Internal Logic using latest state
-  const handleNextInternal = () => {
-    const { currentIndex, slides, isBlackout } = stateRef.current;
-    if (currentIndex < slides.length - 1) {
-      const next = currentIndex + 1;
-      setCurrentIndex(next);
-      broadcastState(next, isBlackout);
-    }
-  };
-
-  const handlePrevInternal = () => {
-    const { currentIndex, isBlackout } = stateRef.current;
-    if (currentIndex > 0) {
-      const next = currentIndex - 1;
-      setCurrentIndex(next);
-      broadcastState(next, isBlackout);
-    }
-  };
-
-  const toggleBlackoutInternal = () => {
-    const { currentIndex, isBlackout } = stateRef.current;
-    const newState = !isBlackout;
-    setIsBlackout(newState);
-    syncService.current?.sendMessage({ type: SyncAction.BLACK_SCREEN, payload: { enabled: newState } });
-    broadcastState(currentIndex, newState);
-  };
-
   const currentSlide = slides[currentIndex];
   const nextSlide = slides[currentIndex + 1];
-  const note = currentSlide?.config?.note || currentSlide?.metadata?.note;
+  const note = currentSlide?.notes;
+
+  // dnd-kit sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = parseInt((active.id as string).split('-')[1], 10);
+      const newIndex = parseInt((over.id as string).split('-')[1], 10);
+      
+      if (onReorderSlides) {
+        onReorderSlides(oldIndex, newIndex);
+      }
+    }
+  };
 
   return (
     <div className="flex flex-col h-screen w-screen bg-stone-900 text-white overflow-hidden font-sans">
@@ -229,36 +303,32 @@ export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, curr
           <div className="px-4 py-3 border-b border-white/5 bg-stone-900/50">
             <span className="text-[10px] font-black text-stone-500 uppercase tracking-[0.2em]">All Slides</span>
           </div>
-          <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-4">
-            {slides.map((s, idx) => (
-              <button
-                key={idx}
-                ref={currentIndex === idx ? activeThumbnailRef : null}
-                onClick={() => handleGotoSlide(idx)}
-                title={`Jump to Slide ${idx + 1}`}
-                className={`w-full group relative transition-all ${currentIndex === idx ? 'scale-[1.02]' : 'hover:scale-[1.01]'}`}
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-3">
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+              modifiers={[restrictToVerticalAxis]}
+            >
+              <SortableContext
+                items={slides.map((_, i) => `thumb-${i}`)}
+                strategy={verticalListSortingStrategy}
               >
-                {/* Index Label */}
-                <div className={`absolute -left-1 top-1/2 -translate-y-1/2 z-20 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black border transition-colors ${
-                  currentIndex === idx 
-                    ? 'bg-[#EA580C] border-[#EA580C] text-white shadow-[0_0_10px_rgba(234,88,12,0.5)]' 
-                    : 'bg-stone-800 border-stone-600 text-stone-400 group-hover:border-[#EA580C]/50'
-                }`}>
-                  {idx + 1}
+                <div className="space-y-4">
+                  {slides.map((s, idx) => (
+                    <SortableThumbnail
+                      key={idx}
+                      idx={idx}
+                      currentIndex={currentIndex}
+                      slide={s}
+                      theme={activeTheme}
+                      onClick={handleGotoSlide}
+                      innerRef={currentIndex === idx ? activeThumbnailRef : null}
+                    />
+                  ))}
                 </div>
-
-                {/* Thumbnail Container */}
-                <div className={`w-full aspect-video bg-black rounded-lg overflow-hidden border-2 transition-all ${
-                  currentIndex === idx 
-                    ? 'border-[#EA580C] shadow-[0_0_20px_rgba(234,88,12,0.2)]' 
-                    : 'border-white/5 group-hover:border-white/20'
-                }`}>
-                  <div className="pointer-events-none scale-[0.15] origin-top-left" style={{ width: '1200px', height: '675px' }}>
-                    <SlideRenderer slide={s} theme={activeTheme} />
-                  </div>
-                </div>
-              </button>
-            ))}
+              </SortableContext>
+            </DndContext>
           </div>
         </div>
 

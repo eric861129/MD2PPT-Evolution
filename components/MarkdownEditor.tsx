@@ -102,17 +102,21 @@ const MarkdownEditor: React.FC = () => {
 
     handleEditorDrop,
 
-    handleUpdateSlideConfig,
+        handleUpdateSlideConfig,
 
-    handleInsertColor,
+        handleInsertColor,
 
-    handleApplyPalette,
+        handleApplyPalette,
 
-    handleTweakerUpdate,
+        handleReorderSlides,
 
-    handleGetLineContent
+        handleTweakerUpdate,
 
-  } = handlers;
+        handleGetLineContent
+
+      } = handlers;
+
+    
 
 
 
@@ -242,15 +246,31 @@ const MarkdownEditor: React.FC = () => {
 
 
 
-              <PreviewPane 
+                            <PreviewPane 
 
-                parsedBlocks={parsedBlocks}
 
-                previewRef={previewRef}
 
-                onUpdateSlideConfig={handleUpdateSlideConfig}
+                              parsedBlocks={parsedBlocks}
 
-                />
+
+
+                              previewRef={previewRef}
+
+
+
+                              onUpdateSlideConfig={handleUpdateSlideConfig}
+
+
+
+                              onReorderSlides={handleReorderSlides}
+
+
+
+                              />
+
+
+
+              
 
             </div>
 

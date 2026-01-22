@@ -6,23 +6,41 @@
 
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import { Sparkles, StickyNote } from 'lucide-react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+
 import { ParsedBlock, PptTheme } from '../../services/types';
-import { splitBlocksToSlides, SlideData } from '../../services/parser/slides';
-import { transformToSOM, SlideObject } from '../../services/parser/som';
-import { useEditor } from '../../contexts/EditorContext';
-import { useVisualTweaker } from '../../contexts/VisualTweakerContext';
+...
 import { fileToBase64 } from '../../utils/imageUtils';
 import { SlideRenderer } from '../common/SlideRenderer';
+import { DragHandle } from './DragHandle';
 
 interface PreviewPaneProps {
   parsedBlocks: ParsedBlock[];
   previewRef: React.RefObject<HTMLDivElement>;
   onUpdateSlideConfig?: (index: number, key: string, value: string) => void;
+  onReorderSlides?: (fromIndex: number, toIndex: number) => void;
 }
 
 const DESIGN_WIDTH = 1200;
 
-const SlideCard: React.FC<{ 
+const SortableSlideCard: React.FC<{ 
   slide: SlideObject; 
   index: number; 
   layout: { width: number; height: number }; 
@@ -33,7 +51,24 @@ const SlideCard: React.FC<{
 }> = ({ slide, index, layout, theme, globalBg, onUpdateConfig, showNotes }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDropTarget, setIsDropTarget] = useState(false);
+
+  // dnd-kit sortable hook
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: `slide-${index}` });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : 'auto',
+    opacity: isDragging ? 0.4 : 1,
+  };
 
   useLayoutEffect(() => {
     const updateScale = () => { if (containerRef.current) setScale(containerRef.current.offsetWidth / DESIGN_WIDTH); };
@@ -45,7 +80,7 @@ const SlideCard: React.FC<{
 
   const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragging(false);
+    setIsDropTarget(false);
     
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0 && onUpdateConfig) {
       const file = e.dataTransfer.files[0];
@@ -66,21 +101,31 @@ const SlideCard: React.FC<{
 
   return (
     <div 
-      className="flex flex-col gap-4"
+      ref={setNodeRef}
+      style={style}
+      className={`flex flex-col gap-4 relative group ${isDragging ? 'pointer-events-none' : ''}`}
       data-source-line={slide.sourceLine}
       data-block-type="BACKGROUND"
     >
+      {/* Index Badge & Drag Handle Container */}
+      <div className="absolute -left-12 top-0 flex flex-col items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="w-8 h-8 rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center text-xs font-black text-stone-500 border border-stone-300 dark:border-stone-700">
+          {index + 1}
+        </div>
+        <DragHandle id={`slide-${index}`} />
+      </div>
+
       <div 
         ref={containerRef}
-        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-        onDragLeave={() => setIsDragging(false)}
+        onDragOver={(e) => { e.preventDefault(); setIsDropTarget(true); }}
+        onDragLeave={() => setIsDropTarget(false)}
         onDrop={handleDrop}
         data-slide-capture
         className={`w-full shadow-[0_30px_60px_rgba(0,0,0,0.12)] relative overflow-hidden bg-[#E7E5E4] dark:bg-[#44403C] rounded-lg transition-all duration-500 ${
           transitionType === 'fade' ? 'animate-in fade-in' : 
           transitionType === 'slide' ? 'animate-in slide-in-from-right' : 
           transitionType === 'zoom' ? 'animate-in zoom-in' : ''
-        } ${isDragging ? 'ring-4 ring-orange-500 scale-[1.02]' : ''}`} 
+        } ${isDropTarget ? 'ring-4 ring-orange-500 scale-[1.02]' : ''}`} 
         style={{ aspectRatio: `${layout.width} / ${layout.height}` }}
       >
         <SlideRenderer 
@@ -107,14 +152,87 @@ const SlideCard: React.FC<{
   );
 };
 
-export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewRef, onUpdateSlideConfig }) => {
+export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewRef, onUpdateSlideConfig, onReorderSlides }) => {
   const { pageSizes, selectedSizeIndex, documentMeta, showNotes, activeTheme } = useEditor();
   const { openTweaker } = useVisualTweaker();
   
   const selectedLayout = pageSizes[selectedSizeIndex];
   const slides = transformToSOM(parsedBlocks);
 
+  // dnd-kit sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5, // Avoid accidental drags when clicking handles
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = parseInt((active.id as string).split('-')[1], 10);
+      const newIndex = parseInt((over.id as string).split('-')[1], 10);
+      
+      if (onReorderSlides) {
+        onReorderSlides(oldIndex, newIndex);
+      }
+    }
+  };
+
   const handlePreviewClick = (e: React.MouseEvent) => {
+...
+  return (
+    <div className="w-1/2 flex flex-col bg-[#F5F5F4] dark:bg-[#0C0A09] transition-colors duration-500 border-l border-[#E7E5E4] dark:border-[#44403C]">
+      <div className="bg-white dark:bg-[#1C1917] px-6 py-2.5 border-b border-[#E7E5E4] dark:border-[#44403C] flex justify-between items-center shrink-0">
+        <span className="text-[10px] font-black text-stone-400 uppercase tracking-[0.3em]">Canvas Preview</span>
+        <div className="flex items-center gap-2 font-black text-[10px] uppercase tracking-tighter" style={{ color: `#${activeTheme.colors.primary}` }}>
+          <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: `#${activeTheme.colors.primary}` }}></span> {activeTheme.label}
+        </div>
+      </div>
+      <div 
+        ref={previewRef} 
+        onClick={handlePreviewClick}
+        className="flex-1 overflow-y-auto p-4 lg:p-8 scroll-smooth bg-transparent"
+      >
+        <div className="w-full max-w-[1600px] mx-auto space-y-12 pb-60">
+          {slides.length > 0 ? (
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+              modifiers={[restrictToVerticalAxis]}
+            >
+              <SortableContext
+                items={slides.map((_, i) => `slide-${i}`)}
+                strategy={verticalListSortingStrategy}
+              >
+                {slides.map((slide, index) => (
+                  <SortableSlideCard 
+                    key={index} 
+                    slide={slide} 
+                    index={index} 
+                    layout={selectedLayout} 
+                    theme={activeTheme}
+                    globalBg={documentMeta.bg}
+                    onUpdateConfig={onUpdateSlideConfig} 
+                    showNotes={showNotes}
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
+          ) : (
+            <div className="h-full flex flex-col items-center justify-center text-stone-300 dark:text-stone-700 mt-20 opacity-30"><Sparkles className="w-16 h-16 mb-6" /><p className="font-bold tracking-[0.5em] uppercase">Composition Canvas</p></div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
     let target = e.target as HTMLElement;
     let depth = 0;
     const maxDepth = 5;

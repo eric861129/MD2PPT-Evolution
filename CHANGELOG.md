@@ -5,6 +5,15 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
 並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [0.14.1] - 2026-01-22
+
+### 新增 (Added)
+- **投影片拖拽重排 (Drag & Drop Reordering)**:
+    - **直覺式排序**: 在編輯器預覽區 (Preview Pane) 新增拖拽把手，支援透過拖移投影片縮圖來改變簡報順序。
+    - **Markdown 自動同步**: 整合核心算法，重排後自動更新 Markdown 原始碼，並確保全域 YAML 配置（主題、標題等）始終固定在檔案頂端。
+    - **互動反饋**: 實作了佔位符 (Placeholder) 與半透明隨游標縮圖，提升操作體驗。
+- **單元測試**: 新增 `tests/markdownReordering.test.ts` 驗證複雜 Markdown 結構下的重排正確性。
+
 ## [0.14.0] - 2026-01-21
 
 ### 新增 (Added)
