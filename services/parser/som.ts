@@ -61,6 +61,9 @@ export const transformToSOM = (blocks: ParsedBlock[]): SlideObject[] => {
       currentConfig = block.metadata || {};
       currentLine = block.sourceLine || 0;
       currentStart = block.startIndex || 0;
+    } else if (block.type === BlockType.NOTE) {
+      const existingNote = currentConfig.note ? currentConfig.note + '\n' : '';
+      currentConfig.note = existingNote + block.content;
     } else {
       currentBlocks.push(block);
     }

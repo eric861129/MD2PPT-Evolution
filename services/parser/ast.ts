@@ -157,6 +157,14 @@ const mapNodeToBlock = (node: UnistNode, lineOffset: number, charOffset: number)
     case 'thematicBreak':
       blocks.push({ ...base, type: BlockType.HORIZONTAL_RULE, content: '---' });
       break;
+
+    case 'html': {
+      const match = nodeToString(node).match(/<!--\s*note:\s*([\s\S]*?)\s*-->/i);
+      if (match) {
+        blocks.push({ ...base, type: BlockType.NOTE, content: match[1].trim() });
+      }
+      break;
+    }
   }
   return blocks;
 };
