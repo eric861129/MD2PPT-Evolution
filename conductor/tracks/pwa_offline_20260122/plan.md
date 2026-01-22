@@ -3,7 +3,7 @@
 ## 第一階段：基礎架構與 PWA 配置 (PWA Infrastructure)
 建立 PWA 的核心設定與 Manifest。
 
-- [ ] **Task: 安裝並設定 `vite-plugin-pwa`**
+- [~] **Task: 安裝並設定 `vite-plugin-pwa`**
     - [ ] 安裝 `vite-plugin-pwa` 依賴。
     - [ ] 修改 `vite.config.ts` 加入 PWA 插件配置。
 - [ ] **Task: 建立 Web App Manifest**

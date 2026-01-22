@@ -40,5 +40,5 @@ This file tracks all major development tracks for MD2PPT-Evolution. Completed tr
 
 ---
 
-- [ ] **Track: PWA (Progressive Web App) 離線化**
+- [~] **Track: PWA (Progressive Web App) 離線化**
     *Link: [./tracks/pwa_offline_20260122/](./tracks/pwa_offline_20260122/)*
