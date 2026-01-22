@@ -42,5 +42,5 @@ This file tracks all major development tracks for MD2PPT-Evolution. Completed tr
 
 ---
 
-- [~] **Track: 投影片拖拽重排 (Drag & Drop Reordering)**
+- [x] **Track: 投影片拖拽重排 (Drag & Drop Reordering)**
     *Link: [./tracks/slide_reordering_20260122/](./tracks/slide_reordering_20260122/)*
