@@ -13,7 +13,7 @@ export const heading1Renderer: BlockRenderer = {
 
     slide.addText(block.content, { 
       x, y, w, h: 0.8, 
-      fontSize: big ? 44 : PPT_THEME.FONT_SIZES.TITLE, 
+      fontSize: options.fontSize || (big ? 44 : PPT_THEME.FONT_SIZES.TITLE), 
       bold: true, 
       color: primaryColor, 
       fontFace: fontFace, 

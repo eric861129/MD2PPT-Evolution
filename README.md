@@ -1,24 +1,9 @@
 # MD2PPT-EVOLUTION 🚀
 
-![Version](https://img.shields.io/badge/version-0.14.4-orange.svg)
-
-**MD2PPT-Evolution** 是一款專為開發者與技術講者打造的生產力工具。它實踐了「簡報即程式碼 (Presentation as Code)」的核心理念，讓您能透過編輯 Markdown 檔案，自動產生具備專業排版、動態圖表與美觀背景的 PowerPoint (PPTX) 簡報。
-
----
-
-## ✨ 核心特色
-
-### 1. 簡報即程式碼 (Presentation as Code)
-- **版本控制**: 像寫程式一樣撰寫簡報內容，支援 Git 版本管理。
-- **極速編輯**: 擺脫 PowerPoint 繁瑣的滑鼠操作，專注於邏輯與內容。
-- **組件化**: 內建圖表、程式碼高亮、對話框與各類專業佈局。
-
-### 🎨 專業排版系統
-- **視覺對比感知系統 (v0.14.0)**: 自動檢測投影片背景亮度，即時切換文字與標題顏色，確保在任何主題或自定義背景下都具備極高可讀性。
-- **動態背景生成器 (Generative Backgrounds) (v0.10+)**: 引入輕量級生成藝術算法（如 Mesh Gradients），讓每頁背景都是獨一無二的，擺脫死板的 PPT 背景圖。
-- **視覺化即時調整 (Visual Tweaker)**: 點擊預覽區元素即可喚起調整視窗，即時修改文字、圖片與圖表數據，並同步回寫至 Markdown。
-- **斜線指令 (Slash Commands)**: 輸入 `/` 喚起懸浮選單，快速插入圖表、佈局與元件，支援鍵盤導航與智慧游標定位。
-- **全域命令面板 (Command Palette v0.14.4)**: 按下 `Ctrl + K` 喚起，一站式執行跳轉、更換主題、切換深色模式與各類匯出操作。
+![Version](https://img.shields.io/badge/version-0.15.0-orange.svg)
+...
+- **全域命令面板 (Command Palette)**: 按下 `Ctrl + K` 喚起，一站式執行跳轉、更換主題、切換深色模式與各類匯出操作。
+- **字體大小客製化 (Custom Font Sizing v0.15.0)**: 透過 Visual Tweaker 調整個別元素的字體大小，設定自動回寫至 Markdown 的 `{size=N}` 標籤，確保樣式可攜且多端一致。
 - **全域主題管理器 (Theme Manager)**: 左側新增配色面板，支援 4 種預設主題（琥珀石墨、科技深夜、簡約學術、現代翠綠）一鍵切換，並支援客製化字體與背景。
 - **演講者備忘錄 (Speaker Notes)**: 支援 `<!-- note: ... -->` 語法，可在預覽中切換顯示，並同步匯出至 PPTX 備忘錄欄位。
 - **分層配置 (YAML)**: 使用 `===` 分頁，並透過每頁頂部的 YAML 區塊 (`---`) 獨立控制佈局、背景與轉場。

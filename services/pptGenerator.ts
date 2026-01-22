@@ -85,7 +85,14 @@ const renderBlocksToArea = (slide: any, blocks: ParsedBlock[], x: number, y: num
         x,
         y: currentY,
         w,
-        options: { ...globalOptions, align, theme, fontFace: themeFont, color: textColor }
+        options: { 
+          ...globalOptions, 
+          align, 
+          theme, 
+          fontFace: themeFont, 
+          color: textColor,
+          fontSize: block.metadata?.size // Pass custom size if exists
+        }
       };
       currentY = renderer.render(block, context);
     } else {

@@ -11,7 +11,7 @@ export const paragraphRenderer: BlockRenderer = {
 
     slide.addText(block.content, { 
       x, y, w, h: 0.5, 
-      fontSize: big ? 24 : 20, 
+      fontSize: options.fontSize || (big ? 24 : 20), 
       color: textColor, 
       fontFace: options.fontFace || PPT_THEME.FONTS.MAIN, 
       align: align || 'left' 

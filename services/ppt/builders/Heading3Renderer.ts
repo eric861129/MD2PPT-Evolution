@@ -12,15 +12,14 @@ export const heading3Renderer: BlockRenderer = {
     const textColor = isDark ? "FFFFFF" : (color || PPT_THEME.COLORS.TEXT_MAIN);
     const fontFace = options.fontFace || PPT_THEME.FONTS.HEADING;
 
-    slide.addText(block.content, { 
-      x, y, w, h: 0.6, 
-      fontSize: 22, 
-      bold: true, 
-      color: textColor, 
-      fontFace: fontFace, 
-      align: align || 'left'
-    });
-    
+        slide.addText(block.content, {
+          x, y, w, h: 0.5,
+          fontSize: options.fontSize || 24,
+          bold: true,
+          color: textColor,
+          fontFace: fontFace,
+          align: align || 'left'
+        });    
     return y + 0.7;
   }
 };

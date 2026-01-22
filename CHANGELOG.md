@@ -5,6 +5,15 @@
 格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
 並遵循 [語義化版本 (Semantic Versioning)](https://semver.org/spec/v2.0.0.html)。
 
+## [0.15.0] - 2026-01-22
+
+### 新增 (Added)
+- **字體大小客製化 (Custom Font Sizing)**:
+    - **視覺化微調**: 在 Visual Tweaker 加入字體大小控制器，支援數值輸入與 +/- 2pt 快速調整。
+    - **Markdown 屬性標籤**: 實作 `{size=N}` 標籤語法，支援樣式設定持久化於 Markdown 源碼中。
+    - **多端同步渲染**: Web 預覽區與 PPTX 匯出引擎現在皆能精確讀取並套用客製化字體大小。
+    - **智慧屬性更新**: 實作 `updateElementAttribute` 邏輯，確保回寫 Markdown 時不會破壞既有結構。
+
 ## [0.14.4] - 2026-01-22
 
 ### 新增 (Added)

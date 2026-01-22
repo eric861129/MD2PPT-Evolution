@@ -25,7 +25,7 @@ function renderList(block: any, ctx: RenderContext, isBullet: boolean): number {
             
             const textOpt: any = {
                 color: textColor,
-                fontSize: big ? 24 : 20,
+                fontSize: options.fontSize || (big ? 24 : 20),
                 fontFace: options.fontFace || PPT_THEME.FONTS.MAIN,
             };
 
