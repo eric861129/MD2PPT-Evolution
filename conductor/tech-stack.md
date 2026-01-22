@@ -20,6 +20,7 @@
     - `peerjs`: 實現 P2P WebRTC 通訊，支援手機遙控功能。
     - `@dnd-kit`: 提供強大的投影片拖拽重排互動基礎。
     - `vite-plugin-pwa`: 實現 Service Worker 管理與離線快取策略。
+    - `kbar`: 實作高性能的全域指令搜尋與命令面板。
 
 ## 測試與品質保證
 - **測試框架**: Vitest
