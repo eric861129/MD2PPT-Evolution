@@ -27,6 +27,12 @@ vi.mock('pptxgenjs', () => {
   };
 });
 
+// Mock imageUtils to avoid JSDOM FileReader issues
+vi.mock('../utils/imageUtils', () => ({
+  imageUrlToBase64: vi.fn().mockResolvedValue('data:image/png;base64,mock'),
+  svgToPngBase64: vi.fn().mockResolvedValue('data:image/png;base64,mock')
+}));
+
 describe('pptGenerator Architecture', () => {
   it('should prefer Registry over fallback switch', async () => {
     const getSpy = vi.spyOn(rendererRegistry, 'getRenderer');
