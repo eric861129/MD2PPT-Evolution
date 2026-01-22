@@ -3,11 +3,11 @@
 ## 第一階段：核心算法與基礎測試 (Core Logic)
 本階段專注於不依賴 UI 的 Markdown 字串處理邏輯，確保順序重排後內容正確。
 
-- [x] **Task: 建立 Markdown 重排測試** b7a8c9d
-    - [x] 撰寫測試案例：驗證將中間投影片移至首位時，全域 YAML 是否保留。 b7a8c9d
-    - [x] 撰寫測試案例：驗證移動後分頁符號 `===` 的空行正確性。 b7a8c9d
-- [x] **Task: 實作 `reorderMarkdown` 算法** d2e3f4g
-    - [x] 開發邏輯：精確切割 `===` 區塊，跳過全域 Header，執行重組。 d2e3f4g
+- [x] **Task: 建立 Markdown 重排測試** 1d3374c
+    - [x] 撰寫測試案例：驗證將中間投影片移至首位時，全域 YAML 是否保留。 1d3374c
+    - [x] 撰寫測試案例：驗證移動後分頁符號 `===` 的空行正確性。 1d3374c
+- [x] **Task: 實作 `reorderMarkdown` 算法** 1d3374c
+    - [x] 開發邏輯：精確切割 `===` 區塊，跳過全域 Header，執行重組。 1d3374c
 - [ ] **Task: Conductor - User Manual Verification '第一階段：核心算法' (Protocol in workflow.md)**
 
 ## 第二階段：UI 組件與拖拽基礎 (UI Infrastructure)
