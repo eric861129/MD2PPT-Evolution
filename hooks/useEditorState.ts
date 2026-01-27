@@ -28,7 +28,7 @@ export const useEditorState = () => {
   const getInitialContent = (lang: string) => lang.startsWith('zh') ? INITIAL_CONTENT_ZH : INITIAL_CONTENT_EN;
 
   const [content, setContent] = useState(() => {
-    return localStorage.getItem('draft_content') || getInitialContent(i18n.language);
+    return localStorage.getItem('md2ppt_draft_content') || getInitialContent(i18n.language);
   });
   
   const [parsedBlocks, setParsedBlocks] = useState<ParsedBlock[]>([]);
@@ -36,20 +36,20 @@ export const useEditorState = () => {
   const [isParsing, setIsParsing] = useState(false);
   
   const [showNotes, setShowNotes] = useState(() => {
-    return localStorage.getItem('show_notes') === 'true';
+    return localStorage.getItem('md2ppt_show_notes') === 'true';
   });
 
   const [activeThemeId, setActiveThemeId] = useState(() => {
-    return localStorage.getItem('active_theme_id') || DEFAULT_THEME_ID;
+    return localStorage.getItem('md2ppt_active_theme_id') || DEFAULT_THEME_ID;
   });
 
   const [customThemeSettings, setCustomThemeSettings] = useState<Partial<PptTheme>>(() => {
-    const saved = localStorage.getItem('custom_theme_settings');
+    const saved = localStorage.getItem('md2ppt_custom_theme_settings');
     return saved ? JSON.parse(saved) : {};
   });
 
   const [brandConfig, setBrandConfig] = useState<BrandConfig>(() => {
-    const saved = localStorage.getItem('brand_config');
+    const saved = localStorage.getItem('md2ppt_brand_config');
     return saved ? JSON.parse(saved) : DEFAULT_BRAND_CONFIG;
   });
 
@@ -86,7 +86,7 @@ export const useEditorState = () => {
         const metaBlock = blocks.find(b => b.type === 'HORIZONTAL_RULE' && b.metadata);
         if (metaBlock) setDocumentMeta(metaBlock.metadata || {});
 
-        localStorage.setItem('draft_content', content);
+        localStorage.setItem('md2ppt_draft_content', content);
       } catch (e) {
         console.error("Markdown parsing error:", e);
       } finally {
@@ -98,19 +98,19 @@ export const useEditorState = () => {
   }, [content]);
 
   useEffect(() => {
-    localStorage.setItem('show_notes', showNotes.toString());
+    localStorage.setItem('md2ppt_show_notes', showNotes.toString());
   }, [showNotes]);
 
   useEffect(() => {
-    localStorage.setItem('active_theme_id', activeThemeId);
+    localStorage.setItem('md2ppt_active_theme_id', activeThemeId);
   }, [activeThemeId]);
 
   useEffect(() => {
-    localStorage.setItem('custom_theme_settings', JSON.stringify(customThemeSettings));
+    localStorage.setItem('md2ppt_custom_theme_settings', JSON.stringify(customThemeSettings));
   }, [customThemeSettings]);
 
   useEffect(() => {
-    localStorage.setItem('brand_config', JSON.stringify(brandConfig));
+    localStorage.setItem('md2ppt_brand_config', JSON.stringify(brandConfig));
     const root = document.documentElement;
     root.style.setProperty('--brand-primary', brandConfig.primaryColor);
     root.style.setProperty('--brand-secondary', brandConfig.secondaryColor);
@@ -123,14 +123,14 @@ export const useEditorState = () => {
     if (confirm(t('switchLangConfirm'))) {
       i18n.changeLanguage(nextLang);
       setContent(getInitialContent(nextLang));
-      localStorage.removeItem('draft_content');
+      localStorage.removeItem('md2ppt_draft_content');
     }
   };
 
   const resetToDefault = () => {
     if (confirm(t('resetConfirm'))) {
       setContent(getInitialContent(i18n.language));
-      localStorage.removeItem('draft_content');
+      localStorage.removeItem('md2ppt_draft_content');
     }
   };
 
