@@ -68,7 +68,7 @@ export const EditorPane: React.FC<EditorPaneProps> = ({
   };
 
   return (
-    <div className="flex-1 w-full flex flex-col border-r border-[#E7E5E4] dark:border-[#44403C] bg-[#FDFCFB] dark:bg-[#1C1917] transition-colors duration-500 relative">
+    <div className="flex-1 w-full flex flex-col border-r border-[#E7E5E4] dark:border-[#44403C] bg-[var(--bg-base)] transition-colors duration-500 relative">
       <div className="bg-white dark:bg-[#292524] px-6 py-2.5 border-b border-[#E7E5E4] dark:border-[#44403C] flex justify-between items-center z-20 relative">
         <span className="text-[10px] font-black text-stone-400 uppercase tracking-[0.2em]">Editor</span>
         <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">{wordCount} Words</span>
@@ -83,7 +83,7 @@ export const EditorPane: React.FC<EditorPaneProps> = ({
         <textarea
           ref={textareaRef}
           onScroll={handleScrollSync}
-          className="absolute inset-0 w-full h-full p-12 pl-16 resize-none focus:outline-none text-lg leading-relaxed text-stone-800 dark:text-stone-200 bg-transparent selection:bg-[#FED7AA] dark:selection:bg-[#7C2D12]/50 z-10"
+          className="absolute inset-0 w-full h-full p-12 pl-16 resize-none focus:outline-none text-lg leading-relaxed text-stone-800 dark:text-stone-200 bg-transparent selection:bg-[var(--product-glow)] z-10"
           style={{ fontFamily: UI_THEME.FONTS.PREVIEW }}
           value={content}
           onChange={handleChange}

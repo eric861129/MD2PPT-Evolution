@@ -39,7 +39,7 @@ export const AiPromptModal: React.FC<AiPromptModalProps> = ({ isOpen, onClose })
         {/* Header */}
         <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between bg-stone-900/50">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#EA580C]/20 flex items-center justify-center text-[#EA580C]">
+            <div className="w-10 h-10 rounded-xl bg-[var(--product-primary)]/20 flex items-center justify-center text-[var(--product-primary)]">
               <Bot size={24} />
             </div>
             <div>
@@ -58,7 +58,7 @@ export const AiPromptModal: React.FC<AiPromptModalProps> = ({ isOpen, onClose })
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6 custom-scrollbar bg-[#141414]">
           <div className="mb-4 flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#EA580C]">Prompt Text</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--product-primary)]">Prompt Text</span>
             <div className="flex gap-2">
                 <a 
                     href="https://chatgpt.com" 
@@ -96,9 +96,9 @@ export const AiPromptModal: React.FC<AiPromptModalProps> = ({ isOpen, onClose })
             </div>
           </div>
 
-          <div className="mt-6 p-4 rounded-2xl bg-[#EA580C]/10 border border-[#EA580C]/20">
-            <h4 className="text-sm font-bold text-[#FB923C] mb-1 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FB923C]" />
+          <div className="mt-6 p-4 rounded-2xl bg-[var(--product-primary)]/10 border border-[var(--product-primary)]/20">
+            <h4 className="text-sm font-bold text-[var(--product-hover)] mb-1 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--product-hover)]" />
               How to use:
             </h4>
             <p className="text-xs text-stone-400 leading-relaxed">

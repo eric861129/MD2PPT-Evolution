@@ -1,0 +1,36 @@
+/* =========================================
+   Amber Anthracite v2.0 - Master Brand Foundation
+   ========================================= */
+:root {
+  /* Base foundation - Light */
+  --bg-base: #FCF9F5;
+  --text-high: #2D2926;
+  --brand-primary: #A86434; /* The Master Brand AMBER Signature */
+  --bg-header: #1C1917; /* Warm Anthracite for Header */
+  
+  /* MD2PPT Product Override Layer (Energetic Coral) */
+  /* Light Mode: A vibrant, reddish-orange to pop against parchment */
+  --product-primary: #E05D44;
+  --product-hover: #F2735B;
+  --product-glow: rgba(224, 93, 68, 0.15);
+}
+
+[data-theme='dark'] {
+  /* Base foundation - Dark */
+  --bg-base: #1A1816;
+  --text-high: #FAFAF9;
+  --brand-primary: #EFC69B; /* The Master Brand AMBER Signature */
+  --bg-header: #151412; /* Deeper Warm Anthracite (No Blue Tint) */
+  
+  /* MD2PPT Product Override Layer (Energetic Coral) */
+  /* Dark Mode: A warm coral pink, distinct from the golden amber brand color */
+  --product-primary: #F48C7F;
+  --product-hover: #FF9F94;
+  --product-glow: rgba(244, 140, 127, 0.2);
+}
+
+/* Base styles using foundation */
+body {
+  background-color: var(--bg-base);
+  color: var(--text-high);
+}

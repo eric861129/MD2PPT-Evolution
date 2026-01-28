@@ -29,7 +29,7 @@ export const RemoteQRCodeModal: React.FC<RemoteQRCodeModalProps> = ({ peerId, is
         width: 300,
         margin: 2,
         color: {
-          dark: '#EA580C', // MD2PPT Brand Color
+          dark: '#E05D44', // MD2PPT Product Color (Coral)
           light: '#FFFFFF'
         }
       }).then(setQrCodeUrl)
@@ -56,7 +56,7 @@ export const RemoteQRCodeModal: React.FC<RemoteQRCodeModalProps> = ({ peerId, is
         </button>
 
         <div className="text-center mb-6">
-          <div className="w-16 h-16 bg-orange-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#EA580C]">
+          <div className="w-16 h-16 bg-[var(--product-primary)]/20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[var(--product-primary)]">
             <Smartphone size={32} />
           </div>
           <h2 className="text-xl font-black text-white uppercase tracking-wider">Mobile Remote</h2>

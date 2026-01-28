@@ -56,7 +56,7 @@ export const BrandSettingsModal: React.FC<BrandSettingsModalProps> = ({
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200 p-4">
       <div 
-        className={`bg-white dark:bg-[#1C1917] w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden border transition-all ${isDragging ? 'border-orange-500 ring-4 ring-orange-500/20' : 'border-[#E7E5E4] dark:border-[#44403C]'}`}
+        className={`bg-white dark:bg-[#1C1917] w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden border transition-all ${isDragging ? 'border-[var(--product-primary)] ring-4 ring-[var(--product-primary)]/20' : 'border-[#E7E5E4] dark:border-[#44403C]'}`}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
@@ -64,7 +64,7 @@ export const BrandSettingsModal: React.FC<BrandSettingsModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-[#E7E5E4] dark:border-[#44403C]">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-orange-100 dark:bg-orange-950 rounded-lg text-orange-600">
+            <div className="p-2 bg-[var(--product-primary)]/10 rounded-lg text-[var(--product-primary)]">
               <Palette size={20} />
             </div>
             <div>
@@ -255,7 +255,7 @@ export const BrandSettingsModal: React.FC<BrandSettingsModalProps> = ({
           
           <button 
             onClick={onClose}
-            className="px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-bold rounded-lg shadow-lg shadow-orange-600/20 transition-all active:scale-95"
+            className="px-6 py-2 bg-[var(--product-primary)] hover:bg-[var(--product-hover)] text-white text-sm font-bold rounded-lg shadow-lg shadow-[var(--product-glow)] transition-all active:scale-95"
           >
             完成設定
           </button>

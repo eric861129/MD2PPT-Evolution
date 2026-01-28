@@ -221,14 +221,14 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
           <div className="flex bg-stone-100 dark:bg-stone-800 rounded-lg p-1">
             <button 
               onClick={() => setActiveTab('tools')}
-              className={`p-1.5 rounded-md transition-all ${activeTab === 'tools' ? 'bg-white dark:bg-stone-700 shadow-sm text-orange-600' : 'text-stone-400'}`}
+              className={`p-1.5 rounded-md transition-all ${activeTab === 'tools' ? 'bg-white dark:bg-stone-700 shadow-sm text-[var(--product-primary)]' : 'text-stone-400'}`}
               title="工具"
             >
               <Wrench size={16} />
             </button>
             <button 
               onClick={() => setActiveTab('outline')}
-              className={`p-1.5 rounded-md transition-all ${activeTab === 'outline' ? 'bg-white dark:bg-stone-700 shadow-sm text-orange-600' : 'text-stone-400'}`}
+              className={`p-1.5 rounded-md transition-all ${activeTab === 'outline' ? 'bg-white dark:bg-stone-700 shadow-sm text-[var(--product-primary)]' : 'text-stone-400'}`}
               title="大綱"
             >
               <List size={16} />
@@ -264,7 +264,7 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
                     title={item.tooltip}
                     className={`
                       flex items-center p-2 rounded-md transition-all
-                      hover:bg-[#FFF7ED] dark:hover:bg-[#44403C] hover:text-[#EA580C]
+                      hover:bg-[var(--product-primary)]/10 dark:hover:bg-[#44403C] hover:text-[var(--product-primary)]
                       text-stone-600 dark:text-stone-400
                       ${isExpanded ? 'justify-start px-3' : 'justify-center'}
                     `}
@@ -307,7 +307,7 @@ export const QuickActionSidebar: React.FC<QuickActionSidebarProps> = ({ onAction
 
             <DragOverlay>
               {activeSlide ? (
-                <div className="w-48 aspect-video bg-black rounded-lg overflow-hidden border-2 border-orange-500 shadow-2xl opacity-90 rotate-2 cursor-grabbing">
+                <div className="w-48 aspect-video bg-black rounded-lg overflow-hidden border-2 border-[var(--product-primary)] shadow-2xl opacity-90 rotate-2 cursor-grabbing">
                   <div className="pointer-events-none w-full h-full overflow-hidden relative">
                     <div className="scale-[0.16] origin-top-left" style={{ width: '1200px', height: '675px' }}>
                       <SlideRenderer slide={activeSlide} theme={activeTheme} />

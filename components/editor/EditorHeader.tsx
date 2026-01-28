@@ -91,7 +91,7 @@ export const EditorHeader: React.FC = () => {
 
   const logoPath = `${import.meta.env.BASE_URL}logo.svg`;
   const hasContent = parsedBlocks.length > 0;
-  const headerBg = isDark ? 'bg-[#141414]/90' : 'bg-[#1C1917]/95';
+  const headerBg = 'bg-[var(--bg-header)]';
   const selectedSize = pageSizes[selectedSizeIndex];
 
   return (
@@ -109,7 +109,7 @@ export const EditorHeader: React.FC = () => {
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
             <h1 className="text-base md:text-lg lg:text-xl font-black text-white leading-none tracking-tight">
-              MD2PPT <span className="text-[#FB923C] font-light ml-0.5 md:ml-1">EVO</span>
+              MD2PPT <span className="text-[var(--product-primary)] font-light ml-0.5 md:ml-1">EVO</span>
             </h1>
             {isOffline && (
               <div className="flex items-center gap-1 px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded text-[8px] font-bold uppercase tracking-widest border border-red-500/30 animate-pulse">
@@ -143,7 +143,7 @@ export const EditorHeader: React.FC = () => {
           onClick={openAiModal} 
           title="AI Assistant Prompt"
           onBrand
-          className="bg-[#EA580C]/10 text-[#EA580C] hover:bg-[#EA580C] hover:text-white w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 border border-[#EA580C]/20"
+          className="bg-[var(--product-primary)]/10 text-[var(--product-primary)] hover:bg-[var(--product-primary)] hover:text-white w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 border border-[var(--product-primary)]/20"
         >
           <Bot size={16} className="md:size-[18px]" />
         </IconButton>
@@ -153,7 +153,7 @@ export const EditorHeader: React.FC = () => {
           onClick={openBrandModal} 
           title="Brand Settings"
           onBrand
-          className="bg-white/5 text-stone-400 hover:text-[#EA580C] w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10"
+          className="bg-white/5 text-stone-400 hover:text-[var(--product-primary)] w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10"
         >
           <Settings2 size={16} className="md:size-[18px]" />
         </IconButton>
@@ -163,7 +163,7 @@ export const EditorHeader: React.FC = () => {
           onClick={toggleThemePanel} 
           title="Color Picker Tool"
           onBrand
-          className={`relative shrink-0 w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 ${isThemePanelOpen ? 'bg-[#EA580C] text-white shadow-[0_0_15px_rgba(234,88,12,0.4)]' : 'bg-white/5 text-stone-400 hover:text-[#EA580C]'}`}
+          className={`relative shrink-0 w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 ${isThemePanelOpen ? 'bg-[var(--product-primary)] text-white shadow-[0_0_15px_var(--product-glow)]' : 'bg-white/5 text-stone-400 hover:text-[var(--product-primary)]'}`}
         >
           <Palette size={16} className="md:size-[18px]" />
           {isThemePanelOpen && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full" />}
@@ -282,7 +282,7 @@ export const EditorHeader: React.FC = () => {
             onClick={toggleNotes} 
             title={showNotes ? t('hideNotes') : t('showNotes')} 
             onBrand
-            className={showNotes ? 'bg-orange-500/20 text-[#FB923C]' : ''}
+            className={showNotes ? 'bg-[var(--product-primary)]/20 text-[var(--product-hover)]' : ''}
           >
             <StickyNote className="w-3.5 h-3.5 md:w-4 md:h-4" />
           </IconButton>
@@ -327,8 +327,8 @@ export const EditorHeader: React.FC = () => {
             onClick={handleDownload}
             disabled={!hasContent}
             isLoading={isGenerating}
-            variant="brand"
-            className="h-8 md:h-9 lg:h-10 px-2 md:px-4 lg:px-8 shadow-[0_10px_30px_rgba(234,88,12,0.3)] border-none ring-1 ring-white/10 active:translate-y-0.5 transition-all shrink-0"
+            variant="product"
+            className="h-8 md:h-9 lg:h-10 px-2 md:px-4 lg:px-8 shadow-[0_10px_30px_var(--product-glow)] border-none ring-1 ring-white/10 active:translate-y-0.5 transition-all shrink-0"
           >
             <Download className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-5 lg:h-5 stroke-[2.5px]" />
             <span className="font-black text-[10px] md:text-xs lg:text-sm uppercase tracking-widest hidden sm:block md:block lg:ml-2">

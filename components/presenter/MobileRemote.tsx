@@ -48,7 +48,7 @@ export const MobileRemote: React.FC = () => {
       {/* Status Bar */}
       <div className="h-14 bg-stone-900 border-b border-white/5 flex items-center justify-between px-6 shrink-0">
         <div className="flex items-center gap-2">
-          <Smartphone size={18} className="text-[#EA580C]" />
+          <Smartphone size={18} className="text-[var(--product-primary)]" />
           <span className="text-xs font-black uppercase tracking-widest">MD2PPT Remote</span>
         </div>
         <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase transition-colors ${isConnected ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
@@ -65,7 +65,7 @@ export const MobileRemote: React.FC = () => {
             onClick={() => sendAction('PREV')}
             disabled={!isConnected}
             aria-label="Previous Slide"
-            className="flex flex-col items-center justify-center bg-stone-900 border border-white/5 rounded-3xl active:bg-orange-500/20 active:scale-95 transition-all disabled:opacity-20"
+            className="flex flex-col items-center justify-center bg-stone-900 border border-white/5 rounded-3xl active:bg-[var(--product-glow)] active:scale-95 transition-all disabled:opacity-20"
           >
             <ChevronLeft size={64} className="text-stone-400" />
             <span className="text-xs font-bold text-stone-500 uppercase mt-4">Prev</span>
@@ -75,10 +75,10 @@ export const MobileRemote: React.FC = () => {
             onClick={() => sendAction('NEXT')}
             disabled={!isConnected}
             aria-label="Next Slide"
-            className="flex flex-col items-center justify-center bg-stone-900 border border-white/5 rounded-3xl active:bg-orange-500/20 active:scale-95 transition-all disabled:opacity-20"
+            className="flex flex-col items-center justify-center bg-stone-900 border border-white/5 rounded-3xl active:bg-[var(--product-glow)] active:scale-95 transition-all disabled:opacity-20"
           >
-            <ChevronRight size={64} className="text-[#EA580C]" />
-            <span className="text-xs font-bold text-[#EA580C] uppercase mt-4">Next</span>
+            <ChevronRight size={64} className="text-[var(--product-primary)]" />
+            <span className="text-xs font-bold text-[var(--product-primary)] uppercase mt-4">Next</span>
           </button>
         </div>
 

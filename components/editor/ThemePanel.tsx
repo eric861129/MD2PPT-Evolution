@@ -75,7 +75,7 @@ export const ThemePanel: React.FC<ColorPickerPanelProps> = ({ onClose, onInsertC
       <div className="flex flex-col bg-stone-50/50 dark:bg-stone-900/50 border-b border-[#E7E5E4] dark:border-[#44403C]">
         <div className="flex items-center justify-between p-4 pb-2">
           <div className="flex items-center gap-2 font-black text-[11px] uppercase tracking-[0.2em] text-stone-500">
-            <LayoutTemplate size={14} className="text-[#EA580C]" />
+            <LayoutTemplate size={14} className="text-[var(--product-primary)]" />
             Design System
           </div>
           <button onClick={onClose} className="p-1 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-md text-stone-400 transition-colors">
@@ -87,13 +87,13 @@ export const ThemePanel: React.FC<ColorPickerPanelProps> = ({ onClose, onInsertC
         <div className="flex px-4 gap-4">
           <button 
             onClick={() => setActiveTab('design')}
-            className={`pb-2.5 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-all ${activeTab === 'design' ? 'text-[#EA580C] border-[#EA580C]' : 'text-stone-400 border-transparent hover:text-stone-600'}`}
+            className={`pb-2.5 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-all ${activeTab === 'design' ? 'text-[var(--product-primary)] border-[var(--product-primary)]' : 'text-stone-400 border-transparent hover:text-stone-600'}`}
           >
             Curated Palettes
           </button>
           <button 
             onClick={() => setActiveTab('picker')}
-            className={`pb-2.5 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-all ${activeTab === 'picker' ? 'text-[#EA580C] border-[#EA580C]' : 'text-stone-400 border-transparent hover:text-stone-600'}`}
+            className={`pb-2.5 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-all ${activeTab === 'picker' ? 'text-[var(--product-primary)] border-[var(--product-primary)]' : 'text-stone-400 border-transparent hover:text-stone-600'}`}
           >
             Color Picker
           </button>
@@ -156,7 +156,7 @@ export const ThemePanel: React.FC<ColorPickerPanelProps> = ({ onClose, onInsertC
                   </div>
                   
                   {/* Hover Action */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity text-[#EA580C]">
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity text-[var(--product-primary)]">
                     <Sparkles size={14} />
                   </div>
                 </button>
@@ -178,7 +178,7 @@ export const ThemePanel: React.FC<ColorPickerPanelProps> = ({ onClose, onInsertC
                     <button
                       key={hex}
                       onClick={() => onInsertColor(hex)}
-                      className="w-full aspect-square rounded-lg border border-stone-200 dark:border-white/5 shadow-sm hover:scale-110 hover:ring-2 hover:ring-orange-500/50 transition-all active:scale-95 group relative"
+                      className="w-full aspect-square rounded-lg border border-stone-200 dark:border-white/5 shadow-sm hover:scale-110 hover:ring-2 hover:ring-[var(--product-primary)]/50 transition-all active:scale-95 group relative"
                       style={{ backgroundColor: hex }}
                     >
                       <span className={`absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity`}>
@@ -224,7 +224,7 @@ export const ThemePanel: React.FC<ColorPickerPanelProps> = ({ onClose, onInsertC
                     <button
                       onClick={handleCopyCode}
                       title="Copy Hex Code"
-                      className="w-10 h-10 rounded-lg shadow-md border border-stone-200 dark:border-white/10 relative overflow-hidden group transition-all hover:scale-110 active:scale-90 ring-offset-2 focus:ring-2 focus:ring-orange-500"
+                      className="w-10 h-10 rounded-lg shadow-md border border-stone-200 dark:border-white/10 relative overflow-hidden group transition-all hover:scale-110 active:scale-90 ring-offset-2 focus:ring-2 focus:ring-[var(--product-primary)]"
                       style={{ backgroundColor: customHex }}
                     >
                       <div className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${copySuccess ? 'bg-green-500' : 'bg-black/0 group-hover:bg-black/10'}`}>
@@ -242,7 +242,7 @@ export const ThemePanel: React.FC<ColorPickerPanelProps> = ({ onClose, onInsertC
                   
                   <button
                     onClick={insertCustom}
-                    className="w-full py-2.5 bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-black uppercase tracking-widest rounded-lg shadow-lg shadow-orange-500/20 active:translate-y-0.5 transition-all"
+                    className="w-full py-2.5 bg-[var(--product-primary)] hover:bg-[var(--product-hover)] text-white text-xs font-black uppercase tracking-widest rounded-lg shadow-lg shadow-[var(--product-glow)] active:translate-y-0.5 transition-all"
                   >
                     插入色碼
                   </button>

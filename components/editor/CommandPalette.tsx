@@ -39,7 +39,7 @@ export const CommandPalette: React.FC = () => {
                 <kbd className="px-1.5 py-0.5 rounded bg-stone-800 border border-white/5 text-stone-400">Enter</kbd> 執行
               </span>
             </div>
-            <span className="text-[9px] font-black text-[#EA580C] uppercase tracking-[0.2em] opacity-80">Command Center</span>
+            <span className="text-[9px] font-black text-[var(--product-primary)] uppercase tracking-[0.2em] opacity-80">Command Center</span>
           </div>
         </KBarAnimator>
       </KBarPositioner>
@@ -55,21 +55,21 @@ function RenderResults() {
       items={results}
       onRender={({ item, active }) =>
         typeof item === "string" ? (
-          <div className="px-5 py-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#EA580C] bg-stone-950/80 sticky top-0 z-10 backdrop-blur-md border-b border-white/5">
+          <div className="px-5 py-3 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--product-primary)] bg-stone-950/80 sticky top-0 z-10 backdrop-blur-md border-b border-white/5">
             {item}
           </div>
         ) : (
           <div
             className={`px-5 py-4 flex items-center justify-between cursor-pointer transition-all duration-200 relative group ${
               active 
-                ? "bg-[#EA580C]/10 text-white" 
+                ? "bg-[var(--product-primary)]/10 text-white" 
                 : "text-stone-400 hover:bg-white/5"
             }`}
           >
-            {active && <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#EA580C] shadow-[0_0_15px_#EA580C]" />}
+            {active && <div className="absolute left-0 top-0 bottom-0 w-1 bg-[var(--product-primary)] shadow-[0_0_15px_var(--product-glow)]" />}
             
             <div className="flex items-center gap-4">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${active ? "bg-[#EA580C] text-white" : "bg-white/5 text-stone-500 group-hover:text-stone-300"}`}>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${active ? "bg-[var(--product-primary)] text-white" : "bg-white/5 text-stone-500 group-hover:text-stone-300"}`}>
                 {item.icon || <div className="w-4 h-4 rounded-sm border border-current opacity-40" />}
               </div>
               <div className="flex flex-col">
@@ -91,7 +91,7 @@ function RenderResults() {
                     key={sc} 
                     className={`px-2 py-1 rounded text-[10px] font-mono font-bold border transition-colors ${
                       active 
-                        ? "bg-[#EA580C] border-orange-400 text-white shadow-lg shadow-orange-900/20" 
+                        ? "bg-[var(--product-primary)] border-[var(--product-hover)] text-white shadow-lg shadow-[var(--product-glow)]" 
                         : "bg-stone-800 border-white/5 text-stone-500"
                     }`}
                   >

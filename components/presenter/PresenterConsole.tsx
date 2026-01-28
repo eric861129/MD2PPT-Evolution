@@ -87,15 +87,15 @@ const SortableThumbnail: React.FC<{
       >
         <div className={`absolute -left-1 top-1/2 -translate-y-1/2 z-20 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black border transition-colors ${
           currentIndex === idx 
-            ? 'bg-[#EA580C] border-[#EA580C] text-white shadow-[0_0_10px_rgba(234,88,12,0.5)]' 
-            : 'bg-stone-800 border-stone-600 text-stone-400 group-hover:border-[#EA580C]/50'
+            ? 'bg-[var(--product-primary)] border-[var(--product-primary)] text-white shadow-[0_0_10px_var(--product-glow)]' 
+            : 'bg-stone-800 border-stone-600 text-stone-400 group-hover:border-[var(--product-primary)]/50'
         }`}>
           {idx + 1}
         </div>
 
         <div className={`w-full aspect-video bg-black rounded-lg overflow-hidden border-2 transition-all ${
           currentIndex === idx 
-            ? 'border-[#EA580C] shadow-[0_0_20px_rgba(234,88,12,0.2)]' 
+            ? 'border-[var(--product-primary)] shadow-[0_0_20px_var(--product-glow)]' 
             : 'border-white/5 group-hover:border-white/20'
         }`}>
           <div className="pointer-events-none scale-[0.15] origin-top-left" style={{ width: '1200px', height: '675px' }}>
@@ -243,10 +243,10 @@ export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, curr
     <div className="flex flex-col h-screen w-screen bg-stone-900 text-white overflow-hidden font-sans">
       <div className="h-14 border-b border-stone-700 flex items-center justify-between px-6 bg-stone-950 shrink-0">
         <div className="flex items-center gap-4 lg:gap-6">
-          <div className="font-bold text-lg tracking-widest text-[#EA580C] hidden sm:block">PRESENTER VIEW</div>
+          <div className="font-bold text-lg tracking-widest text-[var(--product-primary)] hidden sm:block">PRESENTER VIEW</div>
           <div className="flex items-center bg-white/5 rounded-xl p-1 border border-white/10">
             <button onClick={openAudienceWindow} className="flex items-center gap-2 px-3 py-1.5 hover:bg-white/5 text-stone-400 hover:text-white rounded-lg transition-all"><ExternalLink size={14} /><span className="text-[10px] font-bold uppercase tracking-wider hidden lg:block">Project</span></button>
-            <div className="w-[1px] h-4 bg-white/10 mx-1" /><button onClick={() => setIsRemoteModalOpen(true)} className="flex items-center gap-2 px-3 py-1.5 hover:bg-orange-500/20 text-stone-400 hover:text-[#EA580C] rounded-lg transition-all"><Smartphone size={14} /><span className="text-[10px] font-bold uppercase tracking-wider hidden lg:block">Remote</span></button>
+            <div className="w-[1px] h-4 bg-white/10 mx-1" /><button onClick={() => setIsRemoteModalOpen(true)} className="flex items-center gap-2 px-3 py-1.5 hover:bg-orange-500/20 text-stone-400 hover:text-[var(--product-primary)] rounded-lg transition-all"><Smartphone size={14} /><span className="text-[10px] font-bold uppercase tracking-wider hidden lg:block">Remote</span></button>
             <div className="w-[1px] h-4 bg-white/10 mx-1" /><button onClick={toggleBlackoutInternal} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all ${isBlackout ? 'bg-red-600 text-white' : 'text-stone-400 hover:text-white'}`}><MonitorOff size={14} /><span className="text-[10px] font-bold uppercase tracking-wider hidden lg:block">Blackout</span></button>
           </div>
           <button onClick={handleExit} className="flex items-center gap-2 px-3 py-2 bg-white/5 hover:bg-red-500/20 text-stone-500 hover:text-red-400 border border-white/10 rounded-xl transition-all"><LogOut size={14} /><span className="text-[10px] font-black uppercase tracking-[0.1em]">Exit</span></button>
@@ -271,7 +271,7 @@ export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, curr
               </SortableContext>
               <DragOverlay>
                 {activeSlide ? (
-                  <div className="w-64 aspect-video bg-black rounded-xl overflow-hidden border-2 border-[#EA580C] shadow-2xl opacity-90 rotate-2 cursor-grabbing">
+                  <div className="w-64 aspect-video bg-black rounded-xl overflow-hidden border-2 border-[var(--product-primary)] shadow-2xl opacity-90 rotate-2 cursor-grabbing">
                     <div className="pointer-events-none w-full h-full overflow-hidden relative">
                       <div className="scale-[0.213] origin-top-left" style={{ width: '1200px', height: '675px' }}>
                         <SlideRenderer slide={activeSlide} theme={activeTheme} />
@@ -287,8 +287,8 @@ export const PresenterConsole: React.FC<PresenterConsoleProps> = ({ slides, curr
         <div className="flex-1 flex flex-col p-6 border-r border-stone-700 relative group">
           <h2 className="text-xs font-black text-stone-500 mb-3 uppercase tracking-[0.2em]">Current Slide</h2>
           <div data-testid="current-slide-view" className="flex-1 bg-black relative rounded-xl overflow-hidden shadow-2xl ring-1 ring-white/10">{currentSlide ? <ScaledSlideContainer><SlideRenderer slide={currentSlide} theme={activeTheme} /></ScaledSlideContainer> : <div className="flex items-center justify-center h-full"><p className="text-stone-500">No content</p></div>}</div>
-          <div className="absolute inset-y-0 left-0 w-24 flex items-center justify-start pl-4 opacity-0 group-hover:opacity-100 transition-opacity"><button aria-label="Previous Slide" onClick={handlePrevInternal} disabled={currentIndex === 0} className="p-4 bg-stone-800/80 rounded-full hover:bg-[#EA580C] hover:text-white disabled:opacity-30 transition-all"><ChevronLeft size={32} /></button></div>
-          <div className="absolute inset-y-0 right-0 w-24 flex items-center justify-end pr-4 opacity-0 group-hover:opacity-100 transition-opacity"><button aria-label="Next Slide" onClick={handleNextInternal} disabled={currentIndex === slides.length - 1} className="p-4 bg-stone-800/80 rounded-full hover:bg-[#EA580C] hover:text-white disabled:opacity-30 transition-all"><ChevronRight size={32} /></button></div>
+          <div className="absolute inset-y-0 left-0 w-24 flex items-center justify-start pl-4 opacity-0 group-hover:opacity-100 transition-opacity"><button aria-label="Previous Slide" onClick={handlePrevInternal} disabled={currentIndex === 0} className="p-4 bg-stone-800/80 rounded-full hover:bg-[var(--product-primary)] hover:text-white disabled:opacity-30 transition-all"><ChevronLeft size={32} /></button></div>
+          <div className="absolute inset-y-0 right-0 w-24 flex items-center justify-end pr-4 opacity-0 group-hover:opacity-100 transition-opacity"><button aria-label="Next Slide" onClick={handleNextInternal} disabled={currentIndex === slides.length - 1} className="p-4 bg-stone-800/80 rounded-full hover:bg-[var(--product-primary)] hover:text-white disabled:opacity-30 transition-all"><ChevronRight size={32} /></button></div>
         </div>
 
         <div className="w-80 lg:w-96 flex flex-col p-4 lg:p-6 bg-stone-900 gap-4 lg:gap-6 border-l border-stone-700 shrink-0">

@@ -43,27 +43,27 @@ export const UI_THEME = {
   },
   COLORS: {
     BRAND: {
-      DEFAULT: "#EA580C",
-      DARK: "#C2410C",
-      LIGHT: "#FB923C",
-      SURFACE: "#FFF7ED"
+      DEFAULT: "var(--product-primary)",
+      DARK: "var(--product-primary)", // Simplified for now
+      LIGHT: "var(--product-hover)",
+      SURFACE: "var(--product-glow)"
     },
     ACCENT: {
       DEFAULT: "#0369A1",
       DARK: "#075985",
       LIGHT: "#0EA5E9"
     },
-    // 暖色系介面背景
+    // 基礎背景色
     LIGHT: {
-      BG: "#FDFCFB",
+      BG: "var(--bg-base)",
       SURFACE: "#FFFFFF",
-      TEXT: "#1C1917",
+      TEXT: "var(--text-high)",
       BORDER: "#E7E5E4"
     },
     DARK: {
-      BG: "#1C1917",
+      BG: "var(--bg-base)",
       SURFACE: "#292524",
-      TEXT: "#FAFAF9",
+      TEXT: "var(--text-high)",
       BORDER: "#44403C"
     }
   }

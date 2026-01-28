@@ -9,6 +9,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import './services/i18n'; // Initialize i18n
+import './styles/theme.css'; // Global Theme Variables
 
 const container = document.getElementById('root');
 

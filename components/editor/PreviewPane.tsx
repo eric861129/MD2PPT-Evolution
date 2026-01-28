@@ -131,7 +131,7 @@ const SortableSlideCard: React.FC<{
           transitionType === 'fade' ? 'animate-in fade-in' :
           transitionType === 'slide' ? 'animate-in slide-in-from-right' :
           transitionType === 'zoom' ? 'animate-in zoom-in' : ''
-        } ${isDropTarget ? 'ring-4 ring-orange-500 scale-[1.01]' : ''}`} 
+        } ${isDropTarget ? 'ring-4 ring-[var(--product-primary)] scale-[1.01]' : ''}`} 
         style={{ aspectRatio: `${layout.width} / ${layout.height}` }}
       >
         {/* Floating Controls Inside Slide */}
@@ -155,8 +155,8 @@ const SortableSlideCard: React.FC<{
         />
       </div>
       {showNotes && note && (
-        <div className="bg-amber-50 dark:bg-amber-900/10 border-l-4 border-amber-500 p-6 rounded-r-xl shadow-sm animate-in slide-in-from-top duration-300">
-          <div className="flex items-center gap-2 mb-2 text-amber-600 dark:text-amber-400 font-black text-[10px] uppercase tracking-wider">
+        <div className="bg-amber-50 dark:bg-amber-900/10 border-l-4 border-[var(--brand-primary)] p-6 rounded-r-xl shadow-sm animate-in slide-in-from-top duration-300">
+          <div className="flex items-center gap-2 mb-2 text-[var(--brand-primary)] font-black text-[10px] uppercase tracking-wider">
             <StickyNote size={14} /> Speaker Notes
           </div>
           <div className="text-stone-700 dark:text-stone-300 text-sm leading-relaxed whitespace-pre-wrap font-medium">
@@ -283,7 +283,7 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({ parsedBlocks, previewR
                 }),
               }}>
                 {activeSlide ? (
-                  <div className="w-[300px] opacity-90 shadow-2xl rounded-xl overflow-hidden border-2 border-orange-500 ring-4 ring-orange-500/20 rotate-3 transition-transform duration-200 cursor-grabbing">
+                  <div className="w-[300px] opacity-90 shadow-2xl rounded-xl overflow-hidden border-2 border-[var(--product-primary)] ring-4 ring-[var(--product-primary)]/20 rotate-3 transition-transform duration-200 cursor-grabbing">
                     {/* Explicitly height-constrained container to clip transform whitespace */}
                     <div 
                       className="pointer-events-none overflow-hidden" 

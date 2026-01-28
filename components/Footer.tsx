@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
         </span>
         <div className="w-[1px] h-3 bg-slate-200 dark:bg-white/10 hidden sm:block" />
         <span className="text-[10px] text-slate-400 dark:text-stone-600 hidden sm:flex items-center gap-1 font-medium">
-          Made with <Heart size={10} className="fill-current text-rose-400" /> by EricHuang
+          Made with <Heart size={10} className="fill-current text-rose-400" /> by <span className="text-[var(--brand-primary)] font-bold">EricHuang</span>
         </span>
       </div>
 
@@ -45,7 +45,7 @@ const Footer: React.FC = () => {
           <span className="text-[10px] font-bold text-slate-500 dark:text-stone-500 group-hover:text-black dark:group-hover:text-white transition-colors">
             GitHub
           </span>
-          <div className="flex items-center gap-0.5 pl-1.5 border-l border-slate-200 dark:border-white/10 text-[10px] font-medium text-slate-400 dark:text-stone-600 group-hover:text-orange-500 dark:group-hover:text-orange-400">
+          <div className="flex items-center gap-0.5 pl-1.5 border-l border-slate-200 dark:border-white/10 text-[10px] font-medium text-slate-400 dark:text-stone-600 group-hover:text-[var(--brand-primary)]">
             <Star size={10} className="fill-current" />
           </div>
         </a>
